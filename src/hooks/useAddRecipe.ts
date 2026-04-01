@@ -1,0 +1,81 @@
+import { RecipeIngredient, RecipeStep } from "@/types/recipes.types";
+import { useState } from "react";
+import { createRecipe } from "@/api/services/recipes.service";
+import { useAuth } from "@/context/AuthContext";
+import { parsePreparationTime } from "@/utils/format.utils";
+
+export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]) => {
+    const [preparationTime, setPreparationTime] = useState("");
+    const [servings, setServings] = useState<number>();
+    const [title, setTitle] = useState("");
+    const [selectedRecipeTypeId, setSelectedRecipeTypeId] = useState<string>("");
+    const [photo, setPhoto] = useState<File | null>(null);
+    const {token} = useAuth();
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    const handleSubmit = async () => {
+        setErrors({});
+        const calculatedCalories = ingredient.reduce((sum, ing) => sum + parseFloat(ing.calories), 0)
+        const calculatedProteins = ingredient.reduce((sum, ing) => sum + parseFloat(ing.proteins), 0)
+        const calculatedCarbs = ingredient.reduce((sum, ing) => sum + parseFloat(ing.carbs), 0)
+        const calculatedLipids = ingredient.reduce((sum, ing) => sum + parseFloat(ing.lipids), 0)
+
+        const recipe = {
+            name: title,
+            preparation_time_minutes: parsePreparationTime(preparationTime),
+            servings: servings,
+            total_calories: calculatedCalories,
+            total_proteins: calculatedProteins,
+            total_carbs: calculatedCarbs,
+            total_lipids: calculatedLipids,
+            recipe_type_id: Number(selectedRecipeTypeId),
+        }
+
+        const formattedIngredients = JSON.stringify(ingredient.map(ing => ({
+            api_ingredient_id: 1,
+            ingredient_name: ing.ingredientName,
+            quantity: Number(ing.quantity),
+            unit: "g",
+            ingredient_calories: Number(ing.calories),
+            ingredient_proteins: Number(ing.proteins),
+            ingredient_carbs: Number(ing.carbs),
+            ingredient_lipids: Number(ing.lipids),
+        })))
+
+        const recipeData = new FormData();
+
+        recipeData.append("recipe", JSON.stringify(recipe))
+        recipeData.append("preparation_steps", JSON.stringify(steps))
+        recipeData.append("ingredients", formattedIngredients)
+        if (photo) recipeData.append("photo", photo)
+
+        try {
+            await createRecipe(recipeData, token!);
+            return true
+        } catch (error: any) {
+            if (error.errors && Array.isArray(error.errors)) {
+                const errorMap: Record<string, string> = {};
+                error.errors.forEach((e: any) => {
+                    errorMap[e.field] = e.message;
+                });
+                setErrors(errorMap);
+            }
+            return false;
+        }
+    }
+
+    return {
+        photo,
+        setPhoto,
+        preparationTime,
+        setPreparationTime,
+        servings,
+        setServings,
+        title,
+        setTitle,
+        selectedRecipeTypeId,
+        setSelectedRecipeTypeId,
+        handleSubmit,
+        errors
+    }
+}

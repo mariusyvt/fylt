@@ -1,0 +1,23 @@
+@use "../../../variables" as *;
+
+.ingredient-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding-top: $spacing-4;
+}
+
+.ingredient-badge {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.ingredient-placeholder {
+  color: #9e9e9e;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+

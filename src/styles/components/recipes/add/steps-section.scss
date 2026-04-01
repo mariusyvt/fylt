@@ -1,0 +1,113 @@
+@use "../../../variables" as *;
+
+$border-color: #f1f5f9;
+$red-bg: #fef2f2;
+$red-text: #f87171;
+
+// Timeline — global (utilisé aussi sur la page détail)
+.timeline {
+  border-left: 2px solid $border-color;
+  margin-left: $spacing-4;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+}
+
+.step-item {
+  position: relative;
+  padding-left: $spacing-6;
+
+  .step-marker {
+    position: absolute;
+    left: -9px;
+    top: 0;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: $slate-300;
+    border: 2px solid $white;
+  }
+
+  &.active .step-marker {
+    background: $teal-600;
+  }
+}
+
+.step-number {
+  font-size: 0.75rem;
+  font-weight: $font-semibold;
+  color: $slate-400;
+  text-transform: uppercase;
+}
+
+.step-card {
+  background: $white;
+  padding: $spacing-4;
+  border-radius: $radius-2xl;
+  border: 1px solid $border-color;
+  margin-top: $spacing-1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: $spacing-3;
+
+  p {
+    margin: 0;
+    flex: 1;
+  }
+
+  .remove-step-btn {
+    background: none;
+    border: none;
+    color: $slate-300;
+    cursor: pointer;
+    padding: $spacing-1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: $transition-base;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $red-text;
+      background: $red-bg;
+    }
+  }
+}
+
+.step-checkbox {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  border: 2px solid $slate-300;
+  cursor: pointer;
+  transition: $transition-base;
+  flex-shrink: 0;
+  position: relative;
+
+  &:checked {
+    background-color: $teal-600;
+    border-color: $teal-600;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 45%;
+      width: 6px;
+      height: 10px;
+      border: 2px solid $white;
+      border-top: none;
+      border-left: none;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  }
+}
+
+.step-done {
+  text-decoration: line-through;
+  color: $slate-400;
+}
+

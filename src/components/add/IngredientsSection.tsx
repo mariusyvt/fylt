@@ -1,0 +1,41 @@
+"use client";
+
+import { Wheat, X, Plus } from "lucide-react";
+import { RecipeIngredient } from "@/types/recipes.types";
+
+interface IngredientsSectionProps {
+    ingredients: RecipeIngredient[];
+    onRemove: (index: number) => void;
+    onAdd: () => void;
+}
+
+export default function IngredientsSection({
+    ingredients,
+    onRemove,
+    onAdd
+}: IngredientsSectionProps) {
+
+    return (
+        <section>
+            <h2 className="section-title">Ingrédients</h2>
+            <div className="item-stack">
+                {ingredients.map((ing, index) => (
+                    <div key={index} className="ingredient-pill">
+                        <div className="pill-left">
+                            <Wheat size={16} />
+                            <span className="pill-text">{ing.ingredientName}</span>
+                        </div>
+                        <button className="remove-btn" onClick={() => onRemove(index)}>
+                            <X size={16} />
+                        </button>
+                    </div>
+                ))}
+                <button className="btn-add-item" onClick={onAdd}>
+                    <span>Ajouter un ingrédient</span>
+                    <div className="plus-icon"><Plus size={16} /></div>
+                </button>
+            </div>
+        </section>
+    );
+}
+

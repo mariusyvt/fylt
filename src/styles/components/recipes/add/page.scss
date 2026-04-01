@@ -1,0 +1,150 @@
+@use "../../../variables" as *;
+
+$border-color: #f1f5f9;
+
+.add-recipe-page {
+  .mobile-container {
+    max-width: 448px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    background-color: rgba($gray-50, 0.5);
+  }
+
+  .bg-gradient-decor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 384px;
+    background: linear-gradient(to bottom, $teal-50, transparent);
+    z-index: -1;
+  }
+
+  .form-content {
+    padding: 0 $spacing-6 10rem;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+  }
+
+  .intro-section {
+    h1 {
+      font-size: 1.5rem;
+      font-weight: $font-semibold;
+      margin: 0;
+    }
+
+    p {
+      color: $slate-400;
+      font-size: $text-sm;
+      margin: $spacing-1 0 0;
+    }
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: $font-medium;
+    color: $slate-400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 $spacing-2 $spacing-1;
+  }
+
+  .text-input,
+  .select-input {
+    width: 100%;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-2xl;
+    padding: $spacing-3-5 $spacing-4;
+    font-size: 1rem;
+    box-shadow: 0 1px 2px rgba($black, 0.05);
+    transition: $transition-base;
+    box-sizing: border-box;
+  }
+
+  .text-input:focus {
+    outline: none;
+    border-color: $teal-600;
+  }
+
+  .select-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+    .placeholder {
+      color: $slate-400;
+    }
+
+    svg {
+      color: $slate-400;
+    }
+  }
+
+  .input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-4;
+  }
+
+  .btn-dark {
+    background: $slate-900;
+    color: $white;
+    border: none;
+    padding: $spacing-4;
+    border-radius: $radius-2xl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-native {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 2.5rem;
+
+  &:invalid {
+    color: $slate-400;
+  }
+}
+
+.select-icon {
+  position: absolute;
+  right: $spacing-4;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $slate-400;
+  pointer-events: none;
+}
+
+.error-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.error-message {
+  color: #f87171;
+  font-size: $text-sm;
+  padding: $spacing-2 $spacing-4;
+  border-radius: $radius-2xl;
+  text-align: center;
+}

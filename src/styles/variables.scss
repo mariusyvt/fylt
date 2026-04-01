@@ -1,0 +1,51 @@
+// src/styles/variables.scss
+
+// Colors - Slate
+$slate-300: #cbd5e1;
+$slate-400: #94a3b8;
+$slate-600: #475569;
+$slate-800: #1e293b;
+$slate-900: #0f172a;
+
+// Colors - Gray
+$gray-50: #f9fafb;
+
+// Colors - Teal
+$teal-50: #f0fdfa;
+$teal-600: #0d9488;
+$teal-700: #0f766e;
+
+// Colors - Base
+$white: #ffffff;
+$black: #000000;
+
+// Colors - Background
+$bg-color: #EAFBF7;
+
+// Shadows
+$shadow-teal-card: 0 20px 40px -12px rgba(13, 148, 136, 0.1);
+$shadow-slate: 0 10px 15px -3px rgba(15, 23, 42, 0.1);
+
+// Border Radius
+$radius-2xl: 1rem;
+$radius-3xl: 2rem;
+
+// Transitions
+$transition-base: 0.2s ease;
+
+// Spacing
+$spacing-1: 0.25rem;
+$spacing-2: 0.5rem;
+$spacing-3: 0.75rem;
+$spacing-3-5: 0.875rem;
+$spacing-4: 1rem;
+$spacing-5: 1.25rem;
+$spacing-6: 1.5rem;
+$spacing-8: 2rem;
+
+// Typography
+$text-sm: 0.875rem;
+$text-lg: 1.875rem;
+
+$font-medium: 500;
+$font-semibold: 600;

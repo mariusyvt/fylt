@@ -1,0 +1,47 @@
+@use "../../../variables" as *;
+
+$border-color: #f1f5f9;
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding: $spacing-8 $spacing-6 $spacing-4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba($gray-50, 0.8);
+  backdrop-filter: blur(12px);
+}
+
+.icon-btn-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid $border-color;
+  background: $white;
+  cursor: pointer;
+  transition: $transition-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.header-subtitle {
+  color: $slate-400;
+  font-size: $text-sm;
+  font-weight: $font-semibold;
+}
+
+.help-link {
+  background: none;
+  border: none;
+  color: $teal-600;
+  font-weight: $font-medium;
+  cursor: pointer;
+}
+

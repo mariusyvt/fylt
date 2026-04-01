@@ -1,0 +1,72 @@
+// src/styles/main.scss
+
+@use 'variables';
+
+// Loader
+@use 'components/loader';
+
+// Auth
+@use 'components/auth/signin';
+
+// Home
+@use 'components/home/card';
+@use 'components/home/header';
+@use 'components/pages/home';
+
+// Profile
+@use 'components/profile/profile';
+@use 'components/profile/header-profil';
+
+// Navigation
+@use 'components/pages/bottom-navbar';
+
+// Recipes — list
+@use 'components/recipes/header-recipe';
+@use 'components/recipes/recipe-card';
+
+// Recipes — add
+@use 'components/recipes/add/page';
+@use 'components/recipes/add/header-add-recipe';
+@use 'components/recipes/add/ingredient-form';
+@use 'components/recipes/add/ingredients-section';
+@use 'components/recipes/add/steps-section';
+@use 'components/recipes/add/picker-overlay';
+@use 'components/recipes/add/confirm-button';
+
+// Recipes — detail
+@use 'components/pages/recipe';
+@use 'components/recipes/detail/recipe-detail-header';
+@use 'components/recipes/detail/recipe-hero';
+@use 'components/recipes/detail/recipe-ingredients-list';
+@use "components/recipes/detail/recipe-options-menu";
+
+// Global styles
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+//* {
+//  outline: 1px solid red !important;
+//}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background-color: variables.$gray-50;
+  color: variables.$slate-900;
+}
+
+.bg-gradient-decor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 384px;
+  background: linear-gradient(to bottom, variables.$teal-50 80%, transparent);
+  z-index: -1;
+}

@@ -1,0 +1,102 @@
+@use "../../variables" as *;
+
+// Variables spécifiques au card
+$card-border: #f1f5f9;
+$orange-500: #f97316;
+$orange-bg: #fff7ed;
+
+.card-list {
+  padding: 0 $spacing-6;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.card {
+  padding: $spacing-3;
+  background: $white;
+  border-radius: $radius-2xl;
+  border: 1px solid $card-border;
+  display: flex;
+  gap: $spacing-4;
+  align-items: center;
+  transition: transform $transition-base;
+  text-decoration: none;
+  color: inherit;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &--featured {
+    box-shadow: $shadow-slate;
+    border-left: 4px solid $teal-600;
+    background: $white;
+  }
+
+  &__thumbnail {
+    width: 96px;
+    height: 96px;
+    border-radius: $spacing-3;
+    object-fit: cover;
+    background: $card-border;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &__title {
+    font-size: $spacing-4;
+    margin: 0;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+
+  &__calories {
+    font-size: $spacing-3;
+    color: $orange-500;
+    background: $orange-bg;
+    padding: $spacing-1 $spacing-2;
+    border-radius: 999px;
+    font-weight: $font-medium;
+  }
+
+  &__details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px $spacing-2;
+    margin-top: $spacing-2;
+  }
+
+  &__detail {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $spacing-3;
+    color: $slate-400;
+
+    i {
+      width: 14px;
+      height: 14px;
+    }
+
+    &--full {
+      grid-column: span 2;
+    }
+  }
+
+  &__arrow {
+    color: $slate-300;
+
+    &--active {
+      color: $teal-600;
+    }
+  }
+}

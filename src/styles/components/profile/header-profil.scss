@@ -1,0 +1,73 @@
+// src/styles/components/profile/profile.scss
+@use "../../variables" as *;
+
+
+$primary: $teal-600;
+$border-color: $slate-300;
+$text-muted: $slate-400;
+
+
+.bg-gradient-header {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 384px;
+  background: linear-gradient(to bottom, #f0fdfa 80%, transparent);
+  z-index: -1;
+}
+
+.profile-header {
+  padding: 3rem $spacing-6 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-wrapper {
+  position: relative;
+  margin-bottom: $spacing-4;
+}
+
+.avatar-circle {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background-color: $primary;
+  color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $text-lg;
+  font-weight: $font-semibold;
+  border: 4px solid $white;
+  box-shadow: 0 10px 15px -3px rgba(13, 148, 136, 0.2);
+}
+
+.edit-avatar-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: $spacing-2;
+  border-radius: 50%;
+  border: 1px solid $border-color;
+  background: $white;
+  color: $primary;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.user-name {
+  font-size: 1.5rem;
+  font-weight: $font-semibold;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.user-role {
+  color: $text-muted;
+  font-size: $text-sm;
+  margin-top: $spacing-1;
+}
