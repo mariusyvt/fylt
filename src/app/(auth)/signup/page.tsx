@@ -1,11 +1,11 @@
 "use client"
 
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { signUp } from "@/api/services/auth.service";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import TextInput from "@/components/ui/TextInput";
+import PasswordInput from "@/components/ui/PasswordInput";
 
 export default function SignUpForm() {
     const [lastName, setLastName] = useState("");
@@ -16,11 +16,9 @@ export default function SignUpForm() {
     const [error, setError] = useState("");
     const { login } = useAuth();
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [typePassword, setTypePassword] = useState("password");
-    const [typeConfirm, setTypeConfirm] = useState("password");
 
 
-    const handleSubmit = async () =>{
+    const handleSubmit = async () => {
         setError("");
 
         if (password !== confirmPassword) {
@@ -30,9 +28,9 @@ export default function SignUpForm() {
         try {
             const result = await signUp(lastName, firstName, email, name, password);
             login(result.data.token);
-
-        } catch (error: any) {
-            if (error.status === 409){
+        } catch (err: unknown) {
+            const e = err as { status?: number };
+            if (e.status === 409) {
                 setError("Cet email est déjà utilisé.");
             } else {
                 setError("Une erreur est survenue.");
@@ -47,85 +45,51 @@ export default function SignUpForm() {
                 <h1 className="page-title">S'inscrire</h1>
                 <div className="form-card">
                     <form className="login-form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-                        <div className="input-group">
-                            <label className="input-label">Nom</label>
-                            <input
-                                className="input-field"
-                                type="lastName"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                placeholder="Nom"
-                            />
-                        </div>
 
-                        <div className="input-group">
-                            <label className="input-label">Prénom</label>
-                            <input
-                                className="input-field"
-                                type="firstName"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                placeholder="Prénom"
-                            />
-                        </div>
+                        <TextInput
+                            label="Nom"
+                            value={lastName}
+                            onChange={setLastName}
+                            placeholder="Nom"
+                        />
 
-                        <div className="input-group">
-                            <label className="input-label">Email</label>
-                            <input
-                                className="input-field"
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="votre@email.com"
-                            />
-                        </div>
-                        {error && (
-                            <p style={{ color: "red", textAlign: "center", marginBottom: "0.25rem", fontSize: 12 }}>
-                                {error}
-                            </p>
-                        )}
+                        <TextInput
+                            label="Prénom"
+                            value={firstName}
+                            onChange={setFirstName}
+                            placeholder="Prénom"
+                        />
 
-                        <div className="input-group input-group--password">
-                            <label className="input-label">Mot de passe</label>
-                            <div className="input-wrapper">
-                                <input
-                                    className="input-field"
-                                    type={typePassword}
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••"
-                                />
-                                <span className="input-icon" onClick={() => setTypePassword(typePassword === "password" ? "text" : "password")}>
-                                    {typePassword === "password" ? <Eye /> : <EyeOff />}
-                                </span>
-                            </div>
-                        </div>
+                        <TextInput
+                            label="Email"
+                            type="email"
+                            value={email}
+                            onChange={setEmail}
+                            placeholder="votre@email.com"
+                        />
 
-                        <div className="input-group input-group--password">
-                            <label className="input-label">Confirmation du mot de passe</label>
-                            <div className="input-wrapper">
-                            <input
-                                className="input-field"
-                                type={typeConfirm}
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                placeholder="••••••••"
-                            />
-                                <span className="input-icon" onClick={() => setTypeConfirm(typeConfirm === "password" ? "text" : "password")}>
-                                    {typeConfirm === "password" ? <Eye /> : <EyeOff />}
-                                </span>
-                            </div>
-                        </div>
+                        <TextInput
+                            label="Nom d'utilisateur"
+                            value={name}
+                            onChange={setName}
+                            placeholder="@username"
+                        />
 
-                        <div className="link-container">
-                            <Link className="forgot-password" href="#">Mot de passe oublié ?</Link>
-                        </div>
+                        {error && <p className="error-message">{error}</p>}
 
-                        <button
-                            className="submit-button"
-                            type="submit"
-                            onClick={handleSubmit}
-                        >
+                        <PasswordInput
+                            label="Mot de passe"
+                            value={password}
+                            onChange={setPassword}
+                        />
+
+                        <PasswordInput
+                            label="Confirmation du mot de passe"
+                            value={confirmPassword}
+                            onChange={setConfirmPassword}
+                        />
+
+                        <button className="submit-button" type="submit">
                             S'inscrire
                         </button>
                     </form>

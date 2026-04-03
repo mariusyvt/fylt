@@ -2,6 +2,10 @@
 
 @use 'variables';
 
+// UI — composants réutilisables
+@use 'components/ui/inputs';
+@use 'components/ui/buttons';
+
 // Loader
 @use 'components/loader';
 

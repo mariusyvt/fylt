@@ -1,8 +1,9 @@
 "use client";
 
+import TextInput from "@/components/ui/TextInput";
+
 interface IngredientFormProps {
     ingredientName: string;
-    setIngredientName: (name: string) => void;
     quantity: string;
     setQuantity: (qty: string) => void;
     scanning: boolean;
@@ -14,7 +15,6 @@ interface IngredientFormProps {
 
 export default function IngredientForm({
     ingredientName,
-    setIngredientName,
     quantity,
     setQuantity,
     scanning,
@@ -33,16 +33,13 @@ export default function IngredientForm({
                     : <span className="ingredient-placeholder">Scanner un ingrédient</span>
                 }
             </div>
-            <div className="input-group">
-                <label className="field-label">Quantité</label>
-                <input
-                    type="text"
-                    className="text-input"
-                    placeholder="Ex: 200g"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                />
-            </div>
+
+            <TextInput
+                label="Quantité"
+                value={quantity}
+                onChange={setQuantity}
+                placeholder="Ex: 200g"
+            />
 
             {isLoading && <p>Chargement des infos...</p>}
             {error && <p style={{ color: "red" }}>{error}</p>}
@@ -61,4 +58,3 @@ export default function IngredientForm({
         </div>
     );
 }
-

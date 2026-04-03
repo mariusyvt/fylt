@@ -1,0 +1,127 @@
+@use '../../variables' as v;
+
+// -- Labels --
+.field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: v.$font-medium;
+  color: v.$slate-400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 v.$spacing-2 v.$spacing-1;
+}
+
+// -- Text Input & Select Input --
+.text-input,
+.select-input {
+  width: 100%;
+  background: v.$white;
+  border: 1px solid #f1f5f9;
+  border-radius: v.$radius-2xl;
+  padding: v.$spacing-3-5 v.$spacing-4;
+  font-size: 1rem;
+  box-shadow: 0 1px 2px rgba(v.$black, 0.05);
+  transition: v.$transition-base;
+  box-sizing: border-box;
+  color: v.$slate-900;
+
+  &::placeholder {
+    color: v.$slate-400;
+  }
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: v.$teal-600;
+}
+
+.text-input.textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+// -- Select --
+.select-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  .placeholder {
+    color: v.$slate-400;
+  }
+
+  svg {
+    color: v.$slate-400;
+  }
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-native {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 2.5rem;
+
+  &:invalid {
+    color: v.$slate-400;
+  }
+}
+
+.select-icon {
+  position: absolute;
+  right: v.$spacing-4;
+  top: 50%;
+  transform: translateY(-50%);
+  color: v.$slate-400;
+  pointer-events: none;
+}
+
+// -- Password wrapper --
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .text-input {
+    padding-right: 3rem;
+  }
+}
+
+.password-toggle {
+  position: absolute;
+  right: v.$spacing-4;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: v.$slate-400;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: color v.$transition-base;
+  user-select: none;
+
+  &:hover {
+    color: v.$slate-600;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// -- Errors --
+.error-message {
+  color: #f87171;
+  font-size: v.$text-sm;
+  padding: v.$spacing-2 v.$spacing-4;
+  border-radius: v.$radius-2xl;
+  text-align: center;
+}

@@ -7,3 +7,4 @@ export const parsePreparationTime = (timeStr: string): number => {
     }
     return 0;
 }
+

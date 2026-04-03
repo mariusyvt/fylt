@@ -1,0 +1,71 @@
+@use '../../variables' as v;
+
+// -- Btn Dark (file upload / action dark) --
+.btn-dark {
+  background: v.$slate-900;
+  color: v.$white;
+  border: none;
+  padding: v.$spacing-4;
+  border-radius: v.$radius-2xl;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: v.$spacing-2;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1rem;
+  transition: v.$transition-base;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// -- Btn Primary --
+.btn-primary {
+  width: 100%;
+  background-color: v.$black;
+  color: v.$white;
+  border: none;
+  border-radius: v.$radius-2xl;
+  padding: v.$spacing-4;
+  font-size: 15px;
+  font-weight: v.$font-medium;
+  cursor: pointer;
+  transition: all v.$transition-base;
+  box-shadow: v.$shadow-slate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: v.$spacing-2;
+
+  &:hover {
+    background-color: v.$slate-800;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// -- Btn Danger --
+.btn-danger {
+  width: 100%;
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: v.$radius-2xl;
+  padding: v.$spacing-4;
+  font-size: 15px;
+  font-weight: v.$font-medium;
+  cursor: pointer;
+  transition: all v.$transition-base;
+
+  &:hover {
+    background-color: #fff5f5;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}

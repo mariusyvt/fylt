@@ -13,8 +13,9 @@ export const useNutrition = () => {
     const addIngredient = (nutrients: Nutrients, quantity: number, name: string) => {
         const proportion = calculateProportionalNutrients(nutrients, quantity);
         setIngredient(prev => [...prev, {
-            ingredientName,
+            ingredientName: name,
             quantity: String(quantity),
+            unit: "g",
             calories: proportion.calories,
             proteins: proportion.proteins,
             carbs: proportion.carbs,

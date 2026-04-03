@@ -1,5 +1,7 @@
 "use client";
 
+import TextArea from "@/components/ui/TextArea";
+
 interface StepFormProps {
     stepNumber: number;
     stepDescription: string;
@@ -13,17 +15,13 @@ export default function StepForm({
 }: StepFormProps) {
     return (
         <div className="step-form">
-            <div className="input-group">
-                <label className="field-label">Étape {stepNumber}</label>
-                <textarea
-                    className="text-input textarea"
-                    placeholder="Décrivez cette étape..."
-                    value={stepDescription}
-                    onChange={(e) => setStepDescription(e.target.value)}
-                    rows={4}
-                />
-            </div>
+            <TextArea
+                label={`Étape ${stepNumber}`}
+                value={stepDescription}
+                onChange={setStepDescription}
+                placeholder="Décrivez cette étape..."
+                rows={4}
+            />
         </div>
     );
 }
-
