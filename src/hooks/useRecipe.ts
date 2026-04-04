@@ -34,3 +34,7 @@ export const useRecipe = () => {
         id
     };
 }
+
+export const useRecipeTypes = () => {
+
+}

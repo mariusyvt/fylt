@@ -5,7 +5,6 @@ export const useStep = () => {
     const [steps, setSteps] = useState<RecipeStep[]>([]);
     const [stepDescription, setStepDescription] = useState<string>("");
 
-
     const removeStep = (index: number) => {
         setSteps(steps.filter((_, i) => i !== index));
     };
@@ -22,6 +21,7 @@ export const useStep = () => {
 
     return {
         steps,
+        setSteps,
         stepDescription,
         setStepDescription,
         addStep,

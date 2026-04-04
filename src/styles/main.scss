@@ -6,6 +6,9 @@
 @use 'components/ui/inputs';
 @use 'components/ui/buttons';
 
+// Forms — styles de formulaire partagés
+@use 'components/forms/shared-form';
+
 // Loader
 @use 'components/loader';
 

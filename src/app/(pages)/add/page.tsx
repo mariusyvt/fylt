@@ -18,19 +18,14 @@ import FileButton from "@/components/ui/FileButton";
 import { getRecipesTypes } from "@/api/services/recipes.service";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { RecipeCategory } from "@/types/recipes.types";
 import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
 import { useNutrition } from "@/hooks/useNutrition";
 import { useAddRecipe } from "@/hooks/useAddRecipe";
 import { useStep } from "@/hooks/useStep";
 
-type PickerType = "time" | "persons" | "ingredient" | "step" | null;
-
 export default function AddPage () {
     const {token} = useAuth();
     const router = useRouter();
-    const [recipeType, setRecipeType] = useState<RecipeCategory[]>([]);
-    const [activePicker, setActivePicker] = useState<PickerType>(null);
 
     const {
         ingredient,
@@ -63,6 +58,10 @@ export default function AddPage () {
         setTitle,
         selectedRecipeTypeId,
         setSelectedRecipeTypeId,
+        recipeType,
+        setRecipeType,
+        activePicker,
+        setActivePicker,
         handleSubmit,
         errors,
     } = useAddRecipe(ingredient, steps);

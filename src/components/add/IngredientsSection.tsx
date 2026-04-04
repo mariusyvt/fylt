@@ -23,7 +23,7 @@ export default function IngredientsSection({
                     <div key={index} className="ingredient-pill">
                         <div className="pill-left">
                             <Wheat size={16} />
-                            <span className="pill-text">{ing.ingredientName}</span>
+                            <span className="pill-text">{ing.ingredient_name}</span>
                         </div>
                         <button className="remove-btn" onClick={() => onRemove(index)}>
                             <X size={16} />

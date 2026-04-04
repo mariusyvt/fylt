@@ -1,8 +1,10 @@
-import { RecipeIngredient, RecipeStep } from "@/types/recipes.types";
+import { RecipeCategory, RecipeIngredient, RecipeStep } from "@/types/recipes.types";
 import { useState } from "react";
 import { createRecipe } from "@/api/services/recipes.service";
 import { useAuth } from "@/context/AuthContext";
 import { parsePreparationTime } from "@/utils/format.utils";
+
+type PickerType = "time" | "persons" | "ingredient" | "step" | null;
 
 export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]) => {
     const [preparationTime, setPreparationTime] = useState("");
@@ -10,15 +12,17 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
     const [title, setTitle] = useState("");
     const [selectedRecipeTypeId, setSelectedRecipeTypeId] = useState<string>("");
     const [photo, setPhoto] = useState<File | null>(null);
+    const [recipeType, setRecipeType] = useState<RecipeCategory[]>([]);
+    const [activePicker, setActivePicker] = useState<PickerType>(null);
     const {token} = useAuth();
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const handleSubmit = async () => {
         setErrors({});
-        const calculatedCalories = ingredient.reduce((sum, ing) => sum + parseFloat(ing.calories), 0)
-        const calculatedProteins = ingredient.reduce((sum, ing) => sum + parseFloat(ing.proteins), 0)
-        const calculatedCarbs = ingredient.reduce((sum, ing) => sum + parseFloat(ing.carbs), 0)
-        const calculatedLipids = ingredient.reduce((sum, ing) => sum + parseFloat(ing.lipids), 0)
+        const calculatedCalories = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_calories), 0)
+        const calculatedProteins = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_proteins), 0)
+        const calculatedCarbs = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_carbs), 0)
+        const calculatedLipids = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_lipids), 0)
 
         const recipe = {
             name: title,
@@ -33,13 +37,13 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
 
         const formattedIngredients = JSON.stringify(ingredient.map(ing => ({
             api_ingredient_id: 1,
-            ingredient_name: ing.ingredientName,
+            ingredient_name: ing.ingredient_name,
             quantity: Number(ing.quantity),
             unit: "g",
-            ingredient_calories: Number(ing.calories),
-            ingredient_proteins: Number(ing.proteins),
-            ingredient_carbs: Number(ing.carbs),
-            ingredient_lipids: Number(ing.lipids),
+            ingredient_calories: Number(ing.ingredient_calories),
+            ingredient_proteins: Number(ing.ingredient_proteins),
+            ingredient_carbs: Number(ing.ingredient_carbs),
+            ingredient_lipids: Number(ing.ingredient_lipids),
         })))
 
         const recipeData = new FormData();
@@ -75,6 +79,10 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
         setTitle,
         selectedRecipeTypeId,
         setSelectedRecipeTypeId,
+        recipeType,
+        setRecipeType,
+        activePicker,
+        setActivePicker,
         handleSubmit,
         errors
     }
