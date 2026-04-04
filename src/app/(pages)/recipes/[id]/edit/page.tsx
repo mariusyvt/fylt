@@ -69,8 +69,9 @@ export default function EditPage() {
         recipeType,
         activePicker,
         setActivePicker,
-        errors
-    } = useEditRecipe(recipes, ingredient, steps);
+        errors,
+        handleSubmit
+    } = useEditRecipe(recipes, ingredient, steps, Number(id));
 
     const {scanning, isLoading, error, startScanner, stopScanner} = useBarcodeScanner(
         (scannedData) => {
@@ -86,7 +87,11 @@ export default function EditPage() {
     };
 
     const handleConfirm = async () => {
-        router.push(`/recipes/${id}`);
+        const success = await handleSubmit()
+        if (success){
+            console.log("gg")
+            router.push(`/recipes/${id}`);
+        }
     }
 
     useEffect(() => {

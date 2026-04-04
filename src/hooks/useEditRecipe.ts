@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { RecipeCategory, RecipeIngredient, RecipeStep, RecipeType } from "@/types/recipes.types";
 import { parsePreparationTime } from "@/utils/format.utils";
-import { createRecipe } from "@/api/services/recipes.service";
+import { createRecipe, updateRecipe } from "@/api/services/recipes.service";
 import { useAuth } from "@/context/AuthContext";
+import { storeHydrationErrorStateFromConsoleArgs } from "next/dist/next-devtools/userspace/pages/hydration-error-state";
 
 type PickerType = "time" | "persons" | "ingredient" | "step" | null;
 
-export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeIngredient[], steps: RecipeStep[]) => {
+export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeIngredient[], steps: RecipeStep[], id: number) => {
     const [title, setTitle] = useState("");
     const [photo, setPhoto] = useState<File | null>(null);
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
@@ -21,8 +22,6 @@ export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeI
     const [step, setStep] = useState<RecipeStep[]>([]);
     const {token} = useAuth();
     const [errors, setErrors] = useState<Record<string, string>>({});
-
-    console.log("data", recipeData);
 
     useEffect(() => {
         if (recipeData) {
@@ -72,8 +71,10 @@ export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeI
         recipeData.append("ingredients", formattedIngredients)
         if (photo) recipeData.append("photo", photo)
 
+
+        console.log("recipeData", recipeData);
         try {
-            await createRecipe(recipeData, token!);
+            await updateRecipe(recipeData, id, token!);
             return true
         } catch (error: any) {
             if (error.errors && Array.isArray(error.errors)) {
