@@ -64,25 +64,28 @@ export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeI
             ingredient_lipids: Number(ing.ingredient_lipids),
         })))
 
-        const recipeData = new FormData();
+        const formData = new FormData();
 
-        recipeData.append("recipe", JSON.stringify(recipe))
-        recipeData.append("preparation_steps", JSON.stringify(steps))
-        recipeData.append("ingredients", formattedIngredients)
-        if (photo) recipeData.append("photo", photo)
+        formData.append("recipe", JSON.stringify(recipe))
+        formData.append("preparation_steps", JSON.stringify(steps))
+        formData.append("ingredients", formattedIngredients)
+        if (photo) formData.append("photo", photo)
 
-
-        console.log("recipeData", recipeData);
         try {
-            await updateRecipe(recipeData, id, token!);
+            console.log("📤 Envoi PATCH avec:", { recipe, formattedIngredients, steps });
+            const result = await updateRecipe(formData, id, token!);
+            console.log("✅ Réponse API:", result);
             return true
         } catch (error: any) {
+            console.log("❌ ERREUR API:", error);
             if (error.errors && Array.isArray(error.errors)) {
                 const errorMap: Record<string, string> = {};
                 error.errors.forEach((e: any) => {
                     errorMap[e.field] = e.message;
                 });
                 setErrors(errorMap);
+
+                return false
             }
             return false;
         }
