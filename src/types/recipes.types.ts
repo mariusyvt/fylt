@@ -4,7 +4,7 @@ export interface RecipeType {
     photo_url: string;
     preparation_time_minutes: number;
     recipe_type_id: number;
-    recipe_types: RecipeCategory[];
+    recipe_types: RecipeCategory;
     servings: number;
     total_calories: string;
     total_carbs: string;

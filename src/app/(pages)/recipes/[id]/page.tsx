@@ -26,7 +26,7 @@ export default function RecipeId () {
             <div className="bg-gradient-decor"></div>
             <div className="mobile-wrapper">
                 <RecipeDetailHeader
-                    onBack={() => router.back()}
+                    onBack={() => router.push("/recipes")}
                     onEdit={() => router.push(`/recipes/${id}/edit`)}
                     onDelete={async () => {
                         await deleteRecipe(Number(id), token!);

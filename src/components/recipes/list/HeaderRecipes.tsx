@@ -1,7 +1,6 @@
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Profiles } from "@/types/profiles.types";
-import Image from "next/image";
 
 interface HeaderProps {
     profile: Profiles;
@@ -13,17 +12,11 @@ export default function HeaderRecipes ({profile}:HeaderProps) {
             <header className="sticky-recipes-header">
                 <Link className="circle-btn" href="/"><ArrowLeft /></Link>
                 <div className="header-right">
-                    <button className="circle-btn">
-                        <Search />
-                    </button>
                     <Link href="/profile" className="profile-avatar">
                         {profile.photo_url ? (
-                            <Image
+                            <img
                                 src={profile.photo_url}
                                 alt={`${profile.firstName} ${profile.lastName}`}
-                                width={80}
-                                height={80}
-                                unoptimized
                             />
                         ) : (
                             <div className="avatar-circle">{photoProfile}</div>

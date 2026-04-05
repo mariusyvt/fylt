@@ -91,7 +91,7 @@ export default function AddPage () {
 
     const handleConfirm = async () => {
         const success = await handleSubmit();
-        if (success) router.back();
+        if (success) router.push("/");
     };
 
     return (

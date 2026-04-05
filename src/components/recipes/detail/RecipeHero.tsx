@@ -1,4 +1,4 @@
-import { Clock, Users } from "lucide-react";
+import { Bookmark, Clock, Users } from "lucide-react";
 import { RecipeType } from "@/types/recipes.types";
 
 interface RecipeHeroProps {
@@ -28,6 +28,10 @@ export default function RecipeHero({ recipe }: RecipeHeroProps) {
                         <div className="meta-item">
                             <Users />
                             <span>{recipe.servings} portions</span>
+                        </div>
+                        <div className="meta-item">
+                            <Bookmark />
+                            <span>{recipe.recipe_types.name}</span>
                         </div>
                     </div>
 
