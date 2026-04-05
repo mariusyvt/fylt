@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { RecipeCategory, RecipeIngredient, RecipeStep, RecipeType } from "@/types/recipes.types";
-import { parsePreparationTime } from "@/utils/format.utils";
+import { parsePreparationTime, formatPreparationTime } from "@/utils/format.utils";
 import { createRecipe, updateRecipe } from "@/api/services/recipes.service";
 import { useAuth } from "@/context/AuthContext";
 import { storeHydrationErrorStateFromConsoleArgs } from "next/dist/next-devtools/userspace/pages/hydration-error-state";
@@ -27,7 +27,7 @@ export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeI
         if (recipeData) {
             setTitle(recipeData.name);
             setPhotoUrl(recipeData.photo_url)
-            setPreparationTime(recipeData.preparation_time_minutes.toString())
+            setPreparationTime(formatPreparationTime(recipeData.preparation_time_minutes))
             setServings(recipeData.servings)
             setSelectedRecipeTypeId(recipeData.recipe_type_id.toString())
             setIngredients(recipeData.recipe_ingredients)
@@ -72,12 +72,9 @@ export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeI
         if (photo) formData.append("photo", photo)
 
         try {
-            console.log("📤 Envoi PATCH avec:", { recipe, formattedIngredients, steps });
             const result = await updateRecipe(formData, id, token!);
-            console.log("✅ Réponse API:", result);
             return true
         } catch (error: any) {
-            console.log("❌ ERREUR API:", error);
             if (error.errors && Array.isArray(error.errors)) {
                 const errorMap: Record<string, string> = {};
                 error.errors.forEach((e: any) => {

@@ -87,10 +87,7 @@ export default function EditPage() {
     };
 
     const handleConfirm = async () => {
-        console.log("ingredient reçu:", ingredient);
-        console.log("steps reçu:", steps);
         const success = await handleSubmit()
-        console.log("🔑 handleSubmit a retourné:", success);
         if (success){
             router.push(`/recipes/${id}`);
         }
@@ -215,9 +212,6 @@ export default function EditPage() {
                     />
                 )}
             </PickerOverlay>
-
-            <ConfirmButton onClick={handleConfirm} />
-
         </>
     )
 }

@@ -8,3 +8,9 @@ export const parsePreparationTime = (timeStr: string): number => {
     return 0;
 }
 
+export const formatPreparationTime = (totalMinutes: number): string => {
+    const h = Math.floor(totalMinutes / 60);
+    const m = String(totalMinutes % 60).padStart(2, '0');
+    return `${h}h${m}`;
+}
+
