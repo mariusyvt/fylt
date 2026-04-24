@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Clock, Users } from "lucide-react";
 import TimePicker from "@/components/add/TimePicker";
 import PersonPicker from "@/components/add/PersonPicker";

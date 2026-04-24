@@ -5,7 +5,7 @@ import ProfileMenu from "@/components/profile/ProfileMenu";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getProfiles } from "@/api/services/profile.service";
+import { deleteProfile, getProfiles } from "@/api/services/profile.service";
 import { Profiles } from "@/types/profiles.types";
 
 export default function ProfilPage () {
@@ -30,11 +30,19 @@ export default function ProfilPage () {
         logout()
     }
 
+    const handleDeleteAccount = async () => {
+        if (token) {
+            await deleteProfile(token);
+            router.push("/signin");
+            logout();
+        }
+    }
+
     return (
         <>
             <div className="bg-gradient-header"></div>
             {profile && <Header profile={profile} />}
-            <ProfileMenu handleLogout={handleLogout} />
+            <ProfileMenu handleLogout={handleLogout} handleDeleteAccount={handleDeleteAccount} />
         </>
     )
 }

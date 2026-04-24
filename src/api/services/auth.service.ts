@@ -17,13 +17,13 @@ export const signIn = async (email: string, password: string) => {
     return await response.json();
 }
 
-export const signUp = async (lastName: string, firstName: string, email: string, name: string, password: string) => {
+export const signUp = async (lastName: string, firstName: string, email: string, password: string) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ lastName, firstName, email, name, password }),
+        body: JSON.stringify({ last_name: lastName, first_name: firstName, email, password }),
     });
 
     if (!response.ok) {

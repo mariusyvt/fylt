@@ -11,10 +11,9 @@ export default function SignUpForm() {
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const { login } = useAuth();
+    const {login} = useAuth();
     const [confirmPassword, setConfirmPassword] = useState("");
 
 
@@ -26,7 +25,7 @@ export default function SignUpForm() {
             return;
         }
         try {
-            const result = await signUp(lastName, firstName, email, name, password);
+            const result = await signUp(lastName, firstName, email, password);
             login(result.data.token);
         } catch (err: unknown) {
             const e = err as { status?: number };
@@ -44,7 +43,10 @@ export default function SignUpForm() {
             <div className="main-container">
                 <h1 className="page-title">S'inscrire</h1>
                 <div className="form-card">
-                    <form className="login-form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                    <form className="login-form" onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSubmit();
+                    }}>
 
                         <TextInput
                             label="Nom"
@@ -66,13 +68,6 @@ export default function SignUpForm() {
                             value={email}
                             onChange={setEmail}
                             placeholder="votre@email.com"
-                        />
-
-                        <TextInput
-                            label="Nom d'utilisateur"
-                            value={name}
-                            onChange={setName}
-                            placeholder="@username"
                         />
 
                         {error && <p className="error-message">{error}</p>}
