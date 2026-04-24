@@ -70,6 +70,7 @@ $shadow-teal: 0 4px 12px rgba(13, 148, 136, 0.2);
   display: flex;
   flex-wrap: wrap;
   gap: $spacing-2 $spacing-4;
+  flex-direction: column;
 }
 
 .meta-item {
@@ -89,26 +90,32 @@ $shadow-teal: 0 4px 12px rgba(13, 148, 136, 0.2);
 
 .nutrition-card {
   background: $white;
-  padding: $spacing-4;
+  padding: $spacing-3 $spacing-2;
   border-radius: $radius-2xl;
   border: 1px solid $gray-100;
   box-shadow: $shadow-base;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  align-items: center;
   text-align: center;
+  gap: $spacing-1;
 }
 
 .nutri-item {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 0 $spacing-1;
 
   strong {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: $font-semibold;
+    white-space: nowrap;
   }
 
   span {
-    font-size: 10px;
+    font-size: 9px;
     color: $slate-400;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -118,7 +125,7 @@ $shadow-teal: 0 4px 12px rgba(13, 148, 136, 0.2);
 .nutri-divider {
   width: 1px;
   background: $gray-100;
-  height: 2rem;
+  height: 1.5rem;
   align-self: center;
+  flex-shrink: 0;
 }
-

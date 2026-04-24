@@ -16,6 +16,7 @@ export default function Recipe () {
     const [recipeTypes, setRecipeTypes] = useState<RecipeCategory[]>([]);
     const [loading, setLoading] = useState(true);
     const [profile, setProfile] = useState<Profiles | null>(null)
+    const [activeFilter, setActiveFilter] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchRecipes = async () => {
@@ -40,14 +41,24 @@ export default function Recipe () {
         return <Loader />;
     }
 
+    const filteredRecipes = activeFilter
+        ? recipes.filter((r) => r.recipe_type_id === activeFilter)
+        : recipes;
 
     return (
         <>
             <div className="bg-gradient-decor"></div>
-            {profile && <HeaderRecipes profile={profile} />}
+            {profile && (
+                <HeaderRecipes
+                    profile={profile}
+                    recipeTypes={recipeTypes}
+                    activeFilter={activeFilter}
+                    onFilterChange={setActiveFilter}
+                />
+            )}
                 <section className="section-container list-section">
                     <main className="recipe-grid">
-                        {recipes.map((recipe) => (
+                        {filteredRecipes.map((recipe) => (
                             <RecipeCard
                                 key={recipe.id}
                                 recipe={recipe}
@@ -60,4 +71,3 @@ export default function Recipe () {
         </>
     )
 }
-
