@@ -48,7 +48,7 @@ export default function SignInForm () {
                         />
 
                         <div className="link-container">
-                            <a className="forgot-password" href="#">Mot de passe oublié ?</a>
+                            <Link className="forgot-password" href="/forgot-password">Mot de passe oublié ?</Link>
                         </div>
 
                         <button className="submit-button" type="submit">

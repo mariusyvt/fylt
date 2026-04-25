@@ -35,3 +35,41 @@ export const signUp = async (lastName: string, firstName: string, email: string,
 
     return await response.json();
 }
+
+export const forgotPassword = async (email: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/forgot-password`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        const error = new Error(data.message || data.error || `Erreur ${response.status}`) as Error & { status: number };
+        error.status = response.status;
+        throw error;
+    }
+
+    return await response.json();
+}
+
+export const resetPassword = async (token: string, newPassword: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/reset-password`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token, newPassword }),
+    });
+
+    if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        const error = new Error(data.message || data.error || `Erreur ${response.status}`) as Error & { status: number };
+        error.status = response.status;
+        throw error;
+    }
+
+    return await response.json();
+}
