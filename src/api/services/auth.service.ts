@@ -28,8 +28,12 @@ export const signUp = async (lastName: string, firstName: string, email: string,
 
     if (!response.ok) {
         const data = await response.json().catch(() => ({}));
-        const error = new Error(data.message || data.error || `Erreur ${response.status}`) as Error & { status: number };
+        const message = data.errors
+            ? data.errors.map((e: { message: string }) => e.message).join('\n')
+            : data.message || data.error || `Erreur ${response.status}`;
+        const error = new Error(message) as Error & { status: number; errors?: { field: string; message: string }[] };
         error.status = response.status;
+        if (data.errors) error.errors = data.errors;
         throw error;
     }
 

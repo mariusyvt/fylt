@@ -7,6 +7,11 @@ import Link from "next/link";
 import TextInput from "@/components/ui/TextInput";
 import PasswordInput from "@/components/ui/PasswordInput";
 
+interface FieldError {
+    field: string;
+    message: string;
+}
+
 export default function SignUpForm() {
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -15,22 +20,34 @@ export default function SignUpForm() {
     const [error, setError] = useState("");
     const {login} = useAuth();
     const [confirmPassword, setConfirmPassword] = useState("");
-
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
     const handleSubmit = async () => {
         setError("");
+        setFieldErrors({});
 
         if (password !== confirmPassword) {
-            setError("Les mots de passe ne correspondent pas.");
+            setFieldErrors({ password: "Les mots de passe ne correspondent pas." });
             return;
         }
         try {
             const result = await signUp(lastName, firstName, email, password);
             login(result.data.token);
         } catch (err: unknown) {
-            const e = err as { status?: number };
+            console.error("Erreur signup:", err);
+            const e = err as { status?: number; message?: string; errors?: FieldError[] };
             if (e.status === 409) {
-                setError("Cet email est déjà utilisé.");
+                setFieldErrors({ email: "Cet email est déjà utilisé." });
+            } else if (e.errors) {
+                const mapped: Record<string, string> = {};
+                e.errors.forEach((fe) => {
+                    mapped[fe.field] = mapped[fe.field]
+                        ? mapped[fe.field] + '\n' + fe.message
+                        : fe.message;
+                });
+                setFieldErrors(mapped);
+            } else if (e.message) {
+                setError(e.message);
             } else {
                 setError("Une erreur est survenue.");
             }
@@ -48,19 +65,22 @@ export default function SignUpForm() {
                         handleSubmit();
                     }}>
 
-                        <TextInput
-                            label="Nom"
-                            value={lastName}
-                            onChange={setLastName}
-                            placeholder="Nom"
-                        />
-
-                        <TextInput
-                            label="Prénom"
-                            value={firstName}
-                            onChange={setFirstName}
-                            placeholder="Prénom"
-                        />
+                        <div className="form-row">
+                            <TextInput
+                                label="Prénom"
+                                value={firstName}
+                                onChange={setFirstName}
+                                placeholder="Prénom"
+                                error={fieldErrors.first_name}
+                            />
+                            <TextInput
+                                label="Nom"
+                                value={lastName}
+                                onChange={setLastName}
+                                placeholder="Nom"
+                                error={fieldErrors.last_name}
+                            />
+                        </div>
 
                         <TextInput
                             label="Email"
@@ -68,21 +88,23 @@ export default function SignUpForm() {
                             value={email}
                             onChange={setEmail}
                             placeholder="votre@email.com"
+                            error={fieldErrors.email}
                         />
-
-                        {error && <p className="error-message">{error}</p>}
 
                         <PasswordInput
                             label="Mot de passe"
                             value={password}
                             onChange={setPassword}
+                            error={fieldErrors.password}
                         />
 
                         <PasswordInput
-                            label="Confirmation du mot de passe"
+                            label="Confirmation"
                             value={confirmPassword}
                             onChange={setConfirmPassword}
                         />
+
+                        {error && <p className="error-message">{error}</p>}
 
                         <button className="submit-button" type="submit">
                             S'inscrire

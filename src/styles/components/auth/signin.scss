@@ -54,6 +54,16 @@
   gap: v.$spacing-3;
 }
 
+.form-row {
+  display: flex;
+  gap: v.$spacing-3;
+
+  > * {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
 
 .form-description {
   font-size: v.$text-sm;
