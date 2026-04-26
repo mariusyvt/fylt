@@ -45,6 +45,8 @@ $danger-hover: #dc2626;
   justify-content: space-between;
   cursor: pointer;
   transition: all $transition-base;
+  text-decoration: none;
+  color: inherit;
 
   &:active {
     transform: scale(0.98);

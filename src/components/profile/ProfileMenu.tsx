@@ -1,5 +1,6 @@
 import { User, Mail, ChevronRight, LogOut, AlertTriangle } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 
 interface ProfilMenuProps {
@@ -19,7 +20,7 @@ export default function ProfileMenu({handleLogout, handleDeleteAccount}: ProfilM
         <main className="profile-main">
             <label className="section-label">Paramètres</label>
 
-            <button className="menu-item">
+            <Link href="/profile/informations" className="menu-item">
                 <div className="menu-item-left">
                     <div className="icon-box teal">
                         <User />
@@ -27,7 +28,7 @@ export default function ProfileMenu({handleLogout, handleDeleteAccount}: ProfilM
                     <span className="menu-text">Mes informations</span>
                 </div>
                 <ChevronRight className="chevron" />
-            </button>
+            </Link>
 
             <button className="menu-item">
                 <div className="menu-item-left">

@@ -52,17 +52,17 @@
 .btn-danger {
   width: 100%;
   background-color: transparent;
-  color: #ef4444;
-  border: 1px solid #fecaca;
+  color: v.$slate-400;
+  border: none;
   border-radius: v.$radius-2xl;
-  padding: v.$spacing-4;
-  font-size: 15px;
+  padding: v.$spacing-3;
+  font-size: v.$text-sm;
   font-weight: v.$font-medium;
   cursor: pointer;
-  transition: all v.$transition-base;
+  color: #ef4444;
 
   &:hover {
-    background-color: #fff5f5;
+    color: #dc2626;
   }
 
   &:active {

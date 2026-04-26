@@ -41,7 +41,12 @@ export default function ProfilPage () {
     return (
         <>
             <div className="bg-gradient-header"></div>
-            {profile && <Header profile={profile} />}
+            {profile && (
+                <Header
+                    profile={profile}
+                    onPhotoUpdated={(url) => setProfile({ ...profile, photo_url: url })}
+                />
+            )}
             <ProfileMenu handleLogout={handleLogout} handleDeleteAccount={handleDeleteAccount} />
         </>
     )
