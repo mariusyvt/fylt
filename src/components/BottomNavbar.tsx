@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Home, ChefHat, Plus, Heart, User } from "lucide-react";
+import { Home, ChefHat, Plus, Heart, User, ChartNoAxesColumnIncreasing} from "lucide-react";
 
 export default function BottomNavbar () {
     const pathname = usePathname();
@@ -32,11 +32,11 @@ export default function BottomNavbar () {
                     </button>
                 </div>
                 <Link
-                    href="/favorites"
-                    className={`bottom-nav__link ${pathname === "/favorites" ? "bottom-nav__link--active" : ""}`}
+                    href="/tracking"
+                    className={`bottom-nav__link ${pathname === "/tracking" ? "bottom-nav__link--active" : ""}`}
                 >
-                    <Heart />
-                    <span>Favoris</span>
+                    <ChartNoAxesColumnIncreasing />
+                    <span>Suivis</span>
                 </Link>
                 <Link
                     href="/profile"

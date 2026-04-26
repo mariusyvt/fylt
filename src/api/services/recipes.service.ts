@@ -98,3 +98,4 @@ export const updateRecipe = async (recipeData: FormData, id:number, token: strin
 
     return await response.json();
 }
+

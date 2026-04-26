@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getRecipes, getRecipesTypes } from "@/api/services/recipes.service";
 import { RecipeType, RecipeCategory } from "@/types/recipes.types";
-import BottomNavbar from "@/components/BottomNavbar";
 import Card  from "@/components/home/Card";
 import HeaderHome  from "@/components/home/HeaderHome";
 import Link from "next/link";
+import { UtensilsCrossed } from "lucide-react";
 import Loader from "@/components/Loader";
 
 export default function Home () {
@@ -27,8 +27,10 @@ export default function Home () {
         const fetchRecipes = async () => {
             try {
                 if (token) {
-                    const resultRecipe = await getRecipes(token);
-                    const resultRecipeTypes = await getRecipesTypes(token);
+                    const [resultRecipe, resultRecipeTypes] = await Promise.all([
+                        getRecipes(token).catch(() => ({ data: [] })),
+                        getRecipesTypes(token),
+                    ]);
                     setRecipes(resultRecipe.data)
                     setRecipeTypes(resultRecipeTypes.data)
                 }
@@ -48,6 +50,7 @@ export default function Home () {
         return null;
     }
 
+
     return (
         <div className="mobile-container">
             <div className="bg-gradient-decor"></div>
@@ -58,13 +61,21 @@ export default function Home () {
                     <Link href="/recipes" className="view-all">Voir tout</Link>
                 </div>
                 <div className="card-list">
-                    {recipes.map((recipe) => (
-                        <Card
-                            key={recipe.id}
-                            recipe={recipe}
-                            recipeTypes={recipeTypes.find((t) => t.id === recipe.recipe_type_id)?.name ?? ""}
-                        />
-                    ))}
+                    {recipes.length > 0 ? (
+                        recipes.map((recipe) => (
+                            <Card
+                                key={recipe.id}
+                                recipe={recipe}
+                                recipeTypes={recipeTypes.find((t) => t.id === recipe.recipe_type_id)?.name ?? ""}
+                            />
+                        ))
+                    ) : (
+                        <div className="empty-state">
+                            <UtensilsCrossed size={48} />
+                            <h2>Aucune recette</h2>
+                            <p>Commence par ajouter ta première recette !</p>
+                        </div>
+                    )}
                 </div>
             </section>
         </div>

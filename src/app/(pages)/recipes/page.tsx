@@ -8,6 +8,7 @@ import HeaderRecipes from "@/components/recipes/list/HeaderRecipes";
 import { RecipeCard } from "@/components/recipes/list/RecipeCard";
 import { getProfiles } from "@/api/services/profile.service";
 import { Profiles } from "@/types/profiles.types";
+import { UtensilsCrossed } from "lucide-react";
 import Loader from "@/components/Loader";
 
 export default function Recipe () {
@@ -22,9 +23,11 @@ export default function Recipe () {
         const fetchRecipes = async () => {
             try {
                 if (token) {
-                    const resultRecipe = await getRecipes(token);
-                    const resultRecipeTypes = await getRecipesTypes(token);
-                    const resultProfile = await getProfiles(token);
+                    const [resultRecipe, resultRecipeTypes, resultProfile] = await Promise.all([
+                        getRecipes(token).catch(() => ({ data: [] })),
+                        getRecipesTypes(token),
+                        getProfiles(token),
+                    ]);
                     setRecipes(resultRecipe.data)
                     setRecipeTypes(resultRecipeTypes.data)
                     setProfile(resultProfile.data)
@@ -57,15 +60,23 @@ export default function Recipe () {
                 />
             )}
                 <section className="section-container list-section">
-                    <main className="recipe-grid">
-                        {filteredRecipes.map((recipe) => (
-                            <RecipeCard
-                                key={recipe.id}
-                                recipe={recipe}
-                                recipeType={recipeTypes.find((t) => t.id === recipe.recipe_type_id)?.name ?? ""}
-                            />
-                        ))}
-                    </main>
+                    {filteredRecipes.length > 0 ? (
+                        <main className="recipe-grid">
+                            {filteredRecipes.map((recipe) => (
+                                <RecipeCard
+                                    key={recipe.id}
+                                    recipe={recipe}
+                                    recipeType={recipeTypes.find((t) => t.id === recipe.recipe_type_id)?.name ?? ""}
+                                />
+                            ))}
+                        </main>
+                    ) : (
+                        <div className="empty-state">
+                            <UtensilsCrossed size={48} />
+                            <h2>Aucune recette</h2>
+                            <p>{activeFilter ? "Aucune recette dans cette catégorie." : "Commence par ajouter ta première recette !"}</p>
+                        </div>
+                    )}
                 </section>
 
         </>
