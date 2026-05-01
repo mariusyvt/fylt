@@ -78,3 +78,10 @@
   color: $teal-600;
   font-weight: $font-medium;
 }
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+

@@ -30,7 +30,7 @@ export default function ProfileMenu({handleLogout, handleDeleteAccount}: ProfilM
                 <ChevronRight className="chevron" />
             </Link>
 
-            <button className="menu-item">
+            <Link href="/profile/contact" className="menu-item">
                 <div className="menu-item-left">
                     <div className="icon-box orange">
                         <Mail />
@@ -38,7 +38,7 @@ export default function ProfileMenu({handleLogout, handleDeleteAccount}: ProfilM
                     <span className="menu-text">Nous contacter</span>
                 </div>
                 <ChevronRight className="chevron" />
-            </button>
+            </Link>
 
             <hr className="separator" />
 

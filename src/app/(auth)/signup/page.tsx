@@ -1,11 +1,11 @@
 "use client"
 
-import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { signUp } from "@/api/services/auth.service";
 import Link from "next/link";
 import TextInput from "@/components/ui/TextInput";
 import PasswordInput from "@/components/ui/PasswordInput";
+import { MailCheck } from "lucide-react";
 
 interface FieldError {
     field: string;
@@ -18,9 +18,9 @@ export default function SignUpForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const {login} = useAuth();
     const [confirmPassword, setConfirmPassword] = useState("");
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+    const [registered, setRegistered] = useState(false);
 
     const handleSubmit = async () => {
         setError("");
@@ -31,8 +31,8 @@ export default function SignUpForm() {
             return;
         }
         try {
-            const result = await signUp(lastName, firstName, email, password);
-            login(result.data.token);
+            await signUp(lastName, firstName, email, password);
+            setRegistered(true);
         } catch (err: unknown) {
             console.error("Erreur signup:", err);
             const e = err as { status?: number; message?: string; errors?: FieldError[] };
@@ -54,11 +54,30 @@ export default function SignUpForm() {
         }
     }
 
+    if (registered) {
+        return (
+            <div className="login-page">
+                <div className="background-overlay" />
+                <div className="main-container">
+                    <h1 className="page-title">Vérifiez votre email</h1>
+                    <div className="form-card">
+                        <div className="success-message">
+                            <MailCheck size={32} />
+                            <p>Un email de vérification a été envoyé à <strong>{email}</strong>.</p>
+                            <p>Cliquez sur le lien dans l&apos;email pour activer votre compte.</p>
+                            <Link className="success-link-button" href="/signin">Aller à la connexion</Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="login-page">
             <div className="background-overlay" />
             <div className="main-container">
-                <h1 className="page-title">S'inscrire</h1>
+                <h1 className="page-title">S&apos;inscrire</h1>
                 <div className="form-card">
                     <form className="login-form" onSubmit={(e) => {
                         e.preventDefault();

@@ -39,6 +39,32 @@
   padding-left: v.$spacing-1;
 }
 
+.verified-banner {
+  display: flex;
+  align-items: center;
+  gap: v.$spacing-2;
+  background: v.$teal-50;
+  color: v.$teal-600;
+  padding: v.$spacing-3 v.$spacing-4;
+  border-radius: v.$radius-2xl;
+  font-size: v.$text-sm;
+  font-weight: v.$font-medium;
+  margin-bottom: v.$spacing-4;
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: v.$spacing-2;
+  background: #fef2f2;
+  color: #dc2626;
+  padding: v.$spacing-3 v.$spacing-4;
+  border-radius: v.$radius-2xl;
+  font-size: v.$text-sm;
+  font-weight: v.$font-medium;
+  margin-bottom: v.$spacing-4;
+}
+
 .form-card {
   background-color: v.$white;
   border-radius: v.$radius-3xl;

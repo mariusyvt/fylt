@@ -77,3 +77,41 @@ export const resetPassword = async (token: string, newPassword: string) => {
 
     return await response.json();
 }
+
+export const verifyEmail = async (token: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/verify-email`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+    });
+
+    if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        const error = new Error(data.message || data.error || `Erreur ${response.status}`) as Error & { status: number };
+        error.status = response.status;
+        throw error;
+    }
+
+    return await response.json();
+}
+
+export const resendVerification = async (email: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/resend-verification`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        const error = new Error(data.message || data.error || `Erreur ${response.status}`) as Error & { status: number };
+        error.status = response.status;
+        throw error;
+    }
+
+    return await response.json();
+}
