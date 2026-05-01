@@ -43,6 +43,7 @@
 
 // Recipes — detail
 @use 'components/pages/recipe';
+@use 'components/pages/tracking';
 @use 'components/recipes/detail/recipe-detail-header';
 @use 'components/recipes/detail/recipe-hero';
 @use 'components/recipes/detail/recipe-ingredients-list';
