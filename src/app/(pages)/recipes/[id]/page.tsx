@@ -14,7 +14,7 @@ import { useRecipe } from "@/hooks/useRecipe";
 export default function RecipeId () {
     const {token} = useAuth();
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState('ingredients');
+    const [activeTab, setActiveTab] = useState('preparation');
 
     const {recipes,loading, id } = useRecipe()
 
@@ -49,7 +49,6 @@ export default function RecipeId () {
                     </div>
                     {activeTab === 'preparation' ? (
                         <div className="add-recipe-page">
-                            <h2 className="section-title-tab">Préparation</h2>
                             <StepsSection
                                 steps={recipes.preparation_steps}
                                 onRemove={() => {}}
@@ -59,7 +58,6 @@ export default function RecipeId () {
                         </div>
                     ) : (
                         <div>
-                            <h2 className="section-title-tab">Ingrédients</h2>
                             <RecipeIngredientsList recipes={recipes} />
                         </div>
                     )}
