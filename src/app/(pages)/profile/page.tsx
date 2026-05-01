@@ -19,7 +19,6 @@ export default function ProfilPage () {
                 const result = await getProfiles(token);
                 const profile = result.data;
                 setProfile(profile)
-
             }
         }
         fetchProfil()
