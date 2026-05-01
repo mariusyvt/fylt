@@ -77,8 +77,26 @@ function MacroBar({ label, value, goal, color, icon: Icon }: {
     );
 }
 
+// ── Week days ──
+function getWeekDays() {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7));
+
+    const labels = ["L", "M", "M", "J", "V", "S", "D"];
+    return labels.map((label, i) => {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        return { label, date: d.getDate(), isToday: d.toDateString() === today.toDateString() };
+    });
+}
+
 export default function Tracking() {
     const [expandedMeal, setExpandedMeal] = useState<number | null>(null);
+    const weekDays = getWeekDays();
+    const todayIndex = weekDays.findIndex((d) => d.isToday);
+    const [selectedDay, setSelectedDay] = useState(todayIndex);
 
     return (
         <>
@@ -90,6 +108,19 @@ export default function Tracking() {
                         {new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
                     </p>
                 </header>
+
+                <section className="day-picker">
+                    {weekDays.map((day, i) => (
+                        <button
+                            key={i}
+                            className={`day-picker__btn ${selectedDay === i ? "active" : ""}`}
+                            onClick={() => setSelectedDay(i)}
+                        >
+                            <span className="day-picker__label">{day.label}</span>
+                            <span className="day-picker__date">{day.date}</span>
+                        </button>
+                    ))}
+                </section>
 
                 <section className="tracking-ring-section">
                     <CalorieRing consumed={CONSUMED.calories} goal={DAILY_GOAL.calories} />
