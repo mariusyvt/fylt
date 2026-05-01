@@ -101,16 +101,6 @@ export default function InformationsPage() {
                             </div>
 
                             <div className="info-divider" />
-
-                            <div className="info-field">
-                                <label className="info-label">Email</label>
-                                <input
-                                    className="info-input"
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                            </div>
                         </div>
 
                         {hasChanges && (

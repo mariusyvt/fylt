@@ -5,7 +5,14 @@ import { signUp } from "@/api/services/auth.service";
 import Link from "next/link";
 import TextInput from "@/components/ui/TextInput";
 import PasswordInput from "@/components/ui/PasswordInput";
+import SelectField from "@/components/ui/SelectField";
 import { MailCheck } from "lucide-react";
+
+const GENDER_OPTIONS = [
+    { value: "male", label: "Homme" },
+    { value: "female", label: "Femme" },
+    { value: "other", label: "Autre" },
+];
 
 interface FieldError {
     field: string;
@@ -16,6 +23,7 @@ export default function SignUpForm() {
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [email, setEmail] = useState("");
+    const [gender, setGender] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -31,7 +39,7 @@ export default function SignUpForm() {
             return;
         }
         try {
-            await signUp(lastName, firstName, email, password);
+            await signUp(lastName, firstName, email, gender, password);
             setRegistered(true);
         } catch (err: unknown) {
             console.error("Erreur signup:", err);
@@ -100,6 +108,15 @@ export default function SignUpForm() {
                                 error={fieldErrors.last_name}
                             />
                         </div>
+
+                        <SelectField
+                            label="Genre"
+                            value={gender}
+                            onChange={setGender}
+                            options={GENDER_OPTIONS}
+                            placeholder="Sélectionner"
+                            error={fieldErrors.gender}
+                        />
 
                         <TextInput
                             label="Email"
