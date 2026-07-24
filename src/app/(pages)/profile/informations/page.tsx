@@ -1,17 +1,17 @@
 "use client"
 
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { getProfiles, updateProfile } from "@/api/services/profile.service";
-import { Profiles } from "@/types/profiles.types";
+import { getProfile, updateProfile } from "@/api/services/profile.service";
+import { Profile } from "@/types/profile.types";
 import { ArrowLeft, Check } from "lucide-react";
 import Link from "next/link";
 import Loader from "@/components/Loader";
-import Header from "@/components/profile/Header";
+import ProfileHeader from "@/components/profile/ProfileHeader";
 
 export default function InformationsPage() {
     const { token } = useAuth();
-    const [profile, setProfile] = useState<Profiles | null>(null);
+    const [profile, setProfile] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -23,7 +23,7 @@ export default function InformationsPage() {
         const fetchProfile = async () => {
             try {
                 if (token) {
-                    const result = await getProfiles(token);
+                    const result = await getProfile(token);
                     setProfile(result.data);
                     setFirstName(result.data.firstName);
                     setLastName(result.data.lastName);
@@ -43,12 +43,12 @@ export default function InformationsPage() {
     );
 
     const handleSave = async () => {
-        if (!token || !hasChanges) return;
+        if (!token || !profile || !hasChanges) return;
         setSaving(true);
         setSuccess(false);
         try {
             await updateProfile(token, { firstName, lastName, email });
-            setProfile({ ...profile!, firstName, lastName, email });
+            setProfile({ ...profile, firstName, lastName, email });
             setSuccess(true);
             setTimeout(() => setSuccess(false), 2000);
         } catch (err) {
@@ -73,7 +73,7 @@ export default function InformationsPage() {
 
             {profile && (
                 <>
-                    <Header
+                    <ProfileHeader
                         profile={profile}
                         onPhotoUpdated={(url) => setProfile({ ...profile, photo_url: url })}
                     />

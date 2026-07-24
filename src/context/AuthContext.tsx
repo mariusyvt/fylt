@@ -1,13 +1,29 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 
-interface AuthContextType {
+export interface AuthContextType {
     token: string | null;
     isAuthenticated: boolean;
     login: (token: string) => void;
     logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+export const AuthContext = createContext<AuthContextType | null>(null)
+
+/**
+ * Vérifie qu'un token JWT n'est pas expiré (lecture du claim `exp`).
+ * Renvoie true si le token ne peut pas être décodé (on ne bloque pas inutilement).
+ */
+const isTokenValid = (token: string): boolean => {
+    try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        if (payload?.exp) {
+            return payload.exp * 1000 > Date.now();
+        }
+        return true;
+    } catch {
+        return true;
+    }
+};
 
 export const AuthProvider = ({children}: {children : ReactNode}) => {
     const [token, setToken] = useState<string | null>(null);
@@ -15,8 +31,11 @@ export const AuthProvider = ({children}: {children : ReactNode}) => {
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
-        if(storedToken){
+        if (storedToken && isTokenValid(storedToken)) {
             setToken(storedToken);
+        } else if (storedToken) {
+            // Token présent mais expiré/invalide → on nettoie
+            localStorage.removeItem("token");
         }
         setIsLoading(false);
     }, []);
@@ -42,13 +61,4 @@ export const AuthProvider = ({children}: {children : ReactNode}) => {
             {children}
         </AuthContext.Provider>
     )
-}
-
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-
-    if(!context){
-        throw new Error("useAuth must be used within an AuthProvider")
-    }
-    return context
 }

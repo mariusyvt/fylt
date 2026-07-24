@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { Nutrients } from "@/types/nutrition.types";
 import { searchByBarcode } from "@/api/services/openfoodfacts.service";
@@ -14,6 +14,7 @@ export const useBarcodeScanner = (
     const [error, setError] = useState<string | null>(null);
 
     const scannerRef = useRef<Html5Qrcode | null>(null);
+    const isMountedRef = useRef(true);
 
     const startScanner = useCallback(async () => {
         try {
@@ -30,10 +31,11 @@ export const useBarcodeScanner = (
 
                     if (scannerRef.current) {
                         await scannerRef.current.stop();
-                        setScanning(false);
+                        if (isMountedRef.current) setScanning(false);
                     }
 
                     const nutrients = await searchByBarcode(decodedText);
+                    if (!isMountedRef.current) return;
                     setIsLoading(false);
 
                     if (nutrients && onScanSuccess) {
@@ -44,7 +46,8 @@ export const useBarcodeScanner = (
                 },
                 () => {}
             );
-        } catch (err) {
+        } catch {
+            if (!isMountedRef.current) return;
             setError("Impossible d'accéder à la caméra");
             setScanning(false);
         }
@@ -53,8 +56,20 @@ export const useBarcodeScanner = (
     const stopScanner = useCallback(async () => {
         if (scannerRef.current) {
             await scannerRef.current.stop();
-            setScanning(false);
+            if (isMountedRef.current) setScanning(false);
         }
+    }, []);
+
+    // Coupe la caméra si le composant est démonté pendant un scan
+    useEffect(() => {
+        isMountedRef.current = true;
+        return () => {
+            isMountedRef.current = false;
+            if (scannerRef.current) {
+                scannerRef.current.stop().catch(() => {});
+                scannerRef.current = null;
+            }
+        };
     }, []);
 
     return {

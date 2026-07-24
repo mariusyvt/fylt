@@ -1,9 +1,9 @@
-import { RecipeType } from "@/types/recipes.types";
+import { Recipe } from "@/types/recipes.types";
 import { Clock, Users, Bookmark, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 type CardProps = {
-    recipe: RecipeType;
+    recipe: Recipe;
     recipeTypes: string;
 }
 

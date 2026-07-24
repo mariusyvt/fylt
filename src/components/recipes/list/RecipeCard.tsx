@@ -1,9 +1,9 @@
-import { RecipeType } from "@/types/recipes.types";
+import { Recipe } from "@/types/recipes.types";
 import { Users, Clock, Bookmark } from "lucide-react";
 import Link from "next/link";
 
 interface RecipeItemProps {
-    recipe: RecipeType;
+    recipe: Recipe;
     recipeType: string;
 }
 

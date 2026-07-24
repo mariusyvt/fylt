@@ -1,3 +1,5 @@
+import { WeekDay } from "@/types/tracking.types";
+
 export const parsePreparationTime = (timeStr: string): number => {
     const match = timeStr.match(/^(\d+)h(\d+)?$/);
     if (match) {
@@ -14,3 +16,19 @@ export const formatPreparationTime = (totalMinutes: number): string => {
     return `${h}h${m}`;
 }
 
+/**
+ * Retourne les 7 jours de la semaine courante (lundi -> dimanche).
+ */
+export const getWeekDays = (): WeekDay[] => {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7));
+
+    const labels = ["L", "M", "M", "J", "V", "S", "D"];
+    return labels.map((label, i) => {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        return { label, date: d.getDate(), isToday: d.toDateString() === today.toDateString() };
+    });
+};

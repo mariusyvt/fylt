@@ -1,101 +1,63 @@
+import { apiUrl, authHeaders, buildApiError } from "@/api/config/api.config";
+
 export const getRecipes = async (token: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/recipes`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        }
+    const response = await fetch(apiUrl("/recipes"), {
+        method: "GET",
+        headers: authHeaders(token),
     });
 
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
+};
 
-export const getRecipesTypes = async (token: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/recipe-types`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        }
+export const getRecipeTypes = async (token: string) => {
+    const response = await fetch(apiUrl("/recipe-types"), {
+        method: "GET",
+        headers: authHeaders(token),
     });
 
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
+};
 
 export const getRecipeById = async (id: number, token: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/recipes/${id}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        }
+    const response = await fetch(apiUrl(`/recipes/${id}`), {
+        method: "GET",
+        headers: authHeaders(token),
     });
 
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
+};
 
 export const createRecipe = async (recipeData: FormData, token: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/recipes`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
+    const response = await fetch(apiUrl("/recipes"), {
+        method: "POST",
+        headers: authHeaders(token, false),
         body: recipeData,
     });
 
-    if (!response.ok) {
-        throw await response.json();
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
+};
 
 export const deleteRecipe = async (id: number, token: string) => {
-    const response = await fetch (`${process.env.NEXT_PUBLIC_URL_API}/recipes/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    })
+    const response = await fetch(apiUrl(`/recipes/${id}`), {
+        method: "DELETE",
+        headers: authHeaders(token, false),
+    });
 
-    if (!response.ok) {
-        throw await response.json();
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
+};
 
-export const updateRecipe = async (recipeData: FormData, id:number, token: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/recipes/${id}`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
+export const updateRecipe = async (recipeData: FormData, id: number, token: string) => {
+    const response = await fetch(apiUrl(`/recipes/${id}`), {
+        method: "PATCH",
+        headers: authHeaders(token, false),
         body: recipeData,
-    })
+    });
 
-    if (!response.ok) {
-        throw await response.json();
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
-
+};

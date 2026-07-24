@@ -1,45 +1,29 @@
-export const getProfiles = async (token: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/user`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        }
+import { apiUrl, authHeaders, buildApiError } from "@/api/config/api.config";
+
+export const getProfile = async (token: string) => {
+    const response = await fetch(apiUrl("/user"), {
+        method: "GET",
+        headers: authHeaders(token),
     });
 
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
+};
 
 export const deleteProfile = async (token: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/user`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    })
+    const response = await fetch(apiUrl("/user"), {
+        method: "DELETE",
+        headers: authHeaders(token, false),
+    });
 
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
+};
 
 export const updateProfile = async (token: string, data: { firstName?: string; lastName?: string; email?: string }) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/user`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        },
+    const response = await fetch(apiUrl("/user"), {
+        method: "PATCH",
+        headers: authHeaders(token),
         body: JSON.stringify({
             first_name: data.firstName,
             last_name: data.lastName,
@@ -47,33 +31,20 @@ export const updateProfile = async (token: string, data: { firstName?: string; l
         }),
     });
 
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
+};
 
 export const updateProfilePhoto = async (token: string, file: File) => {
     const formData = new FormData();
-    formData.append('photo', file);
+    formData.append("photo", file);
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/user`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
+    const response = await fetch(apiUrl("/user"), {
+        method: "PATCH",
+        headers: authHeaders(token, false),
         body: formData,
     });
 
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
-
+    if (!response.ok) await buildApiError(response);
     return await response.json();
-}
-
+};

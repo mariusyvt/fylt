@@ -22,9 +22,7 @@ export default function VerifyEmailPage() {
 
         const verify = async () => {
             try {
-                console.log("🔑 Token reçu:", token);
-                const result = await verifyEmail(token);
-                console.log("✅ Vérification réussie:", result);
+                await verifyEmail(token);
                 setStatus("success");
             } catch (err) {
                 console.error("❌ Erreur vérification:", err);
@@ -43,8 +41,9 @@ export default function VerifyEmailPage() {
         try {
             await resendVerification(email);
             setResent(true);
-        } catch {
-            setResendError("Une erreur est survenue. Vérifiez votre email.");
+        } catch (err: unknown) {
+            const e = err as { message?: string };
+            setResendError(e.message || "Une erreur est survenue. Vérifiez votre email.");
         }
     };
 

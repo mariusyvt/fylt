@@ -11,8 +11,6 @@ import SelectField from "@/components/ui/SelectField";
 import PickerButton from "@/components/ui/PickerButton";
 import { Clock, Users } from "lucide-react";
 import { useEffect } from "react";
-import { getRecipesTypes } from "@/api/services/recipes.service";
-import { useAuth} from "@/context/AuthContext";
 import IngredientsSection from "@/components/add/IngredientsSection";
 import StepsSection from "@/components/add/StepsSection";
 import { useNutrition } from "@/hooks/useNutrition";
@@ -23,11 +21,9 @@ import PersonPicker from "@/components/add/PersonPicker";
 import IngredientForm from "@/components/add/IngredientForm";
 import StepForm from "@/components/add/StepForm";
 import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
-import ConfirmButton from "@/components/add/ConfirmButton";
 
 export default function EditPage() {
     const router = useRouter();
-    const {token} = useAuth();
 
     const {recipes, loading, id} = useRecipe()
 
@@ -65,7 +61,6 @@ export default function EditPage() {
         servings,
         setSelectedRecipeTypeId,
         selectedRecipeTypeId,
-        setRecipeType,
         recipeType,
         activePicker,
         setActivePicker,
@@ -94,21 +89,11 @@ export default function EditPage() {
     }
 
     useEffect(() => {
-        const fetchRecipes = async () => {
-            if (token) {
-                const result = await getRecipesTypes(token);
-                setRecipeType(result.data);
-            }
-        };
-        fetchRecipes();
-    }, [token]);
-
-    useEffect(() => {
         if (recipes?.recipe_ingredients && recipes.recipe_ingredients.length > 0 && recipes?.preparation_steps && recipes?.preparation_steps.length > 0) {
             setIngredient(recipes.recipe_ingredients);
             setSteps(recipes.preparation_steps)
         }
-    }, [recipes]);
+    }, [recipes, setIngredient, setSteps]);
 
     if (loading) return <Loader />;
 

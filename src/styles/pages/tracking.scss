@@ -1,4 +1,5 @@
-@use "../../variables" as *;
+@use "sass:color";
+@use "../variables" as *;
 
 // ── Page ──
 .tracking-page {
@@ -213,7 +214,7 @@
   transition: all $transition-base;
 
   &:hover {
-    background: darken($teal-50, 2%);
+    background: color.adjust($teal-50, $lightness: -2%);
   }
 }
 

@@ -1,8 +1,8 @@
 import { Search } from "lucide-react";
-import { Profiles } from "@/types/profiles.types";
+import { Profile } from "@/types/profile.types";
 
 interface HeaderHomeProps {
-    profile: Profiles | null;
+    profile: Profile | null;
 }
 
 export default function HeaderHome({ profile }: HeaderHomeProps){

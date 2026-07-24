@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter, usePathname } from "next/navigation";
 
 const PUBLIC_AUTH_ROUTES = ["/verify-email", "/reset-password"];

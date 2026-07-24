@@ -1,6 +1,7 @@
 "use client";
 
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import "@/styles/main.scss";
 import BottomNavbar from "@/components/BottomNavbar";
 

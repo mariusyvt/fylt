@@ -1,4 +1,5 @@
 import { Nutrients, CalculatedNutrients } from "@/types/nutrition.types";
+import { RecipeIngredient } from "@/types/recipes.types";
 
 export const calculateProportionalNutrients = (
     nutrients: Nutrients,
@@ -13,3 +14,12 @@ export const calculateProportionalNutrients = (
     };
 };
 
+/**
+ * Additionne les valeurs nutritionnelles d'une liste d'ingrédients.
+ */
+export const calculateTotalNutrition = (ingredients: RecipeIngredient[]) => ({
+    calories: ingredients.reduce((sum, ing) => sum + parseFloat(ing.ingredient_calories), 0),
+    proteins: ingredients.reduce((sum, ing) => sum + parseFloat(ing.ingredient_proteins), 0),
+    carbs: ingredients.reduce((sum, ing) => sum + parseFloat(ing.ingredient_carbs), 0),
+    lipids: ingredients.reduce((sum, ing) => sum + parseFloat(ing.ingredient_lipids), 0),
+});

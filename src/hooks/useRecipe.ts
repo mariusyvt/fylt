@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getRecipeById } from "@/api/services/recipes.service";
-import { useAuth } from "@/context/AuthContext";
-import { RecipeType } from "@/types/recipes.types";
+import { getRecipeById, deleteRecipe } from "@/api/services/recipes.service";
+import { useAuth } from "@/hooks/useAuth";
+import { Recipe } from "@/types/recipes.types";
 import { useParams, useRouter } from "next/navigation";
 
 export const useRecipe = () => {
@@ -9,8 +9,9 @@ export const useRecipe = () => {
     const router = useRouter();
     const params = useParams();
 
-    const [recipes, setRecipes] = useState<RecipeType | null>(null);
+    const [recipes, setRecipes] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const id = params.id as string;
 
     useEffect(() => {
@@ -20,6 +21,8 @@ export const useRecipe = () => {
                     const result = await getRecipeById(Number(id), token);
                     setRecipes(result.data);
                 }
+            } catch (err) {
+                setError((err as Error).message || "Impossible de charger la recette.");
             } finally {
                 setLoading(false);
             }
@@ -28,13 +31,17 @@ export const useRecipe = () => {
         fetchRecipes();
     }, [router, token, id]);
 
+    const removeRecipe = async () => {
+        if (!token) return;
+        await deleteRecipe(Number(id), token);
+        router.push("/recipes");
+    };
+
     return {
         recipes,
         loading,
-        id
+        error,
+        id,
+        removeRecipe,
     };
-}
-
-export const useRecipeTypes = () => {
-
 }

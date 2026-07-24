@@ -1,22 +1,22 @@
 "use client"
 
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { getRecipes, getRecipesTypes } from "@/api/services/recipes.service";
-import { RecipeType, RecipeCategory } from "@/types/recipes.types";
+import { getRecipes, getRecipeTypes } from "@/api/services/recipes.service";
+import { Recipe, RecipeCategory } from "@/types/recipes.types";
 import HeaderRecipes from "@/components/recipes/list/HeaderRecipes";
 import { RecipeCard } from "@/components/recipes/list/RecipeCard";
-import { getProfiles } from "@/api/services/profile.service";
-import { Profiles } from "@/types/profiles.types";
+import { getProfile } from "@/api/services/profile.service";
+import { Profile } from "@/types/profile.types";
 import { UtensilsCrossed } from "lucide-react";
 import Loader from "@/components/Loader";
 
-export default function Recipe () {
+export default function RecipesPage () {
     const { token } = useAuth();
-    const [recipes, setRecipes] = useState<RecipeType[]>([]);
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [recipeTypes, setRecipeTypes] = useState<RecipeCategory[]>([]);
     const [loading, setLoading] = useState(true);
-    const [profile, setProfile] = useState<Profiles | null>(null)
+    const [profile, setProfile] = useState<Profile | null>(null)
     const [activeFilter, setActiveFilter] = useState<number | null>(null);
 
     useEffect(() => {
@@ -25,8 +25,8 @@ export default function Recipe () {
                 if (token) {
                     const [resultRecipe, resultRecipeTypes, resultProfile] = await Promise.all([
                         getRecipes(token).catch(() => ({ data: [] })),
-                        getRecipesTypes(token),
-                        getProfiles(token),
+                        getRecipeTypes(token),
+                        getProfile(token),
                     ]);
                     setRecipes(resultRecipe.data)
                     setRecipeTypes(resultRecipeTypes.data)

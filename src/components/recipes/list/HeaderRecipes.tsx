@@ -1,10 +1,10 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Profiles } from "@/types/profiles.types";
+import { Profile } from "@/types/profile.types";
 import { RecipeCategory } from "@/types/recipes.types";
 
 interface HeaderProps {
-    profile: Profiles;
+    profile: Profile;
     recipeTypes: RecipeCategory[];
     activeFilter: number | null;
     onFilterChange: (id: number | null) => void;

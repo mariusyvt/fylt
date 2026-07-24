@@ -1,8 +1,8 @@
-import { RecipeType } from "@/types/recipes.types";
+import { Recipe } from "@/types/recipes.types";
 import { useCheckedSteps } from "@/hooks/useCheckedSteps";
 
 interface RecipeIngredientsListProps {
-    recipes: RecipeType;
+    recipes: Recipe;
 }
 
 export default function RecipeIngredientsList({ recipes }: RecipeIngredientsListProps) {

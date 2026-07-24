@@ -1,8 +1,10 @@
 import { RecipeCategory, RecipeIngredient, RecipeStep } from "@/types/recipes.types";
-import { useState } from "react";
-import { createRecipe } from "@/api/services/recipes.service";
-import { useAuth } from "@/context/AuthContext";
+import { ApiError } from "@/types/api.types";
+import { useEffect, useState } from "react";
+import { createRecipe, getRecipeTypes } from "@/api/services/recipes.service";
+import { useAuth } from "@/hooks/useAuth";
 import { parsePreparationTime } from "@/utils/format.utils";
+import { calculateTotalNutrition } from "@/utils/nutrition.utils";
 
 type PickerType = "time" | "persons" | "ingredient" | "step" | null;
 
@@ -17,21 +19,31 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
     const {token} = useAuth();
     const [errors, setErrors] = useState<Record<string, string>>({});
 
+    useEffect(() => {
+        const fetchRecipeTypes = async () => {
+            if (!token) return;
+            const result = await getRecipeTypes(token);
+            setRecipeType(result.data);
+        };
+        fetchRecipeTypes();
+    }, [token]);
+
     const handleSubmit = async () => {
         setErrors({});
-        const calculatedCalories = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_calories), 0)
-        const calculatedProteins = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_proteins), 0)
-        const calculatedCarbs = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_carbs), 0)
-        const calculatedLipids = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_lipids), 0)
+        if (!token) {
+            setErrors({ _global: "Vous devez être connecté." });
+            return false;
+        }
+        const totals = calculateTotalNutrition(ingredient);
 
         const recipe = {
             name: title,
             preparation_time_minutes: parsePreparationTime(preparationTime),
             servings: servings,
-            total_calories: calculatedCalories,
-            total_proteins: calculatedProteins,
-            total_carbs: calculatedCarbs,
-            total_lipids: calculatedLipids,
+            total_calories: totals.calories,
+            total_proteins: totals.proteins,
+            total_carbs: totals.carbs,
+            total_lipids: totals.lipids,
             recipe_type_id: Number(selectedRecipeTypeId),
         }
 
@@ -54,12 +66,13 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
         if (photo) recipeData.append("photo", photo)
 
         try {
-            await createRecipe(recipeData, token!);
+            await createRecipe(recipeData, token);
             return true
-        } catch (error: any) {
-            if (error.errors && Array.isArray(error.errors)) {
+        } catch (error) {
+            const apiError = error as ApiError;
+            if (apiError.errors && Array.isArray(apiError.errors)) {
                 const errorMap: Record<string, string> = {};
-                error.errors.forEach((e: any) => {
+                apiError.errors.forEach((e) => {
                     errorMap[e.field] = e.message;
                 });
                 setErrors(errorMap);
@@ -80,7 +93,6 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
         selectedRecipeTypeId,
         setSelectedRecipeTypeId,
         recipeType,
-        setRecipeType,
         activePicker,
         setActivePicker,
         handleSubmit,

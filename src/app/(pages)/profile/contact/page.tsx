@@ -5,7 +5,8 @@ import { ArrowLeft, Send } from "lucide-react";
 import Link from "next/link";
 import TextInput from "@/components/ui/TextInput";
 import TextArea from "@/components/ui/TextArea";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { sendContactMessage } from "@/api/services/contact.service";
 
 export default function ContactPage() {
     const { token } = useAuth();
@@ -29,16 +30,7 @@ export default function ContactPage() {
 
         setSending(true);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/contact`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ subject, message }),
-            });
-
-            if (!response.ok) throw new Error();
+            await sendContactMessage(token!, { subject, message });
 
             setSuccess(true);
             setSubject("");

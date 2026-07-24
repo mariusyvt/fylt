@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect } from "react";
 import { Clock, Users } from "lucide-react";
 import TimePicker from "@/components/add/TimePicker";
 import PersonPicker from "@/components/add/PersonPicker";
@@ -15,8 +14,6 @@ import TextInput from "@/components/ui/TextInput";
 import SelectField from "@/components/ui/SelectField";
 import PickerButton from "@/components/ui/PickerButton";
 import FileButton from "@/components/ui/FileButton";
-import { getRecipesTypes } from "@/api/services/recipes.service";
-import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
 import { useNutrition } from "@/hooks/useNutrition";
@@ -24,7 +21,6 @@ import { useAddRecipe } from "@/hooks/useAddRecipe";
 import { useStep } from "@/hooks/useStep";
 
 export default function AddPage () {
-    const {token} = useAuth();
     const router = useRouter();
 
     const {
@@ -59,7 +55,6 @@ export default function AddPage () {
         selectedRecipeTypeId,
         setSelectedRecipeTypeId,
         recipeType,
-        setRecipeType,
         activePicker,
         setActivePicker,
         handleSubmit,
@@ -73,15 +68,6 @@ export default function AddPage () {
         }
     );
 
-    useEffect(() => {
-        const fetchRecipes = async () => {
-            if (token) {
-                const result = await getRecipesTypes(token);
-                setRecipeType(result.data);
-            }
-        };
-        fetchRecipes();
-    }, [token]);
 
     const handlePickerConfirm = () => {
         if (activePicker === "ingredient" && scannedNutrients !== null) addIngredient(scannedNutrients, Number(quantity), ingredientName);

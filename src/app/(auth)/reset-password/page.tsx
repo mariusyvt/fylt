@@ -31,8 +31,9 @@ export default function ResetPasswordPage() {
         try {
             await resetPassword(token, password);
             setSuccess(true);
-        } catch {
-            setError("Le lien est invalide ou a expiré.");
+        } catch (err: unknown) {
+            const e = err as { message?: string };
+            setError(e.message || "Le lien est invalide ou a expiré.");
         }
     };
 

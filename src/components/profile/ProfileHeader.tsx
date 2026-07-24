@@ -1,18 +1,19 @@
 import { Camera } from "lucide-react";
-import { useRef } from "react";
-import { Profiles } from "@/types/profiles.types";
+import { useRef, useState } from "react";
+import { Profile } from "@/types/profile.types";
 import { updateProfilePhoto } from "@/api/services/profile.service";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 interface HeaderProps {
-    profile: Profiles;
+    profile: Profile;
     onPhotoUpdated?: (newPhotoUrl: string) => void;
 }
 
-export default function Header ({profile, onPhotoUpdated}: HeaderProps) {
+export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
     const photoProfile = profile.firstName.charAt(0).toUpperCase();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { token } = useAuth();
+    const [uploadError, setUploadError] = useState<string | null>(null);
 
     const handlePhotoClick = () => {
         fileInputRef.current?.click();
@@ -22,11 +23,23 @@ export default function Header ({profile, onPhotoUpdated}: HeaderProps) {
         const file = e.target.files?.[0];
         if (!file || !token) return;
 
+        setUploadError(null);
+
+        if (!file.type.startsWith("image/")) {
+            setUploadError("Le fichier doit être une image.");
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            setUploadError("L'image ne doit pas dépasser 5 Mo.");
+            return;
+        }
+
         try {
             const result = await updateProfilePhoto(token, file);
             onPhotoUpdated?.(result.data?.photo_url);
         } catch (err) {
             console.error("Erreur upload photo:", err);
+            setUploadError("Échec de l'envoi de la photo. Réessayez.");
         }
     };
 
@@ -56,6 +69,7 @@ export default function Header ({profile, onPhotoUpdated}: HeaderProps) {
             </div>
             <h1 className="user-name">{`${profile.firstName} ${profile.lastName}`}</h1>
             <p className="user-role">Chef Amateur</p>
+            {uploadError && <p className="error-message">{uploadError}</p>}
         </header>
     )
 }

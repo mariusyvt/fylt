@@ -1,8 +1,8 @@
 import { Bookmark, Clock, Users } from "lucide-react";
-import { RecipeType } from "@/types/recipes.types";
+import { Recipe } from "@/types/recipes.types";
 
 interface RecipeHeroProps {
-    recipe: RecipeType;
+    recipe: Recipe;
 }
 
 export default function RecipeHero({ recipe }: RecipeHeroProps) {

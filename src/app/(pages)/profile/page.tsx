@@ -1,22 +1,22 @@
 "use client"
 
-import Header from "@/components/profile/Header";
+import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileMenu from "@/components/profile/ProfileMenu";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { deleteProfile, getProfiles } from "@/api/services/profile.service";
-import { Profiles } from "@/types/profiles.types";
+import { deleteProfile, getProfile } from "@/api/services/profile.service";
+import { Profile } from "@/types/profile.types";
 
 export default function ProfilPage () {
     const {logout, token} = useAuth();
     const router = useRouter();
-    const [profile, setProfile] = useState<Profiles | null>(null);
+    const [profile, setProfile] = useState<Profile | null>(null);
 
     useEffect(() => {
         const fetchProfil = async () => {
             if (token) {
-                const result = await getProfiles(token);
+                const result = await getProfile(token);
                 const profile = result.data;
                 setProfile(profile)
             }
@@ -25,15 +25,15 @@ export default function ProfilPage () {
     }, [token])
 
     const handleLogout = async () => {
+        logout();
         router.push("/signin");
-        logout()
     }
 
     const handleDeleteAccount = async () => {
         if (token) {
             await deleteProfile(token);
-            router.push("/signin");
             logout();
+            router.push("/signin");
         }
     }
 
@@ -41,7 +41,7 @@ export default function ProfilPage () {
         <>
             <div className="bg-gradient-header"></div>
             {profile && (
-                <Header
+                <ProfileHeader
                     profile={profile}
                     onPhotoUpdated={(url) => setProfile({ ...profile, photo_url: url })}
                 />

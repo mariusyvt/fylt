@@ -1,4 +1,4 @@
-export interface RecipeType {
+export interface Recipe {
     id: number;
     name: string;
     photo_url: string;
