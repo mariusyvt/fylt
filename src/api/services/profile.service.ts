@@ -48,3 +48,31 @@ export const updateProfilePhoto = async (token: string, file: File) => {
     if (!response.ok) await buildApiError(response);
     return await response.json();
 };
+
+export interface GoalPayload {
+    gender: string;
+    age: number;
+    weight: number;
+    height: number;
+    activity_level: string;
+    daily_calories: number;
+    daily_proteins: number;
+    daily_carbs: number;
+    daily_lipids: number;
+}
+
+export const updateGoal = async (token: string, data: GoalPayload) => {
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, String(value));
+    });
+
+    const response = await fetch(apiUrl("/user"), {
+        method: "PATCH",
+        headers: authHeaders(token, false),
+        body: formData,
+    });
+
+    if (!response.ok) await buildApiError(response);
+    return await response.json();
+};

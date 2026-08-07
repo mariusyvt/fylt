@@ -16,11 +16,16 @@ export const formatPreparationTime = (totalMinutes: number): string => {
     return `${h}h${m}`;
 }
 
-/**
- * Retourne les 7 jours de la semaine courante (lundi -> dimanche).
- */
+export const toISODate = (d: Date): string => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
+
 export const getWeekDays = (): WeekDay[] => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const dayOfWeek = today.getDay();
     const monday = new Date(today);
     monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7));
@@ -29,6 +34,13 @@ export const getWeekDays = (): WeekDay[] => {
     return labels.map((label, i) => {
         const d = new Date(monday);
         d.setDate(monday.getDate() + i);
-        return { label, date: d.getDate(), isToday: d.toDateString() === today.toDateString() };
+        return {
+            label,
+            date: d.getDate(),
+            isToday: d.toDateString() === today.toDateString(),
+            isFuture: d.getTime() > today.getTime(),
+            fullDate: d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+            iso: toISODate(d),
+        };
     });
 };
