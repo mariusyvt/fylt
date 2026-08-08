@@ -4,10 +4,13 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { Nutrients } from "@/types/nutrition.types";
 import { searchByBarcode } from "@/api/services/openfoodfacts.service";
+import { getFoodByBarcode, foodToNutrients } from "@/api/services/foods.service";
+import { useAuth } from "@/hooks/useAuth";
 
 export const useBarcodeScanner = (
     onScanSuccess?: (nutrients: Nutrients) => void
 ) => {
+    const { token } = useAuth();
     const [scanning, setScanning] = useState(false);
     const [codeBar, setCodeBar] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +37,8 @@ export const useBarcodeScanner = (
                         if (isMountedRef.current) setScanning(false);
                     }
 
-                    const nutrients = await searchByBarcode(decodedText);
+                    const food = token ? await getFoodByBarcode(token, decodedText) : null;
+                    const nutrients = food ? foodToNutrients(food) : await searchByBarcode(decodedText);
                     if (!isMountedRef.current) return;
                     setIsLoading(false);
 
@@ -51,7 +55,7 @@ export const useBarcodeScanner = (
             setError("Impossible d'accéder à la caméra");
             setScanning(false);
         }
-    }, [onScanSuccess]);
+    }, [onScanSuccess, token]);
 
     const stopScanner = useCallback(async () => {
         if (scannerRef.current) {

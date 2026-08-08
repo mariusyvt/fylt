@@ -10,7 +10,7 @@ $border-color: #f1f5f9;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba($gray-50, 0.8);
+  background: oklch(0.975 0.006 90 / 0.8);
   backdrop-filter: blur(12px);
 }
 

@@ -51,8 +51,9 @@ const buildMeals = (day: ApiFoodLogDay): Meal[] =>
 
 export const useTracking = (goal?: CalorieGoal | null) => {
     const { token } = useAuth();
-    const weekDays = useMemo(() => getWeekDays(), []);
-    const todayIndex = weekDays.findIndex((d) => d.isToday);
+    const [weekOffset, setWeekOffset] = useState(0);
+    const weekDays = useMemo(() => getWeekDays(weekOffset), [weekOffset]);
+    const todayIndex = getWeekDays(0).findIndex((d) => d.isToday);
 
     const [selectedDay, setSelectedDay] = useState(todayIndex);
     const [expandedMeal, setExpandedMeal] = useState<MealSlot | null>(null);
@@ -132,6 +133,17 @@ export const useTracking = (goal?: CalorieGoal | null) => {
         setExpandedMeal(null);
     };
 
+    const goToWeek = (delta: number) => {
+        setWeekOffset((o) => o + delta);
+        setExpandedMeal(null);
+    };
+
+    const goToToday = () => {
+        setWeekOffset(0);
+        setSelectedDay(todayIndex);
+        setExpandedMeal(null);
+    };
+
     const refresh = useCallback(() => {
         if (selectedIso) loadDay(selectedIso);
     }, [selectedIso, loadDay]);
@@ -162,6 +174,9 @@ export const useTracking = (goal?: CalorieGoal | null) => {
         meals,
         weekDays,
         weekConsumed,
+        weekOffset,
+        goToWeek,
+        goToToday,
         selectedDay,
         selectedWeekDay,
         setSelectedDay: selectDay,

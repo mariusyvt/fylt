@@ -6,7 +6,7 @@ import PersonPicker from "@/components/add/PersonPicker";
 import HeaderAddRecipe from "@/components/add/HeaderAddRecipe";
 import IngredientsSection from "@/components/add/IngredientsSection";
 import StepsSection from "@/components/add/StepsSection";
-import IngredientForm from "@/components/add/IngredientForm";
+import IngredientFullScreen from "@/components/add/IngredientFullScreen";
 import StepForm from "@/components/add/StepForm";
 import PickerOverlay from "@/components/add/PickerOverlay";
 import ConfirmButton from "@/components/add/ConfirmButton";
@@ -144,7 +144,7 @@ export default function AddPage () {
                 </main>
 
                 <PickerOverlay
-                    activePicker={activePicker}
+                    activePicker={activePicker === "ingredient" ? null : activePicker}
                     onClose={() => setActivePicker(null)}
                     onConfirm={handlePickerConfirm}
                 >
@@ -154,18 +154,6 @@ export default function AddPage () {
                     {activePicker === "persons" && (
                         <PersonPicker initial={servings} onChange={setServings} />
                     )}
-                    {activePicker === "ingredient" && (
-                        <IngredientForm
-                            ingredientName={ingredientName}
-                            quantity={quantity}
-                            setQuantity={setQuantity}
-                            scanning={scanning}
-                            isLoading={isLoading}
-                            error={error}
-                            onStartScanner={startScanner}
-                            onStopScanner={stopScanner}
-                        />
-                    )}
                     {activePicker === "step" && (
                         <StepForm
                             stepNumber={steps.length + 1}
@@ -174,6 +162,29 @@ export default function AddPage () {
                         />
                     )}
                 </PickerOverlay>
+
+                <IngredientFullScreen
+                    open={activePicker === "ingredient"}
+                    onClose={() => setActivePicker(null)}
+                    onConfirm={handlePickerConfirm}
+                    ingredientName={ingredientName}
+                    nutrients={scannedNutrients}
+                    quantity={quantity}
+                    setQuantity={setQuantity}
+                    scanning={scanning}
+                    isLoading={isLoading}
+                    error={error}
+                    onStartScanner={startScanner}
+                    onStopScanner={stopScanner}
+                    onSelectFood={(n) => {
+                        setScannedNutrients(n);
+                        setIngredientName(n.name);
+                    }}
+                    onClearFood={() => {
+                        setScannedNutrients(null);
+                        setIngredientName("");
+                    }}
+                />
 
                 <ConfirmButton onClick={handleConfirm} />
             </div>

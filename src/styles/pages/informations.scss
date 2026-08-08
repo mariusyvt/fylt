@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   gap: $spacing-4;
-  padding: $spacing-6;
+  padding: max($spacing-4, env(safe-area-inset-top)) $spacing-6 $spacing-4;
 }
 
 .informations-title {
@@ -85,3 +85,110 @@
   gap: $spacing-4;
 }
 
+
+.info-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.info-row {
+  display: flex;
+  gap: $spacing-3;
+
+  .info-group {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-group__label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: $font-semibold;
+  color: $slate-400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 $spacing-2 2px;
+}
+
+.info-box-input {
+  width: 100%;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: 0.875rem;
+  padding: 0.875rem 1rem;
+  font-size: 0.95rem;
+  color: $slate-900;
+  font-family: inherit;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s ease;
+
+  &:focus {
+    border-color: $teal-600;
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  &[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+}
+
+.gender-toggle {
+  display: flex;
+  gap: $spacing-2;
+}
+
+.gender-btn {
+  flex: 1;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: 0.875rem;
+  padding: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: $font-medium;
+  color: $slate-600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &--active {
+    background: $teal-50;
+    border-color: $teal-600;
+    color: $teal-700;
+    font-weight: $font-semibold;
+  }
+}
+
+.info-save {
+  width: 100%;
+  background: $teal-600;
+  color: $white;
+  border: none;
+  border-radius: 1rem;
+  padding: 1rem;
+  font-size: 0.95rem;
+  font-weight: $font-semibold;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: $shadow-teal-card;
+  margin-top: $spacing-2;
+  transition: opacity 0.15s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}

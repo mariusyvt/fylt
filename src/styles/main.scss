@@ -5,6 +5,7 @@
 // UI — composants réutilisables
 @use 'components/ui/inputs';
 @use 'components/ui/buttons';
+@use 'components/ui/page-header';
 
 // Styles transverses (formulaires partagés)
 @use 'shared/shared-form';
@@ -78,4 +79,13 @@ body {
   height: 384px;
   background: linear-gradient(to bottom, variables.$teal-50 80%, transparent);
   z-index: -1;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

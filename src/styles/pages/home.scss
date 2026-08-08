@@ -41,3 +41,191 @@
   text-decoration: none;
   font-weight: $font-medium;
 }
+
+// ── Tableau de bord : suivi du jour ──
+.today-card {
+  display: block;
+  margin: 0 $spacing-6;
+  padding: $spacing-4 $spacing-5;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: $radius-2xl;
+  box-shadow: $shadow-teal-card;
+  text-decoration: none;
+  transition: transform $transition-base;
+
+  &:active {
+    transform: scale(0.99);
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-2;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $slate-400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.75rem;
+    font-weight: $font-medium;
+    color: $teal-600;
+  }
+
+  &__cal {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2px $spacing-3;
+  }
+
+  &__calMain {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  &__calValue {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $slate-900;
+  }
+
+  &__calGoal {
+    font-size: $text-sm;
+    color: $slate-400;
+  }
+
+  &__remaining {
+    margin: 0;
+    font-size: $text-sm;
+    font-weight: 800;
+    color: $slate-900;
+    white-space: nowrap;
+
+    span {
+      font-size: 0.7rem;
+      font-weight: $font-medium;
+      color: $slate-400;
+    }
+  }
+
+  &__track {
+    height: 8px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    overflow: hidden;
+    margin: $spacing-3 0;
+  }
+
+  &__fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, $teal-600, $teal-700);
+  }
+
+  &__macros {
+    display: flex;
+    gap: $spacing-4;
+  }
+}
+
+.today-macro {
+  flex: 1;
+  min-width: 0;
+
+  &__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: $spacing-1;
+  }
+
+  &__label {
+    font-size: 0.7rem;
+    font-weight: $font-medium;
+    color: $slate-600;
+  }
+
+  &__value {
+    font-size: 0.75rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+
+  &__target {
+    font-size: 0.65rem;
+    font-weight: $font-medium;
+    color: $slate-400;
+  }
+
+  &__track {
+    height: 5px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    overflow: hidden;
+  }
+
+  &__fill {
+    height: 100%;
+    border-radius: 999px;
+  }
+}
+
+// ── CTA objectif (pas encore défini) ──
+.today-cta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  margin: 0 $spacing-6;
+  padding: $spacing-4 $spacing-5;
+  background: $white;
+  border: 1px dashed $teal-600;
+  border-radius: $radius-2xl;
+  text-decoration: none;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: $teal-50;
+    color: $teal-600;
+    flex-shrink: 0;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: $text-sm;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+
+  &__sub {
+    font-size: 0.75rem;
+    color: $slate-400;
+  }
+
+  &__arrow {
+    color: $slate-400;
+    flex-shrink: 0;
+  }
+}

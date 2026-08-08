@@ -18,7 +18,7 @@ import { useStep } from "@/hooks/useStep";
 import PickerOverlay from "@/components/add/PickerOverlay";
 import TimePicker from "@/components/add/TimePicker";
 import PersonPicker from "@/components/add/PersonPicker";
-import IngredientForm from "@/components/add/IngredientForm";
+import IngredientFullScreen from "@/components/add/IngredientFullScreen";
 import StepForm from "@/components/add/StepForm";
 import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
 
@@ -167,7 +167,7 @@ export default function EditPage() {
             </main>
 
             <PickerOverlay
-                activePicker={activePicker}
+                activePicker={activePicker === "ingredient" ? null : activePicker}
                 onClose={() => setActivePicker(null)}
                 onConfirm={handlePickerConfirm}
             >
@@ -177,18 +177,6 @@ export default function EditPage() {
                 {activePicker === "persons" && (
                     <PersonPicker initial={servings} onChange={setServings} />
                 )}
-                {activePicker === "ingredient" && (
-                    <IngredientForm
-                        ingredientName={ingredientName}
-                        quantity={quantity}
-                        setQuantity={setQuantity}
-                        scanning={scanning}
-                        isLoading={isLoading}
-                        error={error}
-                        onStartScanner={startScanner}
-                        onStopScanner={stopScanner}
-                    />
-                )}
                 {activePicker === "step" && (
                     <StepForm
                         stepNumber={steps.length + 1}
@@ -197,6 +185,29 @@ export default function EditPage() {
                     />
                 )}
             </PickerOverlay>
+
+            <IngredientFullScreen
+                open={activePicker === "ingredient"}
+                onClose={() => setActivePicker(null)}
+                onConfirm={handlePickerConfirm}
+                ingredientName={ingredientName}
+                nutrients={scannedNutrients}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                scanning={scanning}
+                isLoading={isLoading}
+                error={error}
+                onStartScanner={startScanner}
+                onStopScanner={stopScanner}
+                onSelectFood={(n) => {
+                    setScannedNutrients(n);
+                    setIngredientName(n.name);
+                }}
+                onClearFood={() => {
+                    setScannedNutrients(null);
+                    setIngredientName("");
+                }}
+            />
         </>
     )
 }

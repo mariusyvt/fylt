@@ -17,7 +17,7 @@ export default function IngredientsSection({
 
     return (
         <section>
-            <h2 className="section-title">Ingrédients</h2>
+            <h2 className="recipe-section-title">Ingrédients</h2>
             <div className="item-stack">
                 {ingredients.map((ing, index) => (
                     <div key={index} className="ingredient-pill">

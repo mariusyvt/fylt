@@ -1,0 +1,80 @@
+@use '../../variables' as v;
+
+// ── Conteneur de page unifié ──
+.page-shell {
+  max-width: 448px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 8rem;
+}
+
+// ── En-tête de page unifié ──
+.page-header {
+  padding: max(#{v.$spacing-4}, env(safe-area-inset-top)) v.$spacing-6 v.$spacing-2;
+
+  &--sticky {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: linear-gradient(to bottom, v.$teal-50, rgba(v.$teal-50, 0.9));
+  }
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: v.$spacing-3;
+    margin-bottom: v.$spacing-4;
+  }
+
+  // Garde le bouton d'action à droite même sans leading
+  &__leading {
+    display: flex;
+    align-items: center;
+    gap: v.$spacing-3;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    gap: v.$spacing-3;
+    margin-left: auto;
+  }
+
+  &__titles {
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-1;
+  }
+
+  &__eyebrow {
+    color: v.$slate-400;
+    font-size: v.$text-sm;
+    font-weight: v.$font-medium;
+    margin: 0;
+  }
+
+  &__title {
+    font-size: v.$spacing-6;
+    font-weight: v.$font-semibold;
+    letter-spacing: -0.025em;
+    color: v.$slate-900;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-size: v.$text-sm;
+    color: v.$slate-400;
+    margin: 0;
+    text-transform: capitalize;
+  }
+
+  &__extra {
+    margin-top: v.$spacing-4;
+  }
+}

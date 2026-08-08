@@ -1,13 +1,17 @@
 "use client"
 
-import { Trash2, Pencil } from "lucide-react";
-import { useEffect } from "react";
+import { Trash2, Pencil, ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Loader from "@/components/Loader";
-import MealAddForm from "@/components/tracking/MealAddForm";
+import PageHeader from "@/components/ui/PageHeader";
+import RecipeQuickAdd from "@/components/tracking/RecipeQuickAdd";
 import { useTracking } from "@/hooks/useTracking";
 import { useCalorieGoal } from "@/hooks/useCalorieGoal";
+import { useAuth } from "@/hooks/useAuth";
+import { getRecipes, getRecipeTypes } from "@/api/services/recipes.service";
+import { Recipe, RecipeCategory } from "@/types/recipes.types";
 
 const MACROS_CONFIG = [
     { key: "proteins" as const, label: "Protéines", color: "#0d9488" },
@@ -17,7 +21,10 @@ const MACROS_CONFIG = [
 
 export default function Tracking() {
     const router = useRouter();
+    const { token } = useAuth();
     const { goal, hasGoal, loading } = useCalorieGoal();
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [recipeTypes, setRecipeTypes] = useState<RecipeCategory[]>([]);
 
     const {
         dailyGoal,
@@ -25,6 +32,9 @@ export default function Tracking() {
         meals,
         weekDays,
         weekConsumed,
+        weekOffset,
+        goToWeek,
+        goToToday,
         selectedDay,
         selectedWeekDay,
         setSelectedDay,
@@ -35,35 +45,83 @@ export default function Tracking() {
         removeItem,
     } = useTracking(goal);
 
+    const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+    const handleTouchStart = (e: React.TouchEvent) => setTouchStartX(e.touches[0].clientX);
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStartX === null) return;
+        const delta = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 50) goToWeek(delta < 0 ? 1 : -1);
+        setTouchStartX(null);
+    };
+
     useEffect(() => {
         if (!loading && !hasGoal) {
             router.replace("/tracking/onboarding");
         }
     }, [loading, hasGoal, router]);
 
+    useEffect(() => {
+        if (!token) return;
+        Promise.all([getRecipes(token), getRecipeTypes(token)])
+            .then(([r, t]) => {
+                setRecipes(r.data ?? []);
+                setRecipeTypes(t.data ?? []);
+            })
+            .catch(() => {
+                setRecipes([]);
+                setRecipeTypes([]);
+            });
+    }, [token]);
+
     if (loading || !hasGoal) return <Loader />;
 
     const remainingCalories = dailyGoal.calories - consumed.calories;
     const caloriePct = Math.min((consumed.calories / dailyGoal.calories) * 100, 100);
 
+    const firstDay = weekDays[0];
+    const lastDay = weekDays[weekDays.length - 1];
+    const weekRangeLabel = firstDay && lastDay
+        ? `${firstDay.date} – ${new Date(lastDay.iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}`
+        : "";
+
     return (
         <>
             <div className="bg-gradient-decor"></div>
-            <div className="tracking-page">
-                <header className="tracking-header tracking-header--row">
-                    <div>
-                        <h1 className="tracking-title">Suivi du jour</h1>
-                        <p className="tracking-date">
-                            {selectedWeekDay?.fullDate ??
-                                new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
-                        </p>
-                    </div>
-                    <Link className="circle-btn" href="/tracking/onboarding?edit=1" aria-label="Modifier mes données">
-                        <Pencil />
-                    </Link>
-                </header>
+            <div className="page-shell tracking-page">
+                <PageHeader
+                    title="Suivi du jour"
+                    subtitle={
+                        selectedWeekDay?.fullDate ??
+                        new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
+                    }
+                    action={
+                        <Link className="circle-btn" href="/tracking/onboarding?edit=1" aria-label="Modifier mes données">
+                            <Pencil />
+                        </Link>
+                    }
+                />
 
-                <section className="day-picker">
+                <div className="tracking-body">
+                <div className="week-nav">
+                    <button className="week-nav__arrow" onClick={() => goToWeek(-1)} aria-label="Semaine précédente">
+                        <ChevronLeft size={18} />
+                    </button>
+                    <div className="week-nav__center">
+                        <span className="week-nav__label">{weekRangeLabel}</span>
+                        {weekOffset !== 0 && (
+                            <button className="week-nav__today" onClick={goToToday}>Aujourd&apos;hui</button>
+                        )}
+                    </div>
+                    <button className="week-nav__arrow" onClick={() => goToWeek(1)} aria-label="Semaine suivante">
+                        <ChevronRight size={18} />
+                    </button>
+                </div>
+                <section
+                    className="day-picker"
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                >
                     {weekDays.map((day, i) => {
                         const dayConsumed = weekConsumed[day.iso];
                         const hasLog = (dayConsumed?.calories ?? 0) > 0;
@@ -179,7 +237,7 @@ export default function Tracking() {
                                                 ))
                                             )}
                                             {selectedWeekDay?.isToday && (
-                                                <MealAddForm slot={meal.slot} onAdd={addItem} />
+                                                <RecipeQuickAdd slot={meal.slot} recipes={recipes} recipeTypes={recipeTypes} onAdd={addItem} />
                                             )}
                                         </div>
                                     )}
@@ -188,6 +246,7 @@ export default function Tracking() {
                         })
                     )}
                 </section>
+                </div>
             </div>
         </>
     );

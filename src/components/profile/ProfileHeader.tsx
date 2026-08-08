@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
-    const photoProfile = profile.firstName.charAt(0).toUpperCase();
+    const photoProfile = (profile.firstName ?? "?").charAt(0).toUpperCase();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { token } = useAuth();
     const [uploadError, setUploadError] = useState<string | null>(null);

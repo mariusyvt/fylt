@@ -76,3 +76,24 @@ export const updateGoal = async (token: string, data: GoalPayload) => {
     if (!response.ok) await buildApiError(response);
     return await response.json();
 };
+
+export const updateUserFields = async (
+    token: string,
+    fields: Record<string, string | number | undefined | null>
+) => {
+    const formData = new FormData();
+    Object.entries(fields).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+            formData.append(key, String(value));
+        }
+    });
+
+    const response = await fetch(apiUrl("/user"), {
+        method: "PATCH",
+        headers: authHeaders(token, false),
+        body: formData,
+    });
+
+    if (!response.ok) await buildApiError(response);
+    return await response.json();
+};

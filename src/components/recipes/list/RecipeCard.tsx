@@ -1,5 +1,5 @@
 import { Recipe } from "@/types/recipes.types";
-import { Users, Clock, Bookmark } from "lucide-react";
+import { Clock, Users, Bookmark, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 interface RecipeItemProps {
@@ -7,30 +7,32 @@ interface RecipeItemProps {
     recipeType: string;
 }
 
-export function RecipeCard ({recipe, recipeType}: RecipeItemProps) {
+export function RecipeCard({ recipe, recipeType }: RecipeItemProps) {
     return (
-        <>
-            <Link href={`/recipes/${recipe.id}`} className="recipe-card">
-                <article>
-                    <div className="card-media">
-                        <img src={recipe.photo_url} alt={recipe.name} />
-                    </div>
-                    <div className="card-body">
-                        <h3>{recipe.name}</h3>
-                        <div className="meta-list">
-                            <div className="meta-item">
-                                <Users /> {recipe.servings} portions
-                            </div>
-                            <div className="meta-item">
-                                <Clock /> {recipe.preparation_time_minutes} min
-                            </div>
-                            <div className="meta-item category">
-                                <Bookmark /> {recipeType}
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </Link>
-        </>
-    )
+        <Link href={`/recipes/${recipe.id}`} className="card">
+            <img
+                className="card__thumbnail"
+                src={recipe.photo_url}
+                alt={recipe.name}
+            />
+            <div className="card__info">
+                <div className="card__header">
+                    <h3 className="card__title">{recipe.name}</h3>
+                    <span className="card__calories">{recipe.total_calories} kcal</span>
+                </div>
+                <div className="card__details">
+                    <span className="card__detail">
+                        <Clock size={14} /> {recipe.preparation_time_minutes} min
+                    </span>
+                    <span className="card__detail">
+                        <Users size={14} /> {recipe.servings} pers.
+                    </span>
+                    <span className="card__detail card__detail--full">
+                        <Bookmark size={14} /> {recipeType}
+                    </span>
+                </div>
+            </div>
+            <ChevronRight className="card__arrow" size={20} />
+        </Link>
+    );
 }

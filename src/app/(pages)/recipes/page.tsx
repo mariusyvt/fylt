@@ -50,35 +50,36 @@ export default function RecipesPage () {
 
     return (
         <>
-            <div className="bg-gradient-decor"></div>
-            {profile && (
-                <HeaderRecipes
-                    profile={profile}
-                    recipeTypes={recipeTypes}
-                    activeFilter={activeFilter}
-                    onFilterChange={setActiveFilter}
-                />
-            )}
-                <section className="section-container list-section">
-                    {filteredRecipes.length > 0 ? (
-                        <main className="recipe-grid">
-                            {filteredRecipes.map((recipe) => (
-                                <RecipeCard
-                                    key={recipe.id}
-                                    recipe={recipe}
-                                    recipeType={recipeTypes.find((t) => t.id === recipe.recipe_type_id)?.name ?? ""}
-                                />
-                            ))}
-                        </main>
-                    ) : (
-                        <div className="empty-state">
-                            <UtensilsCrossed size={48} />
-                            <h2>Aucune recette</h2>
-                            <p>{activeFilter ? "Aucune recette dans cette catégorie." : "Commence par ajouter ta première recette !"}</p>
-                        </div>
-                    )}
-                </section>
-
+            <div className="page-shell">
+                <div className="bg-gradient-decor"></div>
+                {profile && (
+                    <HeaderRecipes
+                        profile={profile}
+                        recipeTypes={recipeTypes}
+                        activeFilter={activeFilter}
+                        onFilterChange={setActiveFilter}
+                    />
+                )}
+                    <section className="section-container list-section">
+                        {filteredRecipes.length > 0 ? (
+                            <main className="card-list">
+                                {filteredRecipes.map((recipe) => (
+                                    <RecipeCard
+                                        key={recipe.id}
+                                        recipe={recipe}
+                                        recipeType={recipeTypes.find((t) => t.id === recipe.recipe_type_id)?.name ?? ""}
+                                    />
+                                ))}
+                            </main>
+                        ) : (
+                            <div className="empty-state">
+                                <UtensilsCrossed size={48} />
+                                <h2>Aucune recette</h2>
+                                <p>{activeFilter ? "Aucune recette dans cette catégorie." : "Commence par ajouter ta première recette !"}</p>
+                            </div>
+                        )}
+                    </section>
+            </div>
         </>
     )
 }

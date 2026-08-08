@@ -4,20 +4,277 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-4;
-  padding-top: $spacing-4;
+  padding-top: $spacing-2;
 }
 
-.ingredient-badge {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-weight: 600;
+// -- Barre de recherche + scan --
+.food-search {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: 0.875rem;
+  padding: 0 $spacing-3;
+
+  &__icon {
+    color: $slate-400;
+    flex: none;
+  }
+
+  &__input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0.75rem 0;
+    font-size: 0.95rem;
+    color: $slate-900;
+
+    &::placeholder {
+      color: $slate-400;
+    }
+  }
+
+  &__scan {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 0.625rem;
+    background: $teal-50;
+    color: $teal-600;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:active {
+      transform: scale(0.94);
+    }
+  }
 }
 
-.ingredient-placeholder {
-  color: #9e9e9e;
-  font-style: italic;
+.btn-scan-stop {
+  width: 100%;
+  background: $slate-900;
+  color: $white;
+  border: none;
+  border-radius: $radius-2xl;
+  padding: $spacing-3 $spacing-4;
   font-size: 0.9rem;
+  cursor: pointer;
 }
 
+// -- Résultats de recherche --
+.food-results {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.food-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-3;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: 0.875rem;
+  padding: $spacing-3 $spacing-4;
+
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    min-width: 0;
+    flex: 1;
+    text-align: left;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+
+    &:active {
+      transform: scale(0.99);
+    }
+  }
+
+  &__name {
+    font-size: 0.9rem;
+    color: $slate-900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__badge {
+    flex: none;
+    font-size: 0.65rem;
+    font-weight: $font-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $teal-700;
+    background: $teal-50;
+    border: 1px solid $teal-600;
+    border-radius: 999px;
+    padding: 0.1rem 0.4rem;
+  }
+
+  &__kcal {
+    flex: none;
+    font-size: 0.8rem;
+    font-weight: $font-semibold;
+    color: $teal-600;
+  }
+
+  &__delete {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    color: $slate-400;
+    cursor: pointer;
+    padding: $spacing-1;
+
+    &:active {
+      color: #ef4444;
+    }
+  }
+}
+
+// -- Aliment sélectionné --
+.food-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-3;
+  background: $teal-50;
+  border: 1px solid $teal-600;
+  border-radius: 0.875rem;
+  padding: $spacing-3 $spacing-4;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 0.95rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__kcal {
+    font-size: 0.75rem;
+    color: $teal-700;
+  }
+
+  &__change {
+    flex: none;
+    border: none;
+    background: none;
+    color: $teal-700;
+    font-size: 0.8rem;
+    font-weight: $font-semibold;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+// -- Aperçu des macros pour la quantité --
+.food-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2 $spacing-4;
+  align-items: baseline;
+  padding: $spacing-3 $spacing-4;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: 0.875rem;
+  font-size: 0.8rem;
+  color: $slate-600;
+
+  &__cal {
+    font-size: 0.95rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+}
+
+// -- Saisie manuelle --
+.manual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-3;
+}
+
+.link-btn {
+  align-self: center;
+  border: none;
+  background: none;
+  color: $teal-600;
+  font-size: 0.85rem;
+  font-weight: $font-medium;
+  cursor: pointer;
+  padding: $spacing-1;
+}
+
+.food-hint {
+  font-size: 0.85rem;
+  color: $slate-400;
+  text-align: center;
+  margin: 0;
+}
+
+.food-error {
+  font-size: 0.85rem;
+  color: #ef4444;
+  text-align: center;
+  margin: 0;
+}
+
+// -- Plein écran d'ajout d'aliment --
+.ingredient-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: $gray-50;
+  display: flex;
+  flex-direction: column;
+
+  .sticky-header {
+    position: static;
+  }
+
+  .icon-btn-circle--confirm {
+    background: $teal-600;
+    border-color: $teal-600;
+    color: $white;
+
+    &:disabled {
+      background: $slate-300;
+      border-color: $slate-300;
+      cursor: default;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 448px;
+    margin: 0 auto;
+    padding: $spacing-2 $spacing-5 calc($spacing-6 + env(safe-area-inset-bottom));
+  }
+}

@@ -23,12 +23,12 @@ export const toISODate = (d: Date): string => {
     return `${year}-${month}-${day}`;
 };
 
-export const getWeekDays = (): WeekDay[] => {
+export const getWeekDays = (weekOffset = 0): WeekDay[] => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const dayOfWeek = today.getDay();
     const monday = new Date(today);
-    monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7));
+    monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7) + weekOffset * 7);
 
     const labels = ["L", "M", "M", "J", "V", "S", "D"];
     return labels.map((label, i) => {
