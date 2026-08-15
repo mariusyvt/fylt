@@ -334,6 +334,17 @@
   box-shadow: $shadow-teal-card;
   margin-bottom: $spacing-4;
 
+  &--compact {
+    padding: $spacing-5 $spacing-6;
+    border-radius: $radius-2xl;
+    box-shadow: 0 1px 2px rgba(10, 20, 40, 0.03);
+    margin-top: $spacing-5;
+
+    .onboarding-result__value {
+      font-size: 2.5rem;
+    }
+  }
+
   &__badge {
     width: 56px;
     height: 56px;
@@ -359,6 +370,11 @@
     font-size: 1rem;
     color: $slate-400;
     margin: 0;
+  }
+
+  &__delta {
+    font-weight: $font-semibold;
+    color: $teal-600;
   }
 }
 

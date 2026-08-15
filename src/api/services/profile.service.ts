@@ -55,6 +55,7 @@ export interface GoalPayload {
     weight: number;
     height: number;
     activity_level: string;
+    objective: string;
     daily_calories: number;
     daily_proteins: number;
     daily_carbs: number;

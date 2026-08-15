@@ -1,10 +1,10 @@
 "use client"
 
-import { ArrowLeft, ArrowRight, Check, Mars, Venus, Armchair, Footprints, Bike, Dumbbell, Flame, Target, Sparkles, Calculator } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, ArrowRight, Check, Mars, Venus, Armchair, Footprints, Bike, Dumbbell, Flame, Target, Sparkles, Calculator, TrendingDown, TrendingUp, Minus } from "lucide-react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
-import { ActivityLevel, Gender } from "@/utils/tdee.utils";
+import { ActivityLevel, Gender, CalorieObjective, applyObjective } from "@/utils/tdee.utils";
 import { useCalorieOnboarding, TOTAL_STEPS, OnboardingData } from "@/hooks/useCalorieOnboarding";
 import { useCalorieGoal, CalorieGoal } from "@/hooks/useCalorieGoal";
 
@@ -27,6 +27,14 @@ const STEP_TITLES = [
     "Quel est ton poids ?",
     "Quelle est ta taille ?",
     "Ton niveau d'activité ?",
+];
+
+const OBJECTIVES: { value: CalorieObjective; label: string; desc: string; icon: typeof Minus }[] = [
+    { value: "maintain", label: "Maintien", desc: "Rester à ton poids actuel", icon: Minus },
+    { value: "cut_moderate", label: "Sèche modérée", desc: "Perte de poids progressive (-15%)", icon: TrendingDown },
+    { value: "cut_intense", label: "Sèche intensive", desc: "Perte de poids accélérée (-25%)", icon: TrendingDown },
+    { value: "bulk_moderate", label: "Prise de masse modérée", desc: "Gain de muscle propre (+10%)", icon: TrendingUp },
+    { value: "bulk_intense", label: "Prise de masse intensive", desc: "Gain de masse accéléré (+20%)", icon: TrendingUp },
 ];
 
 export default function CalorieOnboarding() {
@@ -56,21 +64,35 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
     const [started, setStarted] = useState(editMode);
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
+    const [postPhase, setPostPhase] = useState<"result" | "objective">("result");
+    const [objective, setObjective] = useState<CalorieObjective>(goal?.objective ?? "maintain");
     const { step, data, result, isStepValid, update, next, back, reset, progress } =
         useCalorieOnboarding(goal ? goalToOnboardingData(goal) : undefined);
 
+    const finalResult = useMemo(
+        () => (result ? applyObjective(result, objective) : null),
+        [result, objective]
+    );
+
+    const restart = () => {
+        setPostPhase("result");
+        setObjective("maintain");
+        reset();
+    };
+
     const handleConfirm = async () => {
-        if (!result || !data.gender || !data.activity) return;
+        if (!finalResult || !data.gender || !data.activity) return;
         setSaving(true);
         setSaveError(null);
         try {
             await saveGoal({
-                ...result,
+                ...finalResult,
                 gender: data.gender,
                 age: Number(data.age),
                 weight: Number(data.weight),
                 height: Number(data.height),
                 activity: data.activity,
+                objective,
             });
             router.push("/tracking");
         } catch (err) {
@@ -80,7 +102,6 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
         }
     };
 
-    // ── Intro screen ──
     if (!started && !result) {
         return (
             <>
@@ -127,27 +148,100 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
         );
     }
 
-    // ── Result screen ──
     if (result) {
+        const displayed = postPhase === "objective" ? finalResult! : result;
         const macros = [
-            { label: "Protéines", value: result.proteins, color: "#0d9488" },
-            { label: "Glucides", value: result.carbs, color: "#f97316" },
-            { label: "Lipides", value: result.lipids, color: "#8b5cf6" },
+            { label: "Protéines", value: displayed.proteins, color: "#0d9488" },
+            { label: "Glucides", value: displayed.carbs, color: "#f97316" },
+            { label: "Lipides", value: displayed.lipids, color: "#8b5cf6" },
         ];
+
+        if (postPhase === "result") {
+            return (
+                <>
+                    <div className="bg-gradient-decor"></div>
+                    <div className="onboarding-page">
+                        <header className="onboarding-header">
+                            <h1 className="onboarding-title">Ton maintien</h1>
+                        </header>
+
+                        <div className="onboarding-result">
+                            <div className="onboarding-result__badge">
+                                <Flame size={22} />
+                            </div>
+                            <p className="onboarding-result__value">{result.calories}</p>
+                            <p className="onboarding-result__unit">calories / jour</p>
+                        </div>
+
+                        <div className="onboarding-macros">
+                            {macros.map((m) => (
+                                <div key={m.label} className="onboarding-macros__item">
+                                    <span className="onboarding-macros__dot" style={{ background: m.color }} />
+                                    <span className="onboarding-macros__label">{m.label}</span>
+                                    <span className="onboarding-macros__value">{m.value} g</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="onboarding-actions onboarding-actions--single">
+                            <button className="btn-primary" onClick={() => setPostPhase("objective")}>
+                                Continuer
+                                <ArrowRight size={18} />
+                            </button>
+                            <button className="onboarding-restart" onClick={restart} disabled={saving}>
+                                Recommencer
+                            </button>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        const delta = finalResult!.calories - result.calories;
         return (
             <>
                 <div className="bg-gradient-decor"></div>
                 <div className="onboarding-page">
                     <header className="onboarding-header">
+                        <button className="circle-btn" onClick={() => setPostPhase("result")}>
+                            <ArrowLeft />
+                        </button>
                         <h1 className="onboarding-title">Ton objectif</h1>
                     </header>
 
-                    <div className="onboarding-result">
-                        <div className="onboarding-result__badge">
-                            <Flame size={22} />
-                        </div>
-                        <p className="onboarding-result__value">{result.calories}</p>
-                        <p className="onboarding-result__unit">calories / jour</p>
+                    <h2 className="onboarding-question">Que veux-tu faire ?</h2>
+
+                    <div className="onboarding-options">
+                        {OBJECTIVES.map((o) => (
+                            <button
+                                key={o.value}
+                                className={`option-row ${objective === o.value ? "selected" : ""}`}
+                                onClick={() => setObjective(o.value)}
+                            >
+                                <div className="option-row__icon">
+                                    <o.icon size={20} />
+                                </div>
+                                <div className="option-row__text">
+                                    <span className="option-row__label">{o.label}</span>
+                                    <span className="option-row__desc">{o.desc}</span>
+                                </div>
+                                {objective === o.value && (
+                                    <Check size={18} className="option-row__check" />
+                                )}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="onboarding-result onboarding-result--compact">
+                        <p className="onboarding-result__value">{finalResult!.calories}</p>
+                        <p className="onboarding-result__unit">
+                            calories / jour
+                            {delta !== 0 && (
+                                <span className="onboarding-result__delta">
+                                    {" "}({delta > 0 ? "+" : ""}{delta} kcal)
+                                </span>
+                            )}
+                        </p>
                     </div>
 
                     <div className="onboarding-macros">
@@ -169,7 +263,7 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
                             )}
                         </button>
                         {saveError && <p className="error-message">{saveError}</p>}
-                        <button className="onboarding-restart" onClick={reset} disabled={saving}>
+                        <button className="onboarding-restart" onClick={restart} disabled={saving}>
                             Recommencer
                         </button>
                     </div>
@@ -207,7 +301,6 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
                 <h2 className="onboarding-question">{STEP_TITLES[step]}</h2>
 
                 <main className="onboarding-content">
-                    {/* Step 0 — Gender */}
                     {step === 0 && (
                         <div className="onboarding-options onboarding-options--grid">
                             {GENDERS.map((g) => (
@@ -223,7 +316,6 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
                         </div>
                     )}
 
-                    {/* Step 1 — Age */}
                     {step === 1 && (
                         <div className="onboarding-number">
                             <input
@@ -239,7 +331,6 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
                         </div>
                     )}
 
-                    {/* Step 2 — Weight */}
                     {step === 2 && (
                         <div className="onboarding-number">
                             <input
@@ -255,7 +346,6 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
                         </div>
                     )}
 
-                    {/* Step 3 — Height */}
                     {step === 3 && (
                         <div className="onboarding-number">
                             <input
@@ -271,7 +361,6 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
                         </div>
                     )}
 
-                    {/* Step 4 — Activity */}
                     {step === 4 && (
                         <div className="onboarding-options">
                             {ACTIVITIES.map((a) => (

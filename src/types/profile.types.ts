@@ -15,6 +15,7 @@ export interface Profile {
     weight: number | null;
     height: number | null;
     activity_level: ActivityLevel | null;
+    objective: string | null;
     daily_calories: number | null;
     daily_proteins: number | null;
     daily_carbs: number | null;

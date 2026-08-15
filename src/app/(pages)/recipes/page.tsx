@@ -44,9 +44,10 @@ export default function RecipesPage () {
         return <Loader />;
     }
 
-    const filteredRecipes = activeFilter
+    const filteredRecipes = (activeFilter
         ? recipes.filter((r) => r.recipe_type_id === activeFilter)
-        : recipes;
+        : recipes
+    ).sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 
     return (
         <>

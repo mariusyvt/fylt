@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react";
-import { ActivityLevel, Gender, MacroTargets } from "@/utils/tdee.utils";
+import { ActivityLevel, Gender, MacroTargets, CalorieObjective } from "@/utils/tdee.utils";
 import { getProfile, updateGoal } from "@/api/services/profile.service";
 import { useAuth } from "@/hooks/useAuth";
 import { Profile } from "@/types/profile.types";
@@ -12,7 +12,19 @@ export interface CalorieGoal extends MacroTargets {
     weight: number;
     height: number;
     activity: ActivityLevel;
+    objective: CalorieObjective;
 }
+
+const OBJECTIVES: CalorieObjective[] = [
+    "maintain",
+    "cut_moderate",
+    "cut_intense",
+    "bulk_moderate",
+    "bulk_intense",
+];
+
+const parseObjective = (value: string | null): CalorieObjective =>
+    OBJECTIVES.includes(value as CalorieObjective) ? (value as CalorieObjective) : "maintain";
 
 const profileToGoal = (p: Profile): CalorieGoal | null => {
     if (
@@ -34,6 +46,7 @@ const profileToGoal = (p: Profile): CalorieGoal | null => {
         weight: p.weight,
         height: p.height,
         activity: p.activity_level,
+        objective: parseObjective(p.objective),
     };
 };
 
@@ -72,6 +85,7 @@ export const useCalorieGoal = () => {
                 weight: newGoal.weight,
                 height: newGoal.height,
                 activity_level: newGoal.activity,
+                objective: newGoal.objective,
                 daily_calories: newGoal.calories,
                 daily_proteins: newGoal.proteins,
                 daily_carbs: newGoal.carbs,

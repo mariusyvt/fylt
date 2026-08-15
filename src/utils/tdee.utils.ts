@@ -10,8 +10,8 @@ export type ActivityLevel =
 export interface TdeeInput {
     gender: Gender;
     age: number;
-    weight: number; // kg
-    height: number; // cm
+    weight: number;
+    height: number;
     activity: ActivityLevel;
 }
 
@@ -30,7 +30,6 @@ export const ACTIVITY_MULTIPLIERS: Record<ActivityLevel, number> = {
     athlete: 1.9,
 };
 
-// Mifflin-St Jeor equation (same as tdeecalculator.net)
 export function calculateBMR({ gender, age, weight, height }: TdeeInput): number {
     const base = 10 * weight + 6.25 * height - 5 * age;
     return gender === "male" ? base + 5 : base - 161;
@@ -41,13 +40,38 @@ export function calculateTDEE(input: TdeeInput): number {
     return bmr * ACTIVITY_MULTIPLIERS[input.activity];
 }
 
-// Split calories into macros: 30% protein, 40% carbs, 30% fat
-export function calculateMacros(input: TdeeInput): MacroTargets {
-    const calories = Math.round(calculateTDEE(input));
+export function splitMacros(calories: number): Omit<MacroTargets, "calories"> {
     return {
-        calories,
         proteins: Math.round((calories * 0.3) / 4),
         carbs: Math.round((calories * 0.4) / 4),
         lipids: Math.round((calories * 0.3) / 9),
     };
+}
+
+export function calculateMacros(input: TdeeInput): MacroTargets {
+    const calories = Math.round(calculateTDEE(input));
+    return { calories, ...splitMacros(calories) };
+}
+
+export type CalorieObjective =
+    | "maintain"
+    | "cut_moderate"
+    | "cut_intense"
+    | "bulk_moderate"
+    | "bulk_intense";
+
+export const OBJECTIVE_ADJUSTMENTS: Record<CalorieObjective, number> = {
+    maintain: 0,
+    cut_moderate: -0.15,
+    cut_intense: -0.25,
+    bulk_moderate: 0.1,
+    bulk_intense: 0.2,
+};
+
+export function applyObjective(
+    base: MacroTargets,
+    objective: CalorieObjective
+): MacroTargets {
+    const calories = Math.round(base.calories * (1 + OBJECTIVE_ADJUSTMENTS[objective]));
+    return { calories, ...splitMacros(calories) };
 }

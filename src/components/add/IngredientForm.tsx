@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, ScanBarcode, Trash2 } from "lucide-react";
+import { Search, ScanBarcode, Trash2, Clock, X } from "lucide-react";
 import TextInput from "@/components/ui/TextInput";
 import { Nutrients } from "@/types/nutrition.types";
 import { Food } from "@/types/foods.types";
 import { searchFoods, createFood, deleteFood, foodToNutrients } from "@/api/services/foods.service";
 import { calculateProportionalNutrients } from "@/utils/nutrition.utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useRecentFoods } from "@/hooks/useRecentFoods";
 
 interface IngredientFormProps {
     ingredientName: string;
@@ -39,6 +40,7 @@ export default function IngredientForm({
     onClearFood,
 }: IngredientFormProps) {
     const { token } = useAuth();
+    const { recentFoods, addRecent, removeRecent } = useRecentFoods();
     const [mode, setMode] = useState<"search" | "manual">("search");
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<Food[]>([]);
@@ -206,6 +208,13 @@ export default function IngredientForm({
     }
 
     // -- Recherche par nom + scan --
+    const handleSelectFood = (food: Food) => {
+        addRecent(food);
+        onSelectFood(foodToNutrients(food));
+    };
+
+    const showRecents = query.trim().length < 2 && results.length === 0 && recentFoods.length > 0;
+
     return (
         <div className="ingredient-form">
             <div className="food-search">
@@ -215,6 +224,7 @@ export default function IngredientForm({
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Rechercher un aliment…"
+                    autoFocus
                 />
                 <button
                     type="button"
@@ -227,11 +237,21 @@ export default function IngredientForm({
             </div>
 
             {scanning && (
-                <button type="button" className="btn-scan-stop" onClick={onStopScanner}>
-                    Arrêter le scan
-                </button>
+                <div className="scanner-overlay">
+                    <div className="scanner-overlay__header">
+                        <button type="button" className="scanner-overlay__close" onClick={onStopScanner}>
+                            <X size={22} />
+                        </button>
+                        <span className="scanner-overlay__title">Scanner un produit</span>
+                    </div>
+                    <div className="scanner-overlay__viewport">
+                        <div id="reader"></div>
+                        <div className="scanner-overlay__frame" />
+                    </div>
+                    <p className="scanner-overlay__hint">Placez le code-barres dans le cadre</p>
+                </div>
             )}
-            <div id="reader" style={{ width: "100%", minHeight: scanning ? "220px" : "0" }}></div>
+            {!scanning && <div id="reader" style={{ display: "none" }}></div>}
 
             {isLoading && <p className="food-hint">Recherche du produit…</p>}
             {error && <p className="food-error">{error}</p>}
@@ -240,37 +260,72 @@ export default function IngredientForm({
             {results.length > 0 && (
                 <div className="food-results">
                     {results.map((food) => (
-                        <div className="food-result" key={food.id}>
-                            <button
-                                type="button"
-                                className="food-result__main"
-                                onClick={() => onSelectFood(foodToNutrients(food))}
-                            >
+                        <button
+                            type="button"
+                            className="food-result"
+                            key={food.id}
+                            onClick={() => handleSelectFood(food)}
+                        >
+                            <div className="food-result__left">
                                 <span className="food-result__name">{food.name}</span>
-                                {food.user_id !== null && (
-                                    <span className="food-result__badge">Perso</span>
-                                )}
-                            </button>
-                            <span className="food-result__kcal">
-                                {Math.round(food.calories_100g)} kcal
-                            </span>
+                                <span className="food-result__meta">
+                                    {food.brand && <span className="food-result__brand">{food.brand}</span>}
+                                    {food.user_id !== null && (
+                                        <span className="food-result__badge">Perso</span>
+                                    )}
+                                </span>
+                            </div>
+                            <div className="food-result__right">
+                                <span className="food-result__kcal">{Math.round(food.calories_100g)}</span>
+                                <span className="food-result__unit">kcal</span>
+                            </div>
                             {food.user_id !== null && (
                                 <button
                                     type="button"
                                     className="food-result__delete"
-                                    onClick={() => handleDelete(food.id)}
+                                    onClick={(e) => { e.stopPropagation(); handleDelete(food.id); }}
                                     aria-label="Supprimer cet aliment"
                                 >
-                                    <Trash2 size={16} />
+                                    <Trash2 size={14} />
                                 </button>
                             )}
-                        </div>
+                        </button>
                     ))}
                 </div>
             )}
 
             {query.trim().length >= 2 && !searching && results.length === 0 && (
                 <p className="food-hint">Aucun résultat</p>
+            )}
+
+            {showRecents && (
+                <div className="food-recents">
+                    <div className="food-recents__header">
+                        <Clock size={14} />
+                        <span>Récents</span>
+                    </div>
+                    <div className="food-recents__list">
+                        {recentFoods.map((food) => (
+                            <div className="food-recent" key={food.id}>
+                                <button
+                                    type="button"
+                                    className="food-recent__main"
+                                    onClick={() => handleSelectFood(food)}
+                                >
+                                    <span className="food-recent__name">{food.name}</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    className="food-recent__remove"
+                                    onClick={() => removeRecent(food.id)}
+                                    aria-label="Retirer des récents"
+                                >
+                                    <X size={14} />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             )}
 
             <button type="button" className="link-btn" onClick={() => setMode("manual")}>
