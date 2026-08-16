@@ -52,12 +52,19 @@ export interface ApiFoodLogMeal {
 export interface ApiFoodLogDay {
     date: string;
     consumed: MacroSummary;
+    goals?: Partial<MacroSummary> | null;
+    remaining?: Partial<MacroSummary> | null;
     meals: ApiFoodLogMeal[];
 }
 
 export interface ApiWeekConsumed {
     date: string;
     consumed: MacroSummary;
+}
+
+export interface ApiWeekResponse {
+    goals?: Partial<MacroSummary> | null;
+    days: ApiWeekConsumed[];
 }
 
 export interface NewFoodEntry {
@@ -68,6 +75,37 @@ export interface NewFoodEntry {
     proteins?: number;
     carbs?: number;
     lipids?: number;
+}
+
+export interface UpdateFoodEntry {
+    meal_slot?: MealSlot;
+    name?: string;
+    calories?: number;
+    proteins?: number;
+    carbs?: number;
+    lipids?: number;
+}
+
+export interface RecentFood {
+    name: string;
+    calories: number;
+    proteins: number;
+    carbs: number;
+    lipids: number;
+}
+
+export interface WeightEntry {
+    id: number;
+    weight: number;
+    date: string;
+}
+
+export interface MonthlyStats {
+    month: string;
+    days_logged: number;
+    average: MacroSummary;
+    goals: Partial<MacroSummary> | null;
+    days_on_target: number | null;
 }
 
 

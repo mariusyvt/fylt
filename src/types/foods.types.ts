@@ -7,6 +7,7 @@ export interface Food {
     category: string | null;
     barcode: string | null;
     brand: string | null;
+    brand_label: string | null;
     user_id: string | null;
     calories_100g: number;
     proteins_100g: number;

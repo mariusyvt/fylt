@@ -4,10 +4,12 @@ import { getWeekDays } from "@/utils/format.utils";
 import {
     ApiFoodLogDay,
     ApiWeekConsumed,
+    ApiWeekResponse,
     MacroSummary,
     Meal,
     MealSlot,
     NewFoodEntry,
+    UpdateFoodEntry,
 } from "@/types/tracking.types";
 import { CalorieGoal } from "@/hooks/useCalorieGoal";
 import { useAuth } from "@/hooks/useAuth";
@@ -16,6 +18,7 @@ import {
     deleteFoodLogEntry,
     getFoodLog,
     getFoodLogWeek,
+    updateFoodLogEntry,
 } from "@/api/services/foodlog.service";
 
 const DEFAULT_GOAL: MacroSummary = { calories: 2200, proteins: 150, carbs: 280, lipids: 75 };
@@ -60,6 +63,8 @@ export const useTracking = (goal?: CalorieGoal | null) => {
 
     const [meals, setMeals] = useState<Meal[]>(emptyMeals);
     const [consumed, setConsumed] = useState<MacroSummary>(EMPTY_CONSUMED);
+    const [apiGoals, setApiGoals] = useState<Partial<MacroSummary> | null>(null);
+    const [remaining, setRemaining] = useState<Partial<MacroSummary> | null>(null);
     const [weekConsumed, setWeekConsumed] = useState<Record<string, MacroSummary>>({});
     const [loadingDay, setLoadingDay] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -78,9 +83,13 @@ export const useTracking = (goal?: CalorieGoal | null) => {
                 const day = res.data as ApiFoodLogDay;
                 setMeals(buildMeals(day));
                 setConsumed(day.consumed ?? EMPTY_CONSUMED);
+                setApiGoals(day.goals ?? null);
+                setRemaining(day.remaining ?? null);
             } catch (err) {
                 setMeals(emptyMeals());
                 setConsumed(EMPTY_CONSUMED);
+                setApiGoals(null);
+                setRemaining(null);
                 setError(err instanceof Error ? err.message : "Erreur de chargement");
             } finally {
                 setLoadingDay(false);
@@ -102,8 +111,12 @@ export const useTracking = (goal?: CalorieGoal | null) => {
             try {
                 const res = await getFoodLogWeek(token, weekStart);
                 if (!active) return;
+                const payload = res.data as ApiWeekResponse | ApiWeekConsumed[];
+                const days: ApiWeekConsumed[] = Array.isArray(payload)
+                    ? payload
+                    : payload.days ?? [];
                 const map: Record<string, MacroSummary> = {};
-                (res.data as ApiWeekConsumed[]).forEach((d) => {
+                days.forEach((d) => {
                     map[d.date] = d.consumed;
                 });
                 setWeekConsumed(map);
@@ -123,7 +136,12 @@ export const useTracking = (goal?: CalorieGoal | null) => {
             carbs: goal.carbs,
             lipids: goal.lipids,
         }
-        : DEFAULT_GOAL;
+        : {
+            calories: apiGoals?.calories ?? DEFAULT_GOAL.calories,
+            proteins: apiGoals?.proteins ?? DEFAULT_GOAL.proteins,
+            carbs: apiGoals?.carbs ?? DEFAULT_GOAL.carbs,
+            lipids: apiGoals?.lipids ?? DEFAULT_GOAL.lipids,
+        };
 
     const toggleMeal = (slot: MealSlot) =>
         setExpandedMeal((current) => (current === slot ? null : slot));
@@ -166,11 +184,21 @@ export const useTracking = (goal?: CalorieGoal | null) => {
         [token, selectedIso, loadDay]
     );
 
+    const editItem = useCallback(
+        async (id: number, changes: UpdateFoodEntry) => {
+            if (!token || !selectedIso) return;
+            await updateFoodLogEntry(token, id, changes);
+            await loadDay(selectedIso);
+        },
+        [token, selectedIso, loadDay]
+    );
+
     const hasData = meals.some((m) => m.items.length > 0);
 
     return {
         dailyGoal,
         consumed,
+        remaining,
         meals,
         weekDays,
         weekConsumed,
@@ -187,6 +215,7 @@ export const useTracking = (goal?: CalorieGoal | null) => {
         error,
         addItem,
         removeItem,
+        editItem,
         refresh,
     };
 };

@@ -1,6 +1,6 @@
 "use client"
 
-import { Trash2, Pencil, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trash2, Pencil, ChevronLeft, ChevronRight, LineChart, BarChart3 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -29,6 +29,7 @@ export default function Tracking() {
     const {
         dailyGoal,
         consumed,
+        remaining,
         meals,
         weekDays,
         weekConsumed,
@@ -76,7 +77,7 @@ export default function Tracking() {
 
     if (loading || !hasGoal) return <Loader />;
 
-    const remainingCalories = dailyGoal.calories - consumed.calories;
+    const remainingCalories = remaining?.calories ?? Math.max(dailyGoal.calories - consumed.calories, 0);
     const caloriePct = Math.min((consumed.calories / dailyGoal.calories) * 100, 100);
 
     const firstDay = weekDays[0];
@@ -94,6 +95,16 @@ export default function Tracking() {
                     subtitle={
                         selectedWeekDay?.fullDate ??
                         new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
+                    }
+                    leading={
+                        <div className="header-actions">
+                            <Link className="circle-btn circle-btn--teal" href="/tracking/weight" aria-label="Suivi du poids">
+                                <LineChart />
+                            </Link>
+                            <Link className="circle-btn circle-btn--orange" href="/tracking/stats" aria-label="Bilan du mois">
+                                <BarChart3 />
+                            </Link>
+                        </div>
                     }
                     action={
                         <Link className="circle-btn" href="/tracking/onboarding?edit=1" aria-label="Modifier mes données">

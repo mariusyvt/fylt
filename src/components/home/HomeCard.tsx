@@ -1,5 +1,5 @@
 import { Recipe } from "@/types/recipes.types";
-import { Clock, Users, Bookmark, ChevronRight } from "lucide-react";
+import { Clock, Users, Bookmark, ChevronRight, ImageIcon } from "lucide-react";
 import Link from "next/link";
 
 type CardProps = {
@@ -10,11 +10,17 @@ type CardProps = {
 export default function Card({ recipe, recipeTypes }: CardProps) {
     return (
         <Link href={`/recipes/${recipe.id}`} className={"card"}>
-            <img
-                className="card__thumbnail"
-                src={recipe.photo_url}
-                alt={recipe.name}
-            />
+            {recipe.photo_url ? (
+                <img
+                    className="card__thumbnail"
+                    src={recipe.photo_url}
+                    alt={recipe.name}
+                />
+            ) : (
+                <div className="card__thumbnail card__thumbnail--placeholder">
+                    <ImageIcon size={28} />
+                </div>
+            )}
             <div className="card__info">
                 <div className="card__header">
                     <h3 className="card__title">{recipe.name}</h3>

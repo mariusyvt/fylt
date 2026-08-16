@@ -1,11 +1,21 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
-import { Html5Qrcode } from "html5-qrcode";
+import { useState, useRef, useCallback } from "react";
+import type { DetectedBarcode } from "react-barcode-scanner";
 import { Nutrients } from "@/types/nutrition.types";
 import { searchByBarcode } from "@/api/services/openfoodfacts.service";
 import { getFoodByBarcode, foodToNutrients } from "@/api/services/foods.service";
 import { useAuth } from "@/hooks/useAuth";
+
+export const BARCODE_FORMATS = [
+    "ean_13",
+    "ean_8",
+    "upc_a",
+    "upc_e",
+    "code_128",
+    "code_39",
+    "itf",
+];
 
 export const useBarcodeScanner = (
     onScanSuccess?: (nutrients: Nutrients) => void
@@ -15,65 +25,51 @@ export const useBarcodeScanner = (
     const [codeBar, setCodeBar] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const handledRef = useRef(false);
 
-    const scannerRef = useRef<Html5Qrcode | null>(null);
-    const isMountedRef = useRef(true);
-
-    const startScanner = useCallback(async () => {
-        try {
-            setError(null);
-            scannerRef.current = new Html5Qrcode("reader");
-            setScanning(true);
-
-            await scannerRef.current.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 250 },
-                async (decodedText) => {
-                    setCodeBar(decodedText);
-                    setIsLoading(true);
-
-                    if (scannerRef.current) {
-                        await scannerRef.current.stop();
-                        if (isMountedRef.current) setScanning(false);
-                    }
-
-                    const food = token ? await getFoodByBarcode(token, decodedText) : null;
-                    const nutrients = food ? foodToNutrients(food) : await searchByBarcode(decodedText);
-                    if (!isMountedRef.current) return;
-                    setIsLoading(false);
-
-                    if (nutrients && onScanSuccess) {
-                        onScanSuccess(nutrients);
-                    } else if (!nutrients) {
-                        setError("Produit non trouvé");
-                    }
-                },
-                () => {}
-            );
-        } catch {
-            if (!isMountedRef.current) return;
-            setError("Impossible d'accéder à la caméra");
-            setScanning(false);
-        }
-    }, [onScanSuccess, token]);
-
-    const stopScanner = useCallback(async () => {
-        if (scannerRef.current) {
-            await scannerRef.current.stop();
-            if (isMountedRef.current) setScanning(false);
-        }
+    const startScanner = useCallback(() => {
+        setError(null);
+        setCodeBar("");
+        handledRef.current = false;
+        setScanning(true);
     }, []);
 
-    // Coupe la caméra si le composant est démonté pendant un scan
-    useEffect(() => {
-        isMountedRef.current = true;
-        return () => {
-            isMountedRef.current = false;
-            if (scannerRef.current) {
-                scannerRef.current.stop().catch(() => {});
-                scannerRef.current = null;
+    const stopScanner = useCallback(() => {
+        setScanning(false);
+    }, []);
+
+    const handleCapture = useCallback(
+        async (barcodes: DetectedBarcode[]) => {
+            if (handledRef.current || !barcodes?.length) return;
+            const decodedText = barcodes[0].rawValue;
+            if (!decodedText) return;
+
+            handledRef.current = true;
+            setCodeBar(decodedText);
+            setIsLoading(true);
+            setScanning(false);
+
+            try {
+                const food = token ? await getFoodByBarcode(token, decodedText) : null;
+                const nutrients = food ? foodToNutrients(food) : await searchByBarcode(decodedText);
+                setIsLoading(false);
+
+                if (nutrients && onScanSuccess) {
+                    onScanSuccess(nutrients);
+                } else if (!nutrients) {
+                    setError("Produit non trouvé");
+                }
+            } catch {
+                setIsLoading(false);
+                setError("Produit non trouvé");
             }
-        };
+        },
+        [token, onScanSuccess]
+    );
+
+    const handleCameraError = useCallback(() => {
+        setError("Impossible d'accéder à la caméra");
+        setScanning(false);
     }, []);
 
     return {
@@ -83,6 +79,7 @@ export const useBarcodeScanner = (
         error,
         startScanner,
         stopScanner,
+        handleCapture,
+        handleCameraError,
     };
 };
-

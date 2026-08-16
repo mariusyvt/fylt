@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Search, ScanBarcode, Trash2, Clock, X } from "lucide-react";
+import { BarcodeScanner } from "react-barcode-scanner";
+import "react-barcode-scanner/polyfill";
+import type { DetectedBarcode } from "react-barcode-scanner";
 import TextInput from "@/components/ui/TextInput";
 import { Nutrients } from "@/types/nutrition.types";
 import { Food } from "@/types/foods.types";
@@ -9,6 +12,7 @@ import { searchFoods, createFood, deleteFood, foodToNutrients } from "@/api/serv
 import { calculateProportionalNutrients } from "@/utils/nutrition.utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useRecentFoods } from "@/hooks/useRecentFoods";
+import { BARCODE_FORMATS } from "@/hooks/useBarcodeScanner";
 
 interface IngredientFormProps {
     ingredientName: string;
@@ -18,6 +22,8 @@ interface IngredientFormProps {
     scanning: boolean;
     isLoading: boolean;
     error: string | null;
+    onCapture: (barcodes: DetectedBarcode[]) => void;
+    onCameraError: (error: Error) => void;
     onStartScanner: () => void;
     onStopScanner: () => void;
     onSelectFood: (nutrients: Nutrients) => void;
@@ -34,6 +40,8 @@ export default function IngredientForm({
     scanning,
     isLoading,
     error,
+    onCapture,
+    onCameraError,
     onStartScanner,
     onStopScanner,
     onSelectFood,
@@ -245,13 +253,18 @@ export default function IngredientForm({
                         <span className="scanner-overlay__title">Scanner un produit</span>
                     </div>
                     <div className="scanner-overlay__viewport">
-                        <div id="reader"></div>
+                        <BarcodeScanner
+                            id="reader"
+                            options={{ formats: BARCODE_FORMATS, delay: 500 }}
+                            onCapture={onCapture}
+                            onCameraError={onCameraError}
+                            trackConstraints={{ facingMode: "environment" }}
+                        />
                         <div className="scanner-overlay__frame" />
                     </div>
                     <p className="scanner-overlay__hint">Placez le code-barres dans le cadre</p>
                 </div>
             )}
-            {!scanning && <div id="reader" style={{ display: "none" }}></div>}
 
             {isLoading && <p className="food-hint">Recherche du produit…</p>}
             {error && <p className="food-error">{error}</p>}
@@ -268,12 +281,11 @@ export default function IngredientForm({
                         >
                             <div className="food-result__left">
                                 <span className="food-result__name">{food.name}</span>
-                                <span className="food-result__meta">
-                                    {food.brand && <span className="food-result__brand">{food.brand}</span>}
-                                    {food.user_id !== null && (
-                                        <span className="food-result__badge">Perso</span>
-                                    )}
-                                </span>
+                                {food.brand_label && (
+                                    <span className="food-result__meta">
+                                        <span className="food-result__brand">{food.brand_label}</span>
+                                    </span>
+                                )}
                             </div>
                             <div className="food-result__right">
                                 <span className="food-result__kcal">{Math.round(food.calories_100g)}</span>

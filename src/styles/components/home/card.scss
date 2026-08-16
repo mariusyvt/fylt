@@ -40,6 +40,14 @@ $orange-bg: #fff7ed;
     border-radius: $spacing-3;
     object-fit: cover;
     background: $card-border;
+
+    &--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: $teal-50;
+      color: $teal-600;
+    }
   }
 
 

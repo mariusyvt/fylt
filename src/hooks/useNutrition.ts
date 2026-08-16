@@ -30,6 +30,22 @@ export const useNutrition = () => {
         setIngredient(prev => prev.filter((_, i) => i !== index));
     };
 
+    const editIngredient = (index: number, nutrients: Nutrients, quantity: number, name: string) => {
+        const proportion = calculateProportionalNutrients(nutrients, quantity);
+        setIngredient(prev => prev.map((ing, i) => i === index ? {
+            ingredient_name: name,
+            quantity: String(quantity),
+            unit: "g",
+            ingredient_calories: proportion.calories,
+            ingredient_proteins: proportion.proteins,
+            ingredient_carbs: proportion.carbs,
+            ingredient_lipids: proportion.lipids,
+        } : ing));
+        setScannedNutrients(null);
+        setIngredientName("");
+        setQuantity("");
+    };
+
     return {
         ingredient,
         setIngredient,
@@ -40,6 +56,7 @@ export const useNutrition = () => {
         quantity,
         setQuantity,
         addIngredient,
-        removeIngredient
+        removeIngredient,
+        editIngredient
     };
 }

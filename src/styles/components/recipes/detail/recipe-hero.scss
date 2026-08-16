@@ -53,6 +53,18 @@ $shadow-teal: 0 4px 12px rgba(13, 148, 136, 0.2);
     transition: transform 0.3s;
   }
 
+  &__placeholder {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: $radius-3xl;
+    background: $teal-50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $teal-600;
+  }
+
   &:active img {
     transform: scale(0.95);
   }

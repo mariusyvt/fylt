@@ -21,6 +21,7 @@ import PersonPicker from "@/components/add/PersonPicker";
 import IngredientFullScreen from "@/components/add/IngredientFullScreen";
 import StepForm from "@/components/add/StepForm";
 import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
+import { useState } from "react";
 
 export default function EditPage() {
     const router = useRouter();
@@ -37,8 +38,11 @@ export default function EditPage() {
         quantity,
         setQuantity,
         addIngredient,
-        removeIngredient
+        removeIngredient,
+        editIngredient
     } = useNutrition();
+
+    const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
     const {
         steps,
@@ -68,7 +72,7 @@ export default function EditPage() {
         handleSubmit
     } = useEditRecipe(recipes, ingredient, steps, Number(id));
 
-    const {scanning, isLoading, error, startScanner, stopScanner} = useBarcodeScanner(
+    const {scanning, isLoading, error, startScanner, stopScanner, handleCapture, handleCameraError} = useBarcodeScanner(
         (scannedData) => {
             setScannedNutrients(scannedData);
             setIngredientName(scannedData.name);
@@ -76,8 +80,40 @@ export default function EditPage() {
     );
 
     const handlePickerConfirm = () => {
-        if (activePicker === "ingredient" && scannedNutrients !== null) addIngredient(scannedNutrients, Number(quantity), ingredientName);
+        if (activePicker === "ingredient" && scannedNutrients !== null) {
+            if (editingIndex !== null) {
+                editIngredient(editingIndex, scannedNutrients, Number(quantity), ingredientName);
+            } else {
+                addIngredient(scannedNutrients, Number(quantity), ingredientName);
+            }
+        }
         if (activePicker === "step") addStep();
+        setEditingIndex(null);
+        setActivePicker(null);
+    };
+
+    const handleEditIngredient = (index: number) => {
+        const ing = ingredient[index];
+        if (!ing) return;
+        const qty = Number(ing.quantity) || 1;
+        setScannedNutrients({
+            name: ing.ingredient_name,
+            calories: (parseFloat(ing.ingredient_calories) / qty) * 100,
+            proteins: (parseFloat(ing.ingredient_proteins) / qty) * 100,
+            carbs: (parseFloat(ing.ingredient_carbs) / qty) * 100,
+            lipids: (parseFloat(ing.ingredient_lipids) / qty) * 100,
+        });
+        setIngredientName(ing.ingredient_name);
+        setQuantity(ing.quantity);
+        setEditingIndex(index);
+        setActivePicker("ingredient");
+    };
+
+    const closeIngredient = () => {
+        setEditingIndex(null);
+        setScannedNutrients(null);
+        setIngredientName("");
+        setQuantity("");
         setActivePicker(null);
     };
 
@@ -154,7 +190,14 @@ export default function EditPage() {
                 <IngredientsSection
                     ingredients={ingredient}
                     onRemove={removeIngredient}
-                    onAdd={() => setActivePicker("ingredient")}
+                    onAdd={() => {
+                        setEditingIndex(null);
+                        setScannedNutrients(null);
+                        setIngredientName("");
+                        setQuantity("");
+                        setActivePicker("ingredient");
+                    }}
+                    onEdit={handleEditIngredient}
                 />
                 {errors.ingredients && <p className="error-message">{errors.ingredients}</p>}
 
@@ -188,8 +231,9 @@ export default function EditPage() {
 
             <IngredientFullScreen
                 open={activePicker === "ingredient"}
-                onClose={() => setActivePicker(null)}
+                onClose={closeIngredient}
                 onConfirm={handlePickerConfirm}
+                isEdit={editingIndex !== null}
                 ingredientName={ingredientName}
                 nutrients={scannedNutrients}
                 quantity={quantity}
@@ -197,6 +241,8 @@ export default function EditPage() {
                 scanning={scanning}
                 isLoading={isLoading}
                 error={error}
+                onCapture={handleCapture}
+                onCameraError={handleCameraError}
                 onStartScanner={startScanner}
                 onStopScanner={stopScanner}
                 onSelectFood={(n) => {

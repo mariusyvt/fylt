@@ -61,7 +61,7 @@ export default function AddPage () {
         errors,
     } = useAddRecipe(ingredient, steps);
 
-    const {scanning, isLoading, error, startScanner, stopScanner} = useBarcodeScanner(
+    const {scanning, isLoading, error, startScanner, stopScanner, handleCapture, handleCameraError} = useBarcodeScanner(
         (scannedData) => {
             setScannedNutrients(scannedData);
             setIngredientName(scannedData.name);
@@ -174,6 +174,8 @@ export default function AddPage () {
                     scanning={scanning}
                     isLoading={isLoading}
                     error={error}
+                    onCapture={handleCapture}
+                    onCameraError={handleCameraError}
                     onStartScanner={startScanner}
                     onStopScanner={stopScanner}
                     onSelectFood={(n) => {

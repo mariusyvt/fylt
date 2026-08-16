@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@openfoodfacts/openfoodfacts-nodejs": "^2.0.0-alpha.29",
-    "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.575.0",
     "next": "16.1.6",
     "react": "19.2.3",
+    "react-barcode-scanner": "^4.1.0",
     "react-dom": "19.2.3",
     "react-mobile-picker": "^1.2.0",
     "sass": "^1.97.3"

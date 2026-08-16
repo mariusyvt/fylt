@@ -1,4 +1,4 @@
-import { Bookmark, Clock, Users } from "lucide-react";
+import { Bookmark, Clock, Users, ImageIcon } from "lucide-react";
 import { Recipe } from "@/types/recipes.types";
 
 interface RecipeHeroProps {
@@ -16,7 +16,13 @@ export default function RecipeHero({ recipe }: RecipeHeroProps) {
             <section className="hero-section">
                 <div className="image-box">
                     <div className="image-glow"></div>
-                    <img src={recipe.photo_url} alt={recipe.name} />
+                    {recipe.photo_url ? (
+                        <img src={recipe.photo_url} alt={recipe.name} />
+                    ) : (
+                        <div className="image-box__placeholder">
+                            <ImageIcon size={48} />
+                        </div>
+                    )}
                 </div>
 
                 <div className="hero-stats">
