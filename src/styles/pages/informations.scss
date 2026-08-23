@@ -85,6 +85,59 @@
   gap: $spacing-4;
 }
 
+.contact-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $spacing-2;
+  padding: $spacing-4 $spacing-2;
+
+  &__title {
+    font-size: 1.4rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    margin: 0;
+  }
+
+  &__text {
+    font-size: 0.85rem;
+    color: $slate-400;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.contact-form-card {
+  padding: $spacing-4 $spacing-5;
+}
+
+.contact-success {
+  padding: $spacing-6 $spacing-5;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-3;
+
+  &__icon {
+    font-size: 2.5rem;
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    margin: 0;
+  }
+
+  &__text {
+    font-size: $text-sm;
+    color: $slate-400;
+    margin: 0;
+  }
+}
+
 
 .info-form {
   display: flex;

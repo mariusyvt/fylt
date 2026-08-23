@@ -1,6 +1,6 @@
 "use client"
 
-import { Trash2, Pencil, ChevronLeft, ChevronRight, LineChart, BarChart3 } from "lucide-react";
+import { Trash2, Pencil, ChevronLeft, ChevronRight, LineChart, BarChart3, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -9,9 +9,8 @@ import PageHeader from "@/components/ui/PageHeader";
 import RecipeQuickAdd from "@/components/tracking/RecipeQuickAdd";
 import { useTracking } from "@/hooks/useTracking";
 import { useCalorieGoal } from "@/hooks/useCalorieGoal";
-import { useAuth } from "@/hooks/useAuth";
-import { getRecipes, getRecipeTypes } from "@/api/services/recipes.service";
-import { Recipe, RecipeCategory } from "@/types/recipes.types";
+import { useRecipes } from "@/hooks/useRecipes";
+import { MealSlot } from "@/types/tracking.types";
 
 const MACROS_CONFIG = [
     { key: "proteins" as const, label: "Protéines", color: "#0d9488" },
@@ -21,10 +20,8 @@ const MACROS_CONFIG = [
 
 export default function Tracking() {
     const router = useRouter();
-    const { token } = useAuth();
     const { goal, hasGoal, loading } = useCalorieGoal();
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
-    const [recipeTypes, setRecipeTypes] = useState<RecipeCategory[]>([]);
+    const { recipes, recipeTypes } = useRecipes();
 
     const {
         dailyGoal,
@@ -47,6 +44,7 @@ export default function Tracking() {
     } = useTracking(goal);
 
     const [touchStartX, setTouchStartX] = useState<number | null>(null);
+    const [addSlot, setAddSlot] = useState<MealSlot | null>(null);
 
     const handleTouchStart = (e: React.TouchEvent) => setTouchStartX(e.touches[0].clientX);
     const handleTouchEnd = (e: React.TouchEvent) => {
@@ -61,19 +59,6 @@ export default function Tracking() {
             router.replace("/tracking/onboarding");
         }
     }, [loading, hasGoal, router]);
-
-    useEffect(() => {
-        if (!token) return;
-        Promise.all([getRecipes(token), getRecipeTypes(token)])
-            .then(([r, t]) => {
-                setRecipes(r.data ?? []);
-                setRecipeTypes(t.data ?? []);
-            })
-            .catch(() => {
-                setRecipes([]);
-                setRecipeTypes([]);
-            });
-    }, [token]);
 
     if (loading || !hasGoal) return <Loader />;
 
@@ -150,7 +135,6 @@ export default function Tracking() {
                     })}
                 </section>
 
-                {/* Calories Card */}
                 <section className="calories-card">
                     <span className="calories-card__label">Calories</span>
                     <div className="calories-card__row">
@@ -248,7 +232,9 @@ export default function Tracking() {
                                                 ))
                                             )}
                                             {selectedWeekDay?.isToday && (
-                                                <RecipeQuickAdd slot={meal.slot} recipes={recipes} recipeTypes={recipeTypes} onAdd={addItem} />
+                                                <button className="meal-add-btn" onClick={() => setAddSlot(meal.slot)}>
+                                                    <Plus size={16} /> Ajouter une recette
+                                                </button>
                                             )}
                                         </div>
                                     )}
@@ -259,6 +245,17 @@ export default function Tracking() {
                 </section>
                 </div>
             </div>
+
+            {addSlot && (
+                <RecipeQuickAdd
+                    slot={addSlot}
+                    recipes={recipes}
+                    recipeTypes={recipeTypes}
+                    onAdd={addItem}
+                    open={true}
+                    onClose={() => setAddSlot(null)}
+                />
+            )}
         </>
     );
 }

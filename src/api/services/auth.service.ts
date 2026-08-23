@@ -1,67 +1,46 @@
-import { API_CONFIG, apiUrl, buildApiError } from "@/api/config/api.config";
+import { apiFetch, apiFetchJson, apiUrl } from "@/api/config/api.config";
 
-export const signIn = async (email: string, password: string) => {
-    const response = await fetch(apiUrl("/signin"), {
+export const signIn = async (email: string, password: string) =>
+    apiFetchJson("/signin", { method: "POST", json: { email, password } });
+
+export const signUp = async (
+    lastName: string,
+    firstName: string,
+    email: string,
+    gender: string,
+    password: string
+) =>
+    apiFetchJson("/signup", {
         method: "POST",
-        headers: API_CONFIG.headers,
-        body: JSON.stringify({ email, password }),
+        json: { last_name: lastName, first_name: firstName, email, gender, password },
     });
 
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
+export const forgotPassword = async (email: string) =>
+    apiFetchJson("/forgot-password", { method: "POST", json: { email } });
+
+export const resetPassword = async (token: string, newPassword: string) =>
+    apiFetchJson("/reset-password", { method: "POST", json: { token, newPassword } });
+
+export const verifyEmail = async (token: string) =>
+    apiFetchJson("/verify-email", { method: "POST", json: { token } });
+
+export const resendVerification = async (email: string) =>
+    apiFetchJson("/resend-verification", { method: "POST", json: { email } });
+
+/** Termine la session cote serveur et efface le cookie httpOnly. */
+export const signOut = async (): Promise<void> => {
+    await apiFetch("/signout", { method: "POST" });
 };
 
-export const signUp = async (lastName: string, firstName: string, email: string, gender: string, password: string) => {
-    const response = await fetch(apiUrl("/signup"), {
-        method: "POST",
-        headers: API_CONFIG.headers,
-        body: JSON.stringify({ last_name: lastName, first_name: firstName, email, gender, password }),
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const forgotPassword = async (email: string) => {
-    const response = await fetch(apiUrl("/forgot-password"), {
-        method: "POST",
-        headers: API_CONFIG.headers,
-        body: JSON.stringify({ email }),
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const resetPassword = async (token: string, newPassword: string) => {
-    const response = await fetch(apiUrl("/reset-password"), {
-        method: "POST",
-        headers: API_CONFIG.headers,
-        body: JSON.stringify({ token, newPassword }),
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const verifyEmail = async (token: string) => {
-    const response = await fetch(apiUrl("/verify-email"), {
-        method: "POST",
-        headers: API_CONFIG.headers,
-        body: JSON.stringify({ token }),
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const resendVerification = async (email: string) => {
-    const response = await fetch(apiUrl("/resend-verification"), {
-        method: "POST",
-        headers: API_CONFIG.headers,
-        body: JSON.stringify({ email }),
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
+/**
+ * Verifie l'existence d'une session valide via le cookie httpOnly.
+ * Le cookie n'etant pas lisible en JS, on interroge une route protegee.
+ */
+export const getSession = async (): Promise<boolean> => {
+    try {
+        const res = await fetch(apiUrl("/user"), { method: "GET", credentials: "include" });
+        return res.ok;
+    } catch {
+        return false;
+    }
 };

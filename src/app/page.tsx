@@ -3,10 +3,8 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getRecipes, getRecipeTypes } from "@/api/services/recipes.service";
 import { getProfile } from "@/api/services/profile.service";
 import { getFoodLog } from "@/api/services/foodlog.service";
-import { Recipe, RecipeCategory } from "@/types/recipes.types";
 import { Profile } from "@/types/profile.types";
 import { MacroSummary } from "@/types/tracking.types";
 import { toISODate } from "@/utils/format.utils";
@@ -16,6 +14,7 @@ import TodaySummary from "@/components/home/TodaySummary";
 import Link from "next/link";
 import { UtensilsCrossed } from "lucide-react";
 import Loader from "@/components/Loader";
+import { useRecipes } from "@/hooks/useRecipes";
 
 const EMPTY_CONSUMED: MacroSummary = { calories: 0, proteins: 0, carbs: 0, lipids: 0 };
 const MAX_RECIPES = 3;
@@ -31,36 +30,31 @@ const profileToGoal = (p: Profile | null): MacroSummary | null => {
 };
 
 export default function Home () {
-    const {isAuthenticated, token} = useAuth();
+    const {isAuthenticated} = useAuth();
     const router = useRouter();
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
-    const [recipeTypes, setRecipeTypes] = useState<RecipeCategory[]>([]);
+    const { recipes, recipeTypes, loading: recipesLoading } = useRecipes();
     const [profile, setProfile] = useState<Profile | null>(null);
     const [consumed, setConsumed] = useState<MacroSummary>(EMPTY_CONSUMED);
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
 
+    // Garde d'authentification (la home est hors du groupe (pages)).
     useEffect(() => {
-        if (!isAuthenticated) {
-            router.push('/signin');
-            return;
-        }
+        if (!isAuthenticated) router.push('/signin');
+    }, [isAuthenticated, router]);
+
+    useEffect(() => {
+        if (!isAuthenticated) return;
 
         const fetchData = async () => {
             try {
-                if (token) {
-                    const [resultRecipe, resultRecipeTypes, resultProfile, resultFoodLog] = await Promise.all([
-                        getRecipes(token).catch(() => ({ data: [] })),
-                        getRecipeTypes(token),
-                        getProfile(token),
-                        getFoodLog(token, toISODate(new Date())).catch(() => null),
-                    ]);
-                    setRecipes(resultRecipe.data)
-                    setRecipeTypes(resultRecipeTypes.data)
-                    setProfile(resultProfile.data)
-                    if (resultFoodLog?.data?.consumed) {
-                        setConsumed(resultFoodLog.data.consumed);
-                    }
+                const [resultProfile, resultFoodLog] = await Promise.all([
+                    getProfile(),
+                    getFoodLog(toISODate(new Date())).catch(() => null),
+                ]);
+                setProfile(resultProfile.data);
+                if (resultFoodLog?.data?.consumed) {
+                    setConsumed(resultFoodLog.data.consumed);
                 }
             } catch (err) {
                 setLoadError((err as Error).message || "Impossible de charger vos données.");
@@ -70,9 +64,9 @@ export default function Home () {
         };
 
         fetchData();
-    }, [isAuthenticated, router, token]);
+    }, [isAuthenticated]);
 
-    if (loading) {
+    if (loading || recipesLoading) {
         return <Loader />;
     }
 

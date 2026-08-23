@@ -2,6 +2,7 @@ import { RecipeCategory, RecipeIngredient, RecipeStep } from "@/types/recipes.ty
 import { ApiError } from "@/types/api.types";
 import { useEffect, useState } from "react";
 import { createRecipe, getRecipeTypes } from "@/api/services/recipes.service";
+import { invalidateRecipesCache } from "@/hooks/useRecipes";
 import { useAuth } from "@/hooks/useAuth";
 import { parsePreparationTime } from "@/utils/format.utils";
 import { calculateTotalNutrition } from "@/utils/nutrition.utils";
@@ -16,21 +17,21 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
     const [photo, setPhoto] = useState<File | null>(null);
     const [recipeType, setRecipeType] = useState<RecipeCategory[]>([]);
     const [activePicker, setActivePicker] = useState<PickerType>(null);
-    const {token} = useAuth();
+    const {isAuthenticated} = useAuth();
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     useEffect(() => {
         const fetchRecipeTypes = async () => {
-            if (!token) return;
-            const result = await getRecipeTypes(token);
+            if (!isAuthenticated) return;
+            const result = await getRecipeTypes();
             setRecipeType(result.data);
         };
         fetchRecipeTypes();
-    }, [token]);
+    }, [isAuthenticated]);
 
     const handleSubmit = async () => {
         setErrors({});
-        if (!token) {
+        if (!isAuthenticated) {
             setErrors({ _global: "Vous devez être connecté." });
             return false;
         }
@@ -66,7 +67,8 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
         if (photo) recipeData.append("photo", photo)
 
         try {
-            await createRecipe(recipeData, token);
+            await createRecipe(recipeData);
+            invalidateRecipesCache();
             return true
         } catch (error) {
             const apiError = error as ApiError;

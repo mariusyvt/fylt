@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { useAuth } from "@/hooks/useAuth";
 import "@/styles/main.scss";
 import BottomNavbar from "@/components/BottomNavbar";
+import DeviceGate from "@/components/landing/DeviceGate";
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
     const { isAuthenticated } = useAuth();
@@ -40,7 +41,9 @@ export default function RootLayout({
         </head>
         <body>
         <AuthProvider>
-            <LayoutContent>{children}</LayoutContent>
+            <DeviceGate>
+                <LayoutContent>{children}</LayoutContent>
+            </DeviceGate>
         </AuthProvider>
         </body>
         </html>

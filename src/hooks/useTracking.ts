@@ -53,7 +53,7 @@ const buildMeals = (day: ApiFoodLogDay): Meal[] =>
     });
 
 export const useTracking = (goal?: CalorieGoal | null) => {
-    const { token } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [weekOffset, setWeekOffset] = useState(0);
     const weekDays = useMemo(() => getWeekDays(weekOffset), [weekOffset]);
     const todayIndex = getWeekDays(0).findIndex((d) => d.isToday);
@@ -75,11 +75,11 @@ export const useTracking = (goal?: CalorieGoal | null) => {
 
     const loadDay = useCallback(
         async (iso: string) => {
-            if (!token) return;
+            if (!isAuthenticated) return;
             setLoadingDay(true);
             setError(null);
             try {
-                const res = await getFoodLog(token, iso);
+                const res = await getFoodLog(iso);
                 const day = res.data as ApiFoodLogDay;
                 setMeals(buildMeals(day));
                 setConsumed(day.consumed ?? EMPTY_CONSUMED);
@@ -95,7 +95,7 @@ export const useTracking = (goal?: CalorieGoal | null) => {
                 setLoadingDay(false);
             }
         },
-        [token]
+        [isAuthenticated]
     );
 
     // Charge le jour sélectionné
@@ -105,11 +105,11 @@ export const useTracking = (goal?: CalorieGoal | null) => {
 
     // Charge les totaux de la semaine (indicateurs du sélecteur de jours)
     useEffect(() => {
-        if (!token || !weekStart) return;
+        if (!isAuthenticated || !weekStart) return;
         let active = true;
         (async () => {
             try {
-                const res = await getFoodLogWeek(token, weekStart);
+                const res = await getFoodLogWeek(weekStart);
                 if (!active) return;
                 const payload = res.data as ApiWeekResponse | ApiWeekConsumed[];
                 const days: ApiWeekConsumed[] = Array.isArray(payload)
@@ -127,7 +127,7 @@ export const useTracking = (goal?: CalorieGoal | null) => {
         return () => {
             active = false;
         };
-    }, [token, weekStart]);
+    }, [isAuthenticated, weekStart]);
 
     const dailyGoal: MacroSummary = goal
         ? {
@@ -168,29 +168,29 @@ export const useTracking = (goal?: CalorieGoal | null) => {
 
     const addItem = useCallback(
         async (slot: MealSlot, item: Omit<NewFoodEntry, "date" | "meal_slot">) => {
-            if (!token || !selectedIso) return;
-            await addFoodLogEntry(token, { ...item, date: selectedIso, meal_slot: slot });
+            if (!isAuthenticated || !selectedIso) return;
+            await addFoodLogEntry({ ...item, date: selectedIso, meal_slot: slot });
             await loadDay(selectedIso);
         },
-        [token, selectedIso, loadDay]
+        [isAuthenticated, selectedIso, loadDay]
     );
 
     const removeItem = useCallback(
         async (id: number) => {
-            if (!token || !selectedIso) return;
-            await deleteFoodLogEntry(token, id);
+            if (!isAuthenticated || !selectedIso) return;
+            await deleteFoodLogEntry(id);
             await loadDay(selectedIso);
         },
-        [token, selectedIso, loadDay]
+        [isAuthenticated, selectedIso, loadDay]
     );
 
     const editItem = useCallback(
         async (id: number, changes: UpdateFoodEntry) => {
-            if (!token || !selectedIso) return;
-            await updateFoodLogEntry(token, id, changes);
+            if (!isAuthenticated || !selectedIso) return;
+            await updateFoodLogEntry(id, changes);
             await loadDay(selectedIso);
         },
-        [token, selectedIso, loadDay]
+        [isAuthenticated, selectedIso, loadDay]
     );
 
     const hasData = meals.some((m) => m.items.length > 0);

@@ -20,7 +20,6 @@ import TimePicker from "@/components/add/TimePicker";
 import PersonPicker from "@/components/add/PersonPicker";
 import IngredientFullScreen from "@/components/add/IngredientFullScreen";
 import StepForm from "@/components/add/StepForm";
-import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
 import { useState } from "react";
 
 export default function EditPage() {
@@ -71,13 +70,6 @@ export default function EditPage() {
         errors,
         handleSubmit
     } = useEditRecipe(recipes, ingredient, steps, Number(id));
-
-    const {scanning, isLoading, error, startScanner, stopScanner, handleCapture, handleCameraError} = useBarcodeScanner(
-        (scannedData) => {
-            setScannedNutrients(scannedData);
-            setIngredientName(scannedData.name);
-        }
-    );
 
     const handlePickerConfirm = () => {
         if (activePicker === "ingredient" && scannedNutrients !== null) {
@@ -238,13 +230,6 @@ export default function EditPage() {
                 nutrients={scannedNutrients}
                 quantity={quantity}
                 setQuantity={setQuantity}
-                scanning={scanning}
-                isLoading={isLoading}
-                error={error}
-                onCapture={handleCapture}
-                onCameraError={handleCameraError}
-                onStartScanner={startScanner}
-                onStopScanner={stopScanner}
                 onSelectFood={(n) => {
                     setScannedNutrients(n);
                     setIngredientName(n.name);

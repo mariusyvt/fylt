@@ -10,24 +10,30 @@ export default function RecipeIngredientsList({ recipes }: RecipeIngredientsList
 
     return (
         <div>
+            <h2 className="recipe-section-title">Ingrédients</h2>
             <div className="ingredients-card">
-                {recipes.recipe_ingredients.map((item, i) => (
-                    <div key={i} className="ingredient-item">
-                        <input
-                            type="checkbox"
-                            className="step-checkbox"
-                            checked={checkedSteps.includes(i)}
-                            onChange={() => toggleStep(i)}
-                        />
-                        <span className={`ingredient-name ${checkedSteps.includes(i) ? "step-done" : ""}`}>
+            {recipes.recipe_ingredients.map((item, i) => (
+                <div key={i} className={`ingredient-item ${checkedSteps.includes(i) ? "ingredient-item--done" : ""}`}>
+                    <input
+                        type="checkbox"
+                        className="step-checkbox"
+                        checked={checkedSteps.includes(i)}
+                        onChange={() => toggleStep(i)}
+                    />
+                    <div className="ingredient-item__content">
+                        <span className="ingredient-item__name">
                             {item.ingredient_name}
                         </span>
-                        <span className="ingredient-quantity">
-                            {item.quantity}{item.unit}
+                        <span className="ingredient-item__macros">
+                            {Math.round(Number(item.ingredient_calories))} kcal
                         </span>
                     </div>
-                ))}
+                    <span className="ingredient-item__quantity">
+                        {item.quantity}{item.unit}
+                    </span>
+                </div>
+            ))}
             </div>
         </div>
-    )
+    );
 }

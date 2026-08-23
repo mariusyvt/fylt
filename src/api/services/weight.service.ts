@@ -1,32 +1,12 @@
-import { apiUrl, authHeaders, buildApiError } from "@/api/config/api.config";
+import { apiFetchJson } from "@/api/config/api.config";
+import { ApiResponse } from "@/types/api.types";
+import { WeightEntry } from "@/types/tracking.types";
 
-export const addWeight = async (token: string, weight: number, date: string) => {
-    const response = await fetch(apiUrl("/weight"), {
-        method: "POST",
-        headers: authHeaders(token),
-        body: JSON.stringify({ weight, date }),
-    });
+export const addWeight = async (weight: number, date: string) =>
+    apiFetchJson("/weight", { method: "POST", json: { weight, date } });
 
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
+export const getWeightHistory = async (months = 3) =>
+    apiFetchJson<ApiResponse<WeightEntry[]>>(`/weight?months=${months}`, { method: "GET" });
 
-export const getWeightHistory = async (token: string, months = 3) => {
-    const response = await fetch(apiUrl(`/weight?months=${months}`), {
-        method: "GET",
-        headers: authHeaders(token),
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const deleteWeight = async (token: string, id: number) => {
-    const response = await fetch(apiUrl(`/weight/${id}`), {
-        method: "DELETE",
-        headers: authHeaders(token, false),
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
+export const deleteWeight = async (id: number) =>
+    apiFetchJson(`/weight/${id}`, { method: "DELETE" });

@@ -11,7 +11,7 @@ import ProfileHeader from "@/components/profile/ProfileHeader";
 import { calculateMacros, Gender } from "@/utils/tdee.utils";
 
 export default function InformationsPage() {
-    const { token } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [profile, setProfile] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
     const [firstName, setFirstName] = useState("");
@@ -27,8 +27,8 @@ export default function InformationsPage() {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                if (token) {
-                    const result = await getProfile(token);
+                if (isAuthenticated) {
+                    const result = await getProfile();
                     const data: Profile = result.data;
                     setProfile(data);
                     setFirstName(data.firstName ?? "");
@@ -44,10 +44,10 @@ export default function InformationsPage() {
             }
         };
         fetchProfile();
-    }, [token]);
+    }, [isAuthenticated]);
 
     const handleSave = async () => {
-        if (!token || !profile) return;
+        if (!isAuthenticated || !profile) return;
         setSaving(true);
         setSuccess(false);
 
@@ -86,7 +86,7 @@ export default function InformationsPage() {
         }
 
         try {
-            await updateUserFields(token, fields);
+            await updateUserFields(fields);
             setProfile({
                 ...profile,
                 firstName,

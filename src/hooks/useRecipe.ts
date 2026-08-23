@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { getRecipeById, deleteRecipe } from "@/api/services/recipes.service";
 import { useAuth } from "@/hooks/useAuth";
+import { invalidateRecipesCache } from "@/hooks/useRecipes";
 import { Recipe } from "@/types/recipes.types";
 import { useParams, useRouter } from "next/navigation";
 
 export const useRecipe = () => {
-    const {token} = useAuth();
+    const {isAuthenticated} = useAuth();
     const router = useRouter();
     const params = useParams();
 
@@ -17,8 +18,8 @@ export const useRecipe = () => {
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                if (token) {
-                    const result = await getRecipeById(Number(id), token);
+                if (isAuthenticated) {
+                    const result = await getRecipeById(Number(id));
                     setRecipes(result.data);
                 }
             } catch (err) {
@@ -29,11 +30,12 @@ export const useRecipe = () => {
         };
 
         fetchRecipes();
-    }, [router, token, id]);
+    }, [router, isAuthenticated, id]);
 
     const removeRecipe = async () => {
-        if (!token) return;
-        await deleteRecipe(Number(id), token);
+        if (!isAuthenticated) return;
+        await deleteRecipe(Number(id));
+        invalidateRecipesCache();
         router.push("/recipes");
     };
 

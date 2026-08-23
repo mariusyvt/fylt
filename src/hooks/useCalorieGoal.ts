@@ -51,19 +51,19 @@ const profileToGoal = (p: Profile): CalorieGoal | null => {
 };
 
 export const useCalorieGoal = () => {
-    const { token } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [goal, setGoal] = useState<CalorieGoal | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!token) {
+        if (!isAuthenticated) {
             setLoading(false);
             return;
         }
         let active = true;
         (async () => {
             try {
-                const result = await getProfile(token);
+                const result = await getProfile();
                 if (active) setGoal(profileToGoal(result.data));
             } catch {
                 if (active) setGoal(null);
@@ -74,12 +74,12 @@ export const useCalorieGoal = () => {
         return () => {
             active = false;
         };
-    }, [token]);
+    }, [isAuthenticated]);
 
     const saveGoal = useCallback(
         async (newGoal: CalorieGoal) => {
-            if (!token) return;
-            await updateGoal(token, {
+            if (!isAuthenticated) return;
+            await updateGoal({
                 gender: newGoal.gender,
                 age: newGoal.age,
                 weight: newGoal.weight,
@@ -93,7 +93,7 @@ export const useCalorieGoal = () => {
             });
             setGoal(newGoal);
         },
-        [token]
+        [isAuthenticated]
     );
 
     return {

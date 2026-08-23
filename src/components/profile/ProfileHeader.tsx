@@ -10,9 +10,9 @@ interface HeaderProps {
 }
 
 export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
-    const photoProfile = (profile.firstName ?? "?").charAt(0).toUpperCase();
+    const initial = (profile.firstName ?? "?").charAt(0).toUpperCase();
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const { token } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [uploadError, setUploadError] = useState<string | null>(null);
 
     const handlePhotoClick = () => {
@@ -21,7 +21,7 @@ export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file || !token) return;
+        if (!file || !isAuthenticated) return;
 
         setUploadError(null);
 
@@ -35,8 +35,10 @@ export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
         }
 
         try {
-            const result = await updateProfilePhoto(token, file);
-            onPhotoUpdated?.(result.data?.photo_url);
+            const result = await updateProfilePhoto(file);
+            if (result.data?.photo_url) {
+                onPhotoUpdated?.(result.data.photo_url);
+            }
         } catch (err) {
             console.error("Erreur upload photo:", err);
             setUploadError("Échec de l'envoi de la photo. Réessayez.");
@@ -53,7 +55,7 @@ export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
                         alt={`${profile.firstName} ${profile.lastName}`}
                     />
                 ) : (
-                    <div className="avatar-circle">{photoProfile}</div>
+                    <div className="avatar-circle">{initial}</div>
                 )}
 
                 <input
@@ -63,7 +65,7 @@ export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
                     hidden
                     onChange={handleFileChange}
                 />
-                <button className="edit-avatar-btn" onClick={handlePhotoClick}>
+                <button className="edit-avatar-btn" onClick={handlePhotoClick} aria-label="Modifier la photo de profil">
                     <Camera />
                 </button>
             </div>

@@ -1,63 +1,67 @@
-import { createContext, ReactNode, useEffect, useState } from 'react';
+"use client";
+
+import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
+import { getSession, signOut } from '@/api/services/auth.service';
 
 export interface AuthContextType {
-    token: string | null;
     isAuthenticated: boolean;
-    login: (token: string) => void;
-    logout: () => void;
+    isReady: boolean;
+    login: () => void;
+    logout: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
 /**
- * Vérifie qu'un token JWT n'est pas expiré (lecture du claim `exp`).
- * Renvoie true si le token ne peut pas être décodé (on ne bloque pas inutilement).
+ * Purge les caches du service worker (evite de servir des donnees API
+ * d'une session precedente sur un appareil partage).
  */
-const isTokenValid = (token: string): boolean => {
-    try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        if (payload?.exp) {
-            return payload.exp * 1000 > Date.now();
-        }
-        return true;
-    } catch {
-        return true;
-    }
+const clearServiceWorkerCaches = () => {
+    if (typeof caches === "undefined") return;
+    caches.keys().then((keys) => keys.forEach((key) => caches.delete(key))).catch(() => {});
 };
 
-export const AuthProvider = ({children}: {children : ReactNode}) => {
-    const [token, setToken] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isReady, setIsReady] = useState(false);
 
+    // L'auth repose sur un cookie httpOnly (non lisible en JS) : on verifie
+    // la session au demarrage en interrogeant une route protegee.
     useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        if (storedToken && isTokenValid(storedToken)) {
-            setToken(storedToken);
-        } else if (storedToken) {
-            // Token présent mais expiré/invalide → on nettoie
-            localStorage.removeItem("token");
-        }
-        setIsLoading(false);
+        let active = true;
+        getSession()
+            .then((ok) => {
+                if (active) setIsAuthenticated(ok);
+            })
+            .finally(() => {
+                if (active) setIsReady(true);
+            });
+        return () => {
+            active = false;
+        };
     }, []);
 
-    if (isLoading) {
+    const login = useCallback(() => {
+        // Le cookie de session a deja ete pose par la reponse du /signin.
+        setIsAuthenticated(true);
+    }, []);
+
+    const logout = useCallback(async () => {
+        try {
+            await signOut();
+        } catch {
+            // meme en cas d'echec reseau, on nettoie l'etat local
+        }
+        setIsAuthenticated(false);
+        clearServiceWorkerCaches();
+    }, []);
+
+    if (!isReady) {
         return null;
     }
 
-    const isAuthenticated = !!token;
-
-    const login = (newToken: string) => {
-        setToken(newToken);
-        localStorage.setItem("token", newToken);
-    };
-
-    const logout = () => {
-        setToken(null);
-        localStorage.removeItem("token");
-    }
-
     return (
-        <AuthContext.Provider value={{token, isAuthenticated, login, logout}}>
+        <AuthContext.Provider value={{ isAuthenticated, isReady, login, logout }}>
             {children}
         </AuthContext.Provider>
     )

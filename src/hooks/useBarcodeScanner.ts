@@ -20,7 +20,7 @@ export const BARCODE_FORMATS = [
 export const useBarcodeScanner = (
     onScanSuccess?: (nutrients: Nutrients) => void
 ) => {
-    const { token } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [scanning, setScanning] = useState(false);
     const [codeBar, setCodeBar] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +50,7 @@ export const useBarcodeScanner = (
             setScanning(false);
 
             try {
-                const food = token ? await getFoodByBarcode(token, decodedText) : null;
+                const food = isAuthenticated ? await getFoodByBarcode(decodedText) : null;
                 const nutrients = food ? foodToNutrients(food) : await searchByBarcode(decodedText);
                 setIsLoading(false);
 
@@ -64,7 +64,7 @@ export const useBarcodeScanner = (
                 setError("Produit non trouvé");
             }
         },
-        [token, onScanSuccess]
+        [isAuthenticated, onScanSuccess]
     );
 
     const handleCameraError = useCallback(() => {

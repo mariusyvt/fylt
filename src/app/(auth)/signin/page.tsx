@@ -22,8 +22,8 @@ export default function SignInForm () {
     const handleSubmit = async () => {
         setError("");
         try {
-            const result = await signIn(email, password);
-            login(result.data.token);
+            await signIn(email, password);
+            login();
             setEmail("");
             setPassword("");
         } catch (err: unknown) {

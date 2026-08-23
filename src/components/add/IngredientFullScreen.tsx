@@ -3,7 +3,6 @@
 import { X, Check } from "lucide-react";
 import IngredientForm from "@/components/add/IngredientForm";
 import { Nutrients } from "@/types/nutrition.types";
-import type { DetectedBarcode } from "react-barcode-scanner";
 
 interface IngredientFullScreenProps {
     open: boolean;
@@ -14,13 +13,6 @@ interface IngredientFullScreenProps {
     quantity: string;
     isEdit?: boolean;
     setQuantity: (qty: string) => void;
-    scanning: boolean;
-    isLoading: boolean;
-    error: string | null;
-    onCapture: (barcodes: DetectedBarcode[]) => void;
-    onCameraError: (error: Error) => void;
-    onStartScanner: () => void;
-    onStopScanner: () => void;
     onSelectFood: (nutrients: Nutrients) => void;
     onClearFood: () => void;
 }

@@ -1,52 +1,26 @@
-import { apiUrl, authHeaders, buildApiError } from "@/api/config/api.config";
+import { apiFetchJson } from "@/api/config/api.config";
+import { ApiResponse } from "@/types/api.types";
+import { Profile } from "@/types/profile.types";
 
-export const getProfile = async (token: string) => {
-    const response = await fetch(apiUrl("/user"), {
-        method: "GET",
-        headers: authHeaders(token),
-    });
+export const getProfile = async () =>
+    apiFetchJson<ApiResponse<Profile>>("/user", { method: "GET" });
 
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
+export const deleteProfile = async () => apiFetchJson("/user", { method: "DELETE" });
 
-export const deleteProfile = async (token: string) => {
-    const response = await fetch(apiUrl("/user"), {
-        method: "DELETE",
-        headers: authHeaders(token, false),
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const updateProfile = async (token: string, data: { firstName?: string; lastName?: string; email?: string }) => {
-    const response = await fetch(apiUrl("/user"), {
+export const updateProfile = async (data: { firstName?: string; lastName?: string; email?: string }) =>
+    apiFetchJson<ApiResponse<Profile>>("/user", {
         method: "PATCH",
-        headers: authHeaders(token),
-        body: JSON.stringify({
+        json: {
             first_name: data.firstName,
             last_name: data.lastName,
             email: data.email,
-        }),
+        },
     });
 
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const updateProfilePhoto = async (token: string, file: File) => {
+export const updateProfilePhoto = async (file: File) => {
     const formData = new FormData();
     formData.append("photo", file);
-
-    const response = await fetch(apiUrl("/user"), {
-        method: "PATCH",
-        headers: authHeaders(token, false),
-        body: formData,
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
+    return apiFetchJson<{ data?: { photo_url?: string } }>("/user", { method: "PATCH", body: formData });
 };
 
 export interface GoalPayload {
@@ -62,24 +36,15 @@ export interface GoalPayload {
     daily_lipids: number;
 }
 
-export const updateGoal = async (token: string, data: GoalPayload) => {
+export const updateGoal = async (data: GoalPayload) => {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
         formData.append(key, String(value));
     });
-
-    const response = await fetch(apiUrl("/user"), {
-        method: "PATCH",
-        headers: authHeaders(token, false),
-        body: formData,
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
+    return apiFetchJson("/user", { method: "PATCH", body: formData });
 };
 
 export const updateUserFields = async (
-    token: string,
     fields: Record<string, string | number | undefined | null>
 ) => {
     const formData = new FormData();
@@ -88,13 +53,5 @@ export const updateUserFields = async (
             formData.append(key, String(value));
         }
     });
-
-    const response = await fetch(apiUrl("/user"), {
-        method: "PATCH",
-        headers: authHeaders(token, false),
-        body: formData,
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
+    return apiFetchJson("/user", { method: "PATCH", body: formData });
 };

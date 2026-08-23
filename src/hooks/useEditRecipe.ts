@@ -5,6 +5,7 @@ import { RecipeCategory, RecipeIngredient, RecipeStep, Recipe } from "@/types/re
 import { ApiError } from "@/types/api.types";
 import { parsePreparationTime, formatPreparationTime } from "@/utils/format.utils";
 import { updateRecipe, getRecipeTypes } from "@/api/services/recipes.service";
+import { invalidateRecipesCache } from "@/hooks/useRecipes";
 import { calculateTotalNutrition } from "@/utils/nutrition.utils";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -21,17 +22,17 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
     const [activePicker, setActivePicker] = useState<PickerType>(null);
     const [ingredients, setIngredients] = useState<RecipeIngredient[]>([]);
     const [step, setStep] = useState<RecipeStep[]>([]);
-    const {token} = useAuth();
+    const {isAuthenticated} = useAuth();
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     useEffect(() => {
         const fetchRecipeTypes = async () => {
-            if (!token) return;
-            const result = await getRecipeTypes(token);
+            if (!isAuthenticated) return;
+            const result = await getRecipeTypes();
             setRecipeType(result.data);
         };
         fetchRecipeTypes();
-    }, [token]);
+    }, [isAuthenticated]);
 
     useEffect(() => {
         if (recipeData) {
@@ -47,7 +48,7 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
 
     const handleSubmit = async () => {
         setErrors({});
-        if (!token) {
+        if (!isAuthenticated) {
             setErrors({ _global: "Vous devez être connecté." });
             return false;
         }
@@ -83,7 +84,8 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
         if (photo) formData.append("photo", photo)
 
         try {
-            await updateRecipe(formData, id, token);
+            await updateRecipe(formData, id);
+            invalidateRecipesCache();
             return true
         } catch (error) {
             const apiError = error as ApiError;

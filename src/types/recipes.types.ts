@@ -10,6 +10,7 @@ export interface Recipe {
     total_carbs: string;
     total_lipids: string;
     total_proteins: string;
+    total_weight: number;
     updated_at: string;
     preparation_steps: RecipeStep[];
     recipe_ingredients: RecipeIngredient[];

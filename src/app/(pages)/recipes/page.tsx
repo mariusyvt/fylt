@@ -2,49 +2,33 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { getRecipes, getRecipeTypes } from "@/api/services/recipes.service";
-import { Recipe, RecipeCategory } from "@/types/recipes.types";
+import { Recipe } from "@/types/recipes.types";
 import HeaderRecipes from "@/components/recipes/list/HeaderRecipes";
 import { RecipeCard } from "@/components/recipes/list/RecipeCard";
 import { getProfile } from "@/api/services/profile.service";
 import { Profile } from "@/types/profile.types";
 import { UtensilsCrossed } from "lucide-react";
 import Loader from "@/components/Loader";
+import { useRecipes } from "@/hooks/useRecipes";
 
 export default function RecipesPage () {
-    const { token } = useAuth();
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
-    const [recipeTypes, setRecipeTypes] = useState<RecipeCategory[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { isAuthenticated } = useAuth();
+    const { recipes, recipeTypes, loading } = useRecipes();
     const [profile, setProfile] = useState<Profile | null>(null)
     const [activeFilter, setActiveFilter] = useState<number | null>(null);
 
     useEffect(() => {
-        const fetchRecipes = async () => {
-            try {
-                if (token) {
-                    const [resultRecipe, resultRecipeTypes, resultProfile] = await Promise.all([
-                        getRecipes(token).catch(() => ({ data: [] })),
-                        getRecipeTypes(token),
-                        getProfile(token),
-                    ]);
-                    setRecipes(resultRecipe.data)
-                    setRecipeTypes(resultRecipeTypes.data)
-                    setProfile(resultProfile.data)
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchRecipes();
-    }, [token]);
+        if (!isAuthenticated) return;
+        getProfile()
+            .then((res) => setProfile(res.data))
+            .catch(() => setProfile(null));
+    }, [isAuthenticated]);
 
     if (loading) {
         return <Loader />;
     }
 
-    const filteredRecipes = activeFilter
+    const filteredRecipes: Recipe[] = activeFilter
         ? recipes.filter((r) => r.recipe_type_id === activeFilter)
         : recipes;
 

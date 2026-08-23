@@ -1,0 +1,218 @@
+@use "../variables" as *;
+
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 40%);
+
+  &__header {
+    padding: $spacing-6 $spacing-8;
+    display: flex;
+    align-items: center;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    color: $teal-600;
+    font-size: 1.4rem;
+    font-weight: $font-semibold;
+  }
+
+  &__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 $spacing-6;
+  }
+
+  &__hero {
+    max-width: 1100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    padding: 4rem 0;
+  }
+
+  &__hero-content {
+    flex: 1;
+  }
+
+  &__hero-visual {
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: $slate-900;
+    line-height: 1.15;
+    margin: 0 0 $spacing-4;
+
+    &--accent {
+      color: $teal-600;
+    }
+  }
+
+  &__subtitle {
+    font-size: 1.1rem;
+    color: $slate-600;
+    line-height: 1.6;
+    margin: 0 0 $spacing-6;
+  }
+
+  &__cta {
+    display: flex;
+  }
+
+  &__phone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-3;
+    padding: $spacing-3 $spacing-5;
+    background: $white;
+    border: 1px solid $slate-300;
+    border-radius: 999px;
+    color: $slate-600;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+    svg {
+      color: $teal-600;
+    }
+  }
+
+  // Phone mockup
+  &__phone-mockup {
+    position: relative;
+  }
+
+  &__phone-frame {
+    width: 260px;
+    height: 520px;
+    border-radius: 2.5rem;
+    overflow: hidden;
+    border: 8px solid $slate-900;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    background: $slate-900;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  // Food banner
+  &__food-banner {
+    width: 100%;
+    max-width: 1100px;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    margin-bottom: 4rem;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+
+    img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  // Features
+  &__features {
+    max-width: 1100px;
+    width: 100%;
+    padding: 0 0 6rem;
+  }
+
+  &__features-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    margin: 0 0 $spacing-6;
+  }
+
+  &__features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-5;
+  }
+
+  &__feature-card {
+    background: $white;
+    border: 1px solid #f1f5f9;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(13, 148, 136, 0.1);
+    }
+  }
+
+  &__feature-img {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  &__feature-body {
+    padding: $spacing-4;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+
+    h3 {
+      font-size: 1rem;
+      font-weight: $font-semibold;
+      color: $slate-900;
+      margin: 0;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: $slate-400;
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+
+  &__feature-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background: $teal-50;
+    color: $teal-600;
+  }
+
+  &__footer {
+    text-align: center;
+    padding: $spacing-4;
+    border-top: 1px solid #f1f5f9;
+
+    p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: $slate-400;
+    }
+  }
+}

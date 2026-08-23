@@ -15,7 +15,6 @@ import SelectField from "@/components/ui/SelectField";
 import PickerButton from "@/components/ui/PickerButton";
 import FileButton from "@/components/ui/FileButton";
 import { useRouter } from "next/navigation";
-import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
 import { useNutrition } from "@/hooks/useNutrition";
 import { useAddRecipe } from "@/hooks/useAddRecipe";
 import { useStep } from "@/hooks/useStep";
@@ -60,13 +59,6 @@ export default function AddPage () {
         handleSubmit,
         errors,
     } = useAddRecipe(ingredient, steps);
-
-    const {scanning, isLoading, error, startScanner, stopScanner, handleCapture, handleCameraError} = useBarcodeScanner(
-        (scannedData) => {
-            setScannedNutrients(scannedData);
-            setIngredientName(scannedData.name);
-        }
-    );
 
 
     const handlePickerConfirm = () => {
@@ -171,13 +163,6 @@ export default function AddPage () {
                     nutrients={scannedNutrients}
                     quantity={quantity}
                     setQuantity={setQuantity}
-                    scanning={scanning}
-                    isLoading={isLoading}
-                    error={error}
-                    onCapture={handleCapture}
-                    onCameraError={handleCameraError}
-                    onStartScanner={startScanner}
-                    onStopScanner={stopScanner}
                     onSelectFood={(n) => {
                         setScannedNutrients(n);
                         setIngredientName(n.name);

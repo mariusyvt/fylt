@@ -15,16 +15,16 @@ const monthLabel = (key: string) => {
 };
 
 export default function StatsPage() {
-    const { token } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [month, setMonth] = useState(monthKey(new Date()));
     const [stats, setStats] = useState<MonthlyStats | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!token) return;
+        if (!isAuthenticated) return;
         let active = true;
         setLoading(true);
-        getMonthlyStats(token, month)
+        getMonthlyStats(month)
             .then((res) => {
                 if (active) setStats(res.data ?? null);
             })
@@ -37,7 +37,7 @@ export default function StatsPage() {
         return () => {
             active = false;
         };
-    }, [token, month]);
+    }, [isAuthenticated, month]);
 
     const shiftMonth = (delta: number) => {
         const [year, m] = month.split("-").map(Number);

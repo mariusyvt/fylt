@@ -1,63 +1,21 @@
-import { apiUrl, authHeaders, buildApiError } from "@/api/config/api.config";
+import { apiFetchJson } from "@/api/config/api.config";
+import { ApiResponse } from "@/types/api.types";
+import { Recipe, RecipeCategory } from "@/types/recipes.types";
 
-export const getRecipes = async (token: string) => {
-    const response = await fetch(apiUrl("/recipes"), {
-        method: "GET",
-        headers: authHeaders(token),
-    });
+export const getRecipes = async () =>
+    apiFetchJson<ApiResponse<Recipe[]>>("/recipes", { method: "GET" });
 
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
+export const getRecipeTypes = async () =>
+    apiFetchJson<ApiResponse<RecipeCategory[]>>("/recipe-types", { method: "GET" });
 
-export const getRecipeTypes = async (token: string) => {
-    const response = await fetch(apiUrl("/recipe-types"), {
-        method: "GET",
-        headers: authHeaders(token),
-    });
+export const getRecipeById = async (id: number) =>
+    apiFetchJson<ApiResponse<Recipe>>(`/recipes/${id}`, { method: "GET" });
 
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
+export const createRecipe = async (recipeData: FormData) =>
+    apiFetchJson("/recipes", { method: "POST", body: recipeData });
 
-export const getRecipeById = async (id: number, token: string) => {
-    const response = await fetch(apiUrl(`/recipes/${id}`), {
-        method: "GET",
-        headers: authHeaders(token),
-    });
+export const deleteRecipe = async (id: number) =>
+    apiFetchJson(`/recipes/${id}`, { method: "DELETE" });
 
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const createRecipe = async (recipeData: FormData, token: string) => {
-    const response = await fetch(apiUrl("/recipes"), {
-        method: "POST",
-        headers: authHeaders(token, false),
-        body: recipeData,
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const deleteRecipe = async (id: number, token: string) => {
-    const response = await fetch(apiUrl(`/recipes/${id}`), {
-        method: "DELETE",
-        headers: authHeaders(token, false),
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
-
-export const updateRecipe = async (recipeData: FormData, id: number, token: string) => {
-    const response = await fetch(apiUrl(`/recipes/${id}`), {
-        method: "PATCH",
-        headers: authHeaders(token, false),
-        body: recipeData,
-    });
-
-    if (!response.ok) await buildApiError(response);
-    return await response.json();
-};
+export const updateRecipe = async (recipeData: FormData, id: number) =>
+    apiFetchJson(`/recipes/${id}`, { method: "PATCH", body: recipeData });
