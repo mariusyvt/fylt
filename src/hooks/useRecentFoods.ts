@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Food } from "@/types/foods.types";
 
-const STORAGE_KEY = "fitmeal_recent_foods";
+const STORAGE_KEY = "fylt_recent_foods";
 const MAX_RECENT = 10;
 
 export const useRecentFoods = () => {

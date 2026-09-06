@@ -37,26 +37,30 @@ $danger-hover: #dc2626;
 .menu-item {
   width: 100%;
   padding: $spacing-4;
-  background: $white;
-  border: 1px solid $border-color;
+  background: rgba($white, 0.9);
+  border: 1px solid rgba($border-color, 0.5);
   border-radius: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  transition: all $transition-base;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
   text-decoration: none;
   color: inherit;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 
   &:active {
     transform: scale(0.98);
+    box-shadow: 0 0 0 rgba(15, 23, 42, 0);
   }
 
   &:hover {
-    border-color: #ccfbf1;
+    border-color: rgba($primary, 0.2);
+    box-shadow: 0 2px 8px rgba(13, 148, 136, 0.06);
 
     .chevron {
       color: $primary;
+      transform: translateX(2px);
     }
   }
 }
@@ -95,7 +99,7 @@ $danger-hover: #dc2626;
 
 .chevron {
   color: $slate-300;
-  transition: color $transition-base;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .separator {
@@ -108,9 +112,10 @@ $danger-hover: #dc2626;
   display: flex;
   gap: $spacing-3;
   padding: $spacing-4;
-  background: $white;
-  border: 1px solid $border-color;
+  background: rgba($white, 0.9);
+  border: 1px solid rgba($border-color, 0.5);
   border-radius: 1.25rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 
   &__icon {
     flex: none;

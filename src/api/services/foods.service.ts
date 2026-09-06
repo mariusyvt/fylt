@@ -48,3 +48,16 @@ export const deleteFood = async (id: number): Promise<void> => {
         throw err;
     }
 };
+
+/** Log fire-and-forget : enregistre la sélection d'un aliment après recherche. */
+export const logFoodSelection = (query: string, foodId: number): void => {
+    const q = query.trim();
+    if (!q || !foodId) return;
+
+    apiFetch("/foods/search-log", {
+        method: "POST",
+        json: { query: q, food_id: foodId },
+    }).catch(() => {
+        // Télémétrie non critique — on ignore silencieusement.
+    });
+};

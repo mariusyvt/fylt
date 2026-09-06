@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const SESSION_COOKIE = "fitmeal.session_token";
+const SESSION_COOKIE = "fylt.session_token";
 
 /** Routes d'authentification accessibles sans session. */
 const AUTH_ROUTES = [

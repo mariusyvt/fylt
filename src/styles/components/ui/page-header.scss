@@ -13,13 +13,6 @@
 .page-header {
   padding: max(#{v.$spacing-4}, env(safe-area-inset-top)) v.$spacing-6 v.$spacing-2;
 
-  &--sticky {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    background: linear-gradient(to bottom, v.$teal-50, rgba(v.$teal-50, 0.9));
-  }
-
   &__bar {
     display: flex;
     align-items: center;

@@ -1,40 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# 🥗 Fylt
 
-## Getting Started
+Application mobile-first de suivi nutritionnel et de gestion de recettes. Fylt permet de suivre ses apports caloriques au quotidien, créer et partager ses recettes, et atteindre ses objectifs nutritionnels.
 
-First, run the development server:
+## ✨ Fonctionnalités
+
+### 📊 Suivi nutritionnel
+- Suivi quotidien des calories, protéines, glucides et lipides
+- Organisation des repas par créneau (petit-déjeuner, déjeuner, goûter, dîner)
+- Vue hebdomadaire et statistiques mensuelles
+- Historique des aliments récemment consommés
+
+### 🍳 Gestion de recettes
+- Création de recettes avec photo, ingrédients et étapes
+- Calcul automatique des valeurs nutritionnelles
+- Catégorisation par type de plat (entrée, plat, dessert…)
+- Modification et suppression de recettes
+
+### 🔍 Recherche d'aliments
+- Recherche dans une base de données d'aliments (Ciqual)
+- Scan de code-barres via OpenFoodFacts
+- Ajout d'aliments personnalisés
+
+### 🎯 Objectifs personnalisés
+- Onboarding guidé pour définir ses objectifs (5 étapes)
+- Calcul du métabolisme de base (formule Mifflin-St Jeor)
+- Répartition automatique des macronutriments (30P / 40G / 30L)
+- Objectifs ajustables : maintien, sèche modérée/intense, prise de masse modérée/intense
+
+### 👤 Profil utilisateur
+- Authentification complète (inscription, connexion, mot de passe oublié, vérification email)
+- Photo de profil
+- Suivi du poids
+
+## 🛠️ Stack technique
+
+| Technologie | Usage |
+|---|---|
+| **Next.js 16** | Framework React (App Router) |
+| **React 19** | UI |
+| **TypeScript** | Typage statique |
+| **Sass** | Styles |
+| **Vitest** | Tests unitaires |
+| **React Testing Library** | Tests de hooks |
+| **OpenFoodFacts SDK** | Données nutritionnelles par code-barres |
+| **Lucide React** | Icônes |
+
+## 📁 Structure du projet
+
+```
+src/
+├── api/              # Configuration API et services (recipes, foods, profile, tracking…)
+├── app/              # Pages Next.js (App Router)
+│   ├── (auth)/       # Pages d'authentification (signin, signup, forgot-password…)
+│   └── (pages)/      # Pages principales (tracking, recipes, add, profile)
+├── components/       # Composants React (ui, add, recipes, tracking, profile…)
+├── context/          # Contexte d'authentification
+├── hooks/            # Hooks personnalisés (useAddRecipe, useTracking, useNutrition…)
+├── styles/           # Fichiers SCSS
+├── types/            # Types TypeScript
+└── utils/            # Fonctions utilitaires (nutrition, TDEE, formatage)
+```
+
+## 🚀 Démarrage
+
+### Prérequis
+- Node.js 18+
+- npm
+
+### Installation
+
+```bash
+git clone https://github.com/mariusyvt/fylt.git
+cd fylt
+npm install
+```
+
+### Lancer le serveur de développement
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L'application est accessible sur [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Lancer les tests
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```bash
+npm test
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+## 📜 Scripts disponibles
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+| Commande | Description |
+|---|---|
+| `npm run dev` | Serveur de développement |
+| `npm run build` | Build de production |
+| `npm start` | Serveur de production |
+| `npm test` | Lancer les tests |
+| `npm run test:watch` | Tests en mode watch |
+| `npm run lint` | Linter ESLint |

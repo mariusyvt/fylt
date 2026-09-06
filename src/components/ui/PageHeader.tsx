@@ -6,7 +6,6 @@ interface PageHeaderProps {
     subtitle?: string;
     leading?: ReactNode;
     action?: ReactNode;
-    sticky?: boolean;
     children?: ReactNode;
 }
 
@@ -16,13 +15,12 @@ export default function PageHeader({
     subtitle,
     leading,
     action,
-    sticky = false,
     children,
 }: PageHeaderProps) {
     const hasBar = Boolean(leading || action);
 
     return (
-        <header className={`page-header ${sticky ? "page-header--sticky" : ""}`}>
+        <header className="page-header">
             {hasBar && (
                 <div className="page-header__bar">
                     <div className="page-header__leading">{leading}</div>

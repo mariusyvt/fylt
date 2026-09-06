@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { Search, ScanBarcode, Trash2, Clock, X } from "lucide-react";
 import { Nutrients } from "@/types/nutrition.types";
 import { Food } from "@/types/foods.types";
-import { foodToNutrients } from "@/api/services/foods.service";
+import { foodToNutrients, logFoodSelection } from "@/api/services/foods.service";
 import { useFoodSearch } from "@/hooks/useFoodSearch";
 import { useRecentFoods } from "@/hooks/useRecentFoods";
 import type { DetectedBarcode } from "react-barcode-scanner";
@@ -42,6 +42,11 @@ export default function FoodSearchPanel({
     const handleSelectFood = (food: Food) => {
         addRecent(food);
         onSelectFood(foodToNutrients(food));
+    };
+
+    const handleSelectSearchResult = (food: Food) => {
+        logFoodSelection(query, food.id);
+        handleSelectFood(food);
     };
 
     const showRecents = query.trim().length < 2 && results.length === 0 && recentFoods.length > 0;
@@ -86,7 +91,7 @@ export default function FoodSearchPanel({
                             <button
                                 type="button"
                                 className="food-result__select"
-                                onClick={() => handleSelectFood(food)}
+                                onClick={() => handleSelectSearchResult(food)}
                             >
                                 <div className="food-result__left">
                                     <span className="food-result__name">{food.name}</span>

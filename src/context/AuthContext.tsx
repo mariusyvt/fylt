@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const login = useCallback(() => {
-        // Le cookie de session a deja ete pose par la reponse du /signin.
         setIsAuthenticated(true);
     }, []);
 
@@ -50,7 +49,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
             await signOut();
         } catch {
-            // meme en cas d'echec reseau, on nettoie l'etat local
         }
         setIsAuthenticated(false);
         clearServiceWorkerCaches();

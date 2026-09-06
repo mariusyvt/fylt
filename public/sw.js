@@ -1,4 +1,4 @@
-const CACHE_NAME = "fitmeal-v2";
+const CACHE_NAME = "fylt-v2";
 const OFFLINE_URL = "/offline";
 const STATIC_ASSETS = [
   "/",

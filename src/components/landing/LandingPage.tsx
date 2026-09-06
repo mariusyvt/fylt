@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Smartphone, Utensils, BarChart3, BookOpen, Scan } from "lucide-react";
 
 const FEATURES = [
@@ -34,8 +35,14 @@ export default function LandingPage() {
         <div className="landing">
             <header className="landing__header">
                 <div className="landing__logo">
-                    <Utensils size={28} />
-                    <span>FitMeal</span>
+
+                    <img
+                        src={"/icons/fylt-logo-1024.webp"}
+                        alt={"Fylt Logo"}
+                        width={40}
+                        height={40}
+                    />
+                    <span>Fylt</span>
                 </div>
             </header>
 
@@ -47,7 +54,7 @@ export default function LandingPage() {
                             <span className="landing__title--accent">atteignez vos objectifs.</span>
                         </h1>
                         <p className="landing__subtitle">
-                            FitMeal est votre assistant nutrition personnel. Créez vos recettes, suivez vos calories et atteignez vos objectifs — tout depuis votre téléphone.
+                            Fylt est votre assistant nutrition personnel. Créez vos recettes, suivez vos calories et atteignez vos objectifs — tout depuis votre téléphone.
                         </p>
                         <div className="landing__cta">
                             <div className="landing__phone-badge">
@@ -61,7 +68,7 @@ export default function LandingPage() {
                             <div className="landing__phone-frame">
                                 <img
                                     src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=600&fit=crop"
-                                    alt="Aperçu FitMeal"
+                                    alt="Aperçu Fylt"
                                 />
                             </div>
                         </div>
@@ -94,7 +101,13 @@ export default function LandingPage() {
             </main>
 
             <footer className="landing__footer">
-                <p>© {new Date().getFullYear()} FitMeal — Application mobile uniquement</p>
+                <p>© {new Date().getFullYear()} Fylt — Application mobile uniquement</p>
+                <nav className="landing__footer-links">
+                    <Link href="/legal/mentions-legales">Mentions légales</Link>
+                    <Link href="/legal/confidentialite">Confidentialité</Link>
+                    <Link href="/legal/cgu">CGU</Link>
+                    <Link href="/legal/cookies">Cookies</Link>
+                </nav>
             </footer>
         </div>
     );

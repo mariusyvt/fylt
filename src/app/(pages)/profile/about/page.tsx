@@ -17,7 +17,7 @@ export default function AboutPage() {
 
             <main className="informations-content">
                 <div className="info-card" style={{ padding: "1.5rem" }}>
-                    <h2 className="about-heading">FitMeal</h2>
+                    <h2 className="about-heading">Fylt</h2>
                     <p className="about-text">
                         Je suis un <strong>étudiant en développement web</strong>, passionné de nutrition et de sport. Au fil de mes entraînements, je me suis rendu compte qu&apos;il était difficile de garder une vue claire sur ce que je mangeais réellement et sur l&apos;équilibre de mes repas.
                     </p>
@@ -29,7 +29,7 @@ export default function AboutPage() {
 
                     <p className="about-subheading">Le projet</p>
                     <p className="about-text">
-                        FitMeal me permet de <strong>créer mes propres recettes</strong>, de <strong>calculer automatiquement leurs valeurs nutritionnelles</strong> et de <strong>suivre au quotidien</strong> mes calories et mes macronutriments. C&apos;est un outil qui réunit mes deux centres d&apos;intérêt — le code et la nutrition — et que j&apos;utilise au jour le jour.
+                        Fylt me permet de <strong>créer mes propres recettes</strong>, de <strong>calculer automatiquement leurs valeurs nutritionnelles</strong> et de <strong>suivre au quotidien</strong> mes calories et mes macronutriments. C&apos;est un outil qui réunit mes deux centres d&apos;intérêt — le code et la nutrition — et que j&apos;utilise au jour le jour.
                     </p>
 
                     <p className="about-subheading">L&apos;apprentissage</p>
@@ -40,7 +40,7 @@ export default function AboutPage() {
                     <hr className="about-divider" />
 
                     <p className="about-text">
-                        Mon objectif est de rendre le <strong>suivi alimentaire simple, rapide et accessible à tous</strong>, sans se perdre dans des calculs interminables. FitMeal continue d&apos;évoluer, et de nouvelles fonctionnalités sont ajoutées régulièrement.
+                        Mon objectif est de rendre le <strong>suivi alimentaire simple, rapide et accessible à tous</strong>, sans se perdre dans des calculs interminables. Fylt continue d&apos;évoluer, et de nouvelles fonctionnalités sont ajoutées régulièrement.
                     </p>
                     <p className="about-version">Version 1.0.0</p>
                 </div>

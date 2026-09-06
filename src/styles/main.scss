@@ -49,6 +49,7 @@
 @use 'pages/signin';
 @use 'pages/profile';
 @use 'pages/informations';
+@use 'pages/legal';
 
 
 // Global styles
@@ -63,22 +64,53 @@
 //  outline: 1px solid red !important;
 //}
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: variables.$gray-50;
   color: variables.$slate-900;
 }
 
-.bg-gradient-decor {
+// Skip-to-content (accessibilité clavier)
+.skip-link {
   position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999;
+  padding: variables.$spacing-3 variables.$spacing-4;
+  background: variables.$teal-600;
+  color: variables.$white;
+  font-size: variables.$text-sm;
+  font-weight: 500;
+  border-radius: 0 0 variables.$radius-2xl 0;
+  text-decoration: none;
+
+  &:focus {
+    left: 0;
+    top: 0;
+    width: auto;
+    height: auto;
+  }
+}
+
+.bg-gradient-decor {
+  position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
+  max-width: 448px;
   height: 384px;
-  background: linear-gradient(to bottom, variables.$teal-50 80%, transparent);
+  background: linear-gradient(to bottom, #f0fdfa 80%, transparent);
   z-index: -1;
 }
 

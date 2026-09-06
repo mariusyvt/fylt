@@ -28,7 +28,6 @@ export default function HeaderAddRecipe({
                 </> :
                 <>
                     <span className="header-subtitle">Nouvelle Recette</span>
-                    <button className="help-link">Aide</button>
                 </>}
 
 

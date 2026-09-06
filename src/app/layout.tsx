@@ -36,7 +36,7 @@ export default function RootLayout({
             <meta name="theme-color" content="#0d9488" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-            <meta name="apple-mobile-web-app-title" content="FitMeal" />
+            <meta name="apple-mobile-web-app-title" content="Fylt" />
             <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         </head>
         <body>

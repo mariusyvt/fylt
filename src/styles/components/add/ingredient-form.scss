@@ -11,15 +11,29 @@
 .food-search {
   display: flex;
   align-items: center;
-  gap: $spacing-2;
-  background: $white;
-  border: 1px solid $slate-300;
-  border-radius: 0.875rem;
-  padding: 0 $spacing-3;
+  gap: $spacing-3;
+  background: rgba($white, 0.85);
+  border: 1px solid rgba($slate-300, 0.6);
+  border-radius: 1rem;
+  padding: $spacing-1 $spacing-3 $spacing-1 $spacing-4;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+
+  &:focus-within {
+    border-color: rgba($teal-600, 0.5);
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04), 0 0 0 3px rgba($teal-600, 0.08);
+    background: $white;
+  }
 
   &__icon {
     color: $slate-400;
     flex: none;
+    transition: color 0.25s ease, transform 0.25s ease;
+
+    .food-search:focus-within & {
+      color: $teal-600;
+      transform: scale(1.08);
+    }
   }
 
   &__input {
@@ -28,31 +42,43 @@
     border: none;
     outline: none;
     background: none;
-    padding: 0.75rem 0;
+    padding: 0.8rem 0;
     font-size: 0.95rem;
     color: $slate-900;
+    letter-spacing: -0.01em;
 
     &::placeholder {
       color: $slate-400;
+      transition: color 0.2s ease;
+    }
+
+    &:focus::placeholder {
+      color: rgba($slate-400, 0.5);
     }
   }
 
   &__scan {
     flex: none;
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 0.625rem;
+    border-radius: 0.75rem;
     background: $teal-50;
     color: $teal-600;
     cursor: pointer;
-    transition: $transition-base;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      background: rgba($teal-600, 0.15);
+      box-shadow: 0 2px 8px rgba($teal-600, 0.12);
+    }
 
     &:active {
-      transform: scale(0.94);
+      transform: scale(0.92);
+      background: rgba($teal-600, 0.2);
     }
   }
 }

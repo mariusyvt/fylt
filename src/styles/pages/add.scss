@@ -6,17 +6,6 @@
     margin: 0 auto;
     min-height: 100vh;
     position: relative;
-    background-color: oklch(0.975 0.006 90 / 0.5);
-  }
-
-  .bg-gradient-decor {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 384px;
-    background: linear-gradient(to bottom, $teal-50, transparent);
-    z-index: -1;
   }
 }
 

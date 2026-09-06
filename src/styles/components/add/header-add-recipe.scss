@@ -3,15 +3,10 @@
 $border-color: #f1f5f9;
 
 .sticky-header {
-  position: sticky;
-  top: 0;
-  z-index: 30;
   padding: $spacing-8 $spacing-6 $spacing-4;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: oklch(0.975 0.006 90 / 0.8);
-  backdrop-filter: blur(12px);
 }
 
 .icon-btn-circle {
@@ -36,12 +31,3 @@ $border-color: #f1f5f9;
   font-size: $text-sm;
   font-weight: $font-semibold;
 }
-
-.help-link {
-  background: none;
-  border: none;
-  color: $teal-600;
-  font-weight: $font-medium;
-  cursor: pointer;
-}
-

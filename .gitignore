@@ -42,4 +42,8 @@ next-env.d.ts
 
 architecture.md
 
+# guides de déploiement locaux (ne pas versionner)
+DEPLOY_GUIDE.local.md
+
 .npmrc
+__tests__/

@@ -23,7 +23,6 @@ export default function HeaderRecipes ({profile, recipeTypes, activeFilter, onFi
 
     return (
         <PageHeader
-            sticky
             title="Recettes"
             action={
                 <Link href="/profile" className="profile-avatar">

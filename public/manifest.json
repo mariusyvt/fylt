@@ -1,6 +1,6 @@
 {
-  "name": "FitMeal",
-  "short_name": "FitMeal",
+  "name": "Fylt",
+  "short_name": "Fylt",
   "description": "Suivi nutritionnel et recettes personnalisées",
   "start_url": "/",
   "display": "standalone",
@@ -10,15 +10,15 @@
   "scope": "/",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/icons/fylt-logo-192x192.webp",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/webp",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "/icons/fylt-logo-512x512.webp",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/webp",
       "purpose": "any maskable"
     }
   ]
