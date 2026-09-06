@@ -3,16 +3,17 @@ import { OpenFoodFacts } from "@openfoodfacts/openfoodfacts-nodejs";
 
 const client = new OpenFoodFacts(fetch);
 
+const logDev = (message: string, detail?: unknown) => {
+    if (process.env.NODE_ENV !== "production") {
+        console.error(message, detail);
+    }
+};
+
 export const searchByBarcode = async (barcode: string): Promise<Nutrients | null> => {
     const {data, error} = await client.getProductV3(barcode);
 
-    if (!data) {
-        console.error("Error fetching product:", error);
-        return null;
-    }
-
-    if(data.status === "failure"){
-        console.error("Error fetching product:", error);
+    if (!data || data.status === "failure") {
+        logDev("Error fetching product:", error);
         return null;
     }
 

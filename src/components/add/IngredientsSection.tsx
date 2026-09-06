@@ -7,24 +7,31 @@ interface IngredientsSectionProps {
     ingredients: RecipeIngredient[];
     onRemove: (index: number) => void;
     onAdd: () => void;
+    onEdit?: (index: number) => void;
 }
 
 export default function IngredientsSection({
     ingredients,
     onRemove,
-    onAdd
+    onAdd,
+    onEdit
 }: IngredientsSectionProps) {
 
     return (
         <section>
-            <h2 className="section-title">Ingrédients</h2>
+            <h2 className="recipe-section-title">Ingrédients</h2>
             <div className="item-stack">
                 {ingredients.map((ing, index) => (
                     <div key={index} className="ingredient-pill">
-                        <div className="pill-left">
+                        <button
+                            type="button"
+                            className={`pill-left ${onEdit ? "pill-left--clickable" : ""}`}
+                            onClick={onEdit ? () => onEdit(index) : undefined}
+                            disabled={!onEdit}
+                        >
                             <Wheat size={16} />
                             <span className="pill-text">{ing.ingredient_name}</span>
-                        </div>
+                        </button>
                         <button className="remove-btn" onClick={() => onRemove(index)}>
                             <X size={16} />
                         </button>

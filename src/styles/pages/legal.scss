@@ -1,0 +1,125 @@
+@use "../variables" as *;
+
+.legal {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: $spacing-8 $spacing-6 calc($spacing-8 * 3);
+  color: $slate-800;
+  line-height: 1.7;
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-2;
+    color: $teal-600;
+    text-decoration: none;
+    font-weight: $font-medium;
+    font-size: $text-sm;
+    margin-bottom: $spacing-6;
+
+    &:hover {
+      color: $teal-700;
+    }
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $slate-900;
+    margin-bottom: $spacing-2;
+    letter-spacing: -0.025em;
+  }
+
+  &__updated {
+    font-size: $text-sm;
+    color: $slate-400;
+    margin-bottom: $spacing-8;
+  }
+
+  section {
+    margin-bottom: $spacing-8;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    margin-bottom: $spacing-3;
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: $font-semibold;
+    color: $slate-800;
+    margin: $spacing-4 0 $spacing-2;
+  }
+
+  p {
+    margin-bottom: $spacing-3;
+  }
+
+  ul {
+    margin: 0 0 $spacing-3 $spacing-5;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+
+  a {
+    color: $teal-600;
+    text-decoration: underline;
+
+    &:hover {
+      color: $teal-700;
+    }
+  }
+
+  &__placeholder {
+    background: $teal-50;
+    border: 1px dashed $teal-600;
+    border-radius: $radius-2xl;
+    padding: $spacing-4;
+    font-size: $text-sm;
+    color: $slate-600;
+    margin-bottom: $spacing-6;
+  }
+
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-4;
+    margin-top: calc($spacing-8 * 1.5);
+    padding-top: $spacing-6;
+    border-top: 1px solid $slate-300;
+
+    a {
+      text-decoration: none;
+      font-size: $text-sm;
+      color: $slate-600;
+
+      &:hover {
+        color: $teal-600;
+      }
+    }
+  }
+}
+
+// Liens légaux dans le footer de la landing
+.landing__footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $spacing-4;
+  margin-top: $spacing-2;
+
+  a {
+    color: $slate-400;
+    text-decoration: none;
+    font-size: 0.8rem;
+
+    &:hover {
+      color: $teal-600;
+      text-decoration: underline;
+    }
+  }
+}

@@ -5,48 +5,52 @@
 // UI — composants réutilisables
 @use 'components/ui/inputs';
 @use 'components/ui/buttons';
+@use 'components/ui/page-header';
 
-// Forms — styles de formulaire partagés
-@use 'components/forms/shared-form';
+// Styles transverses (formulaires partagés)
+@use 'shared/shared-form';
 
-// Loader
+// Composants — divers
 @use 'components/loader';
+@use 'components/bottom-navbar';
+@use 'components/landing';
 
-// Auth
-@use 'components/auth/signin';
-
-// Home
+// Composants — home
 @use 'components/home/card';
 @use 'components/home/header';
-@use 'components/pages/home';
 
-// Profile
-@use 'components/profile/profile';
+// Composants — profile
 @use 'components/profile/header-profil';
-@use 'components/profile/informations';
 
-// Navigation
-@use 'components/pages/bottom-navbar';
+// Composants — recipes (list)
+@use 'components/recipes/list/header-recipe';
+@use 'components/recipes/list/recipe-card';
 
-// Recipes — list
-@use 'components/recipes/header-recipe';
-@use 'components/recipes/recipe-card';
-
-// Recipes — add
-@use 'components/recipes/add/page';
-@use 'components/recipes/add/header-add-recipe';
-@use 'components/recipes/add/ingredient-form';
-@use 'components/recipes/add/ingredients-section';
-@use 'components/recipes/add/steps-section';
-@use 'components/recipes/add/picker-overlay';
-@use 'components/recipes/add/confirm-button';
-
-// Recipes — detail
-@use 'components/pages/recipe';
+// Composants — recipes (detail)
 @use 'components/recipes/detail/recipe-detail-header';
 @use 'components/recipes/detail/recipe-hero';
 @use 'components/recipes/detail/recipe-ingredients-list';
-@use "components/recipes/detail/recipe-options-menu";
+@use 'components/recipes/detail/recipe-options-menu';
+
+// Composants — add
+@use 'components/add/header-add-recipe';
+@use 'components/add/ingredient-form';
+@use 'components/add/ingredients-section';
+@use 'components/add/steps-section';
+@use 'components/add/picker-overlay';
+@use 'components/add/confirm-button';
+
+// Pages
+@use 'pages/home';
+@use 'pages/add';
+@use 'pages/recipe';
+@use 'pages/tracking';
+@use 'pages/onboarding';
+@use 'pages/signin';
+@use 'pages/profile';
+@use 'pages/informations';
+@use 'pages/legal';
+
 
 // Global styles
 *,
@@ -60,21 +64,61 @@
 //  outline: 1px solid red !important;
 //}
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: variables.$gray-50;
   color: variables.$slate-900;
 }
 
-.bg-gradient-decor {
+// Skip-to-content (accessibilité clavier)
+.skip-link {
   position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999;
+  padding: variables.$spacing-3 variables.$spacing-4;
+  background: variables.$teal-600;
+  color: variables.$white;
+  font-size: variables.$text-sm;
+  font-weight: 500;
+  border-radius: 0 0 variables.$radius-2xl 0;
+  text-decoration: none;
+
+  &:focus {
+    left: 0;
+    top: 0;
+    width: auto;
+    height: auto;
+  }
+}
+
+.bg-gradient-decor {
+  position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
+  max-width: 448px;
   height: 384px;
-  background: linear-gradient(to bottom, variables.$teal-50 80%, transparent);
+  background: linear-gradient(to bottom, #f0fdfa 80%, transparent);
   z-index: -1;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

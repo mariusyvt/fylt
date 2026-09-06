@@ -7,7 +7,7 @@ interface PersonPickerProps {
     onChange?: (value: number) => void;
 }
 
-export default function PersonPicker({ initial = 2, max = 20, onChange }: PersonPickerProps) {
+export default function PersonPicker({ initial = 1, max = 20, onChange }: PersonPickerProps) {
     const [value, setValue] = useState({ persons: String(initial) });
 
     useEffect(() => {

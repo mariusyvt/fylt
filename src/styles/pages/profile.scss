@@ -1,0 +1,296 @@
+// src/styles/components/profile/profile.scss
+@use "../variables" as *;
+
+$border-color: $slate-300;
+$text-muted: $slate-400;
+$primary: $teal-600;
+$primary-soft: $teal-50;
+$orange: #f97316;
+$orange-soft: #fff7ed;
+$danger: #ef4444;
+$danger-hover: #dc2626;
+
+.mobile-container {
+  max-width: 448px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 128px;
+}
+
+.profile-main {
+  padding: 0 $spacing-6;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: $font-medium;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 $spacing-1 $spacing-1;
+}
+
+.menu-item {
+  width: 100%;
+  padding: $spacing-4;
+  background: rgba($white, 0.9);
+  border: 1px solid rgba($border-color, 0.5);
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 0 0 rgba(15, 23, 42, 0);
+  }
+
+  &:hover {
+    border-color: rgba($primary, 0.2);
+    box-shadow: 0 2px 8px rgba(13, 148, 136, 0.06);
+
+    .chevron {
+      color: $primary;
+      transform: translateX(2px);
+    }
+  }
+}
+
+.menu-item-left {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+}
+
+.icon-box {
+  padding: 0.625rem;
+  border-radius: 0.75rem;
+  display: flex;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &.teal {
+    background-color: $primary-soft;
+    color: $primary;
+  }
+
+  &.orange {
+    background-color: $orange-soft;
+    color: $orange;
+  }
+}
+
+.menu-text {
+  font-weight: $font-medium;
+  color: $slate-800;
+}
+
+.chevron {
+  color: $slate-300;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.separator {
+  border: 0;
+  margin: $spacing-4 0;
+}
+
+// About section
+.about-section {
+  display: flex;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: rgba($white, 0.9);
+  border: 1px solid rgba($border-color, 0.5);
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+
+  &__icon {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $primary-soft;
+    color: $primary;
+    border-radius: 0.75rem;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+  }
+
+  &__text {
+    font-size: 0.85rem;
+    color: $slate-600;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.about-heading {
+  font-size: 1.25rem;
+  font-weight: $font-semibold;
+  color: $slate-900;
+  margin: 0 0 $spacing-3;
+}
+
+.about-text {
+  font-size: 0.9rem;
+  color: $slate-600;
+  line-height: 1.6;
+  margin: 0 0 $spacing-3;
+
+  strong {
+    color: $slate-900;
+    font-weight: $font-semibold;
+  }
+}
+
+.about-subheading {
+  font-size: 0.8rem;
+  font-weight: $font-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $teal-600;
+  margin: $spacing-5 0 $spacing-2;
+}
+
+.about-divider {
+  border: none;
+  border-top: 1px solid $slate-300;
+  margin: $spacing-4 0;
+}
+
+.about-version {
+  font-size: 0.75rem;
+  color: $text-muted;
+  margin: $spacing-4 0 0;
+}
+
+// Confirm delete modal
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: $spacing-6;
+  animation: fadeIn 0.2s ease;
+}
+
+.confirm-modal {
+  background: $white;
+  border-radius: 1.5rem;
+  padding: $spacing-8 $spacing-6;
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-3;
+  animation: scaleIn 0.2s ease;
+}
+
+.confirm-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fef2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $spacing-2;
+
+  svg {
+    width: 28px;
+    height: 28px;
+    color: $danger;
+  }
+}
+
+.confirm-title {
+  font-size: 1.125rem;
+  font-weight: $font-semibold;
+  color: $slate-900;
+}
+
+.confirm-text {
+  font-size: $text-sm;
+  color: $slate-400;
+  line-height: 1.5;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: $spacing-3;
+  width: 100%;
+  margin-top: $spacing-4;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid $slate-300;
+  background: $white;
+  color: $slate-600;
+  font-weight: $font-medium;
+  font-size: $text-sm;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.btn-confirm-delete {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: none;
+  background: $danger;
+  color: $white;
+  font-weight: $font-medium;
+  font-size: $text-sm;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover {
+    background: $danger-hover;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+

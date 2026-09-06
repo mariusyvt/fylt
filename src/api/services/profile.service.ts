@@ -1,79 +1,57 @@
-export const getProfiles = async (token: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/user`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        }
-    });
+import { apiFetchJson } from "@/api/config/api.config";
+import { ApiResponse } from "@/types/api.types";
+import { Profile } from "@/types/profile.types";
 
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
+export const getProfile = async () =>
+    apiFetchJson<ApiResponse<Profile>>("/user", { method: "GET" });
 
-    return await response.json();
-}
+export const deleteProfile = async () => apiFetchJson("/user", { method: "DELETE" });
 
-export const deleteProfile = async (token: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/user`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    })
-
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
-
-    return await response.json();
-}
-
-export const updateProfile = async (token: string, data: { firstName?: string; lastName?: string; email?: string }) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/user`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+export const updateProfile = async (data: { firstName?: string; lastName?: string; email?: string }) =>
+    apiFetchJson<ApiResponse<Profile>>("/user", {
+        method: "PATCH",
+        json: {
             first_name: data.firstName,
             last_name: data.lastName,
             email: data.email,
-        }),
-    });
-
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
-
-    return await response.json();
-}
-
-export const updateProfilePhoto = async (token: string, file: File) => {
-    const formData = new FormData();
-    formData.append('photo', file);
-
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/user`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `Bearer ${token}`,
         },
-        body: formData,
     });
 
-    if (!response.ok) {
-        const error = new Error(`Erreur ${response.status}`) as Error & { status: number };
-        error.status = response.status;
-        throw error;
-    }
+export const updateProfilePhoto = async (file: File) => {
+    const formData = new FormData();
+    formData.append("photo", file);
+    return apiFetchJson<{ data?: { photo_url?: string } }>("/user", { method: "PATCH", body: formData });
+};
 
-    return await response.json();
+export interface GoalPayload {
+    gender: string;
+    age: number;
+    weight: number;
+    height: number;
+    activity_level: string;
+    objective: string;
+    daily_calories: number;
+    daily_proteins: number;
+    daily_carbs: number;
+    daily_lipids: number;
 }
 
+export const updateGoal = async (data: GoalPayload) => {
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, String(value));
+    });
+    return apiFetchJson("/user", { method: "PATCH", body: formData });
+};
+
+export const updateUserFields = async (
+    fields: Record<string, string | number | undefined | null>
+) => {
+    const formData = new FormData();
+    Object.entries(fields).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+            formData.append(key, String(value));
+        }
+    });
+    return apiFetchJson("/user", { method: "PATCH", body: formData });
+};

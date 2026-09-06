@@ -1,15 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import { RecipeCategory, RecipeIngredient, RecipeStep, RecipeType } from "@/types/recipes.types";
+import { RecipeCategory, RecipeIngredient, RecipeStep, Recipe } from "@/types/recipes.types";
+import { ApiError } from "@/types/api.types";
 import { parsePreparationTime, formatPreparationTime } from "@/utils/format.utils";
-import { createRecipe, updateRecipe } from "@/api/services/recipes.service";
-import { useAuth } from "@/context/AuthContext";
-import { storeHydrationErrorStateFromConsoleArgs } from "next/dist/next-devtools/userspace/pages/hydration-error-state";
+import { updateRecipe, getRecipeTypes } from "@/api/services/recipes.service";
+import { invalidateRecipesCache } from "@/hooks/useRecipes";
+import { calculateTotalNutrition } from "@/utils/nutrition.utils";
+import { useAuth } from "@/hooks/useAuth";
 
 type PickerType = "time" | "persons" | "ingredient" | "step" | null;
 
-export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeIngredient[], steps: RecipeStep[], id: number) => {
+export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngredient[], steps: RecipeStep[], id: number) => {
     const [title, setTitle] = useState("");
     const [photo, setPhoto] = useState<File | null>(null);
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
@@ -20,8 +22,17 @@ export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeI
     const [activePicker, setActivePicker] = useState<PickerType>(null);
     const [ingredients, setIngredients] = useState<RecipeIngredient[]>([]);
     const [step, setStep] = useState<RecipeStep[]>([]);
-    const {token} = useAuth();
+    const {isAuthenticated} = useAuth();
     const [errors, setErrors] = useState<Record<string, string>>({});
+
+    useEffect(() => {
+        const fetchRecipeTypes = async () => {
+            if (!isAuthenticated) return;
+            const result = await getRecipeTypes();
+            setRecipeType(result.data);
+        };
+        fetchRecipeTypes();
+    }, [isAuthenticated]);
 
     useEffect(() => {
         if (recipeData) {
@@ -37,19 +48,20 @@ export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeI
 
     const handleSubmit = async () => {
         setErrors({});
-        const calculatedCalories = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_calories), 0)
-        const calculatedProteins = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_proteins), 0)
-        const calculatedCarbs = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_carbs), 0)
-        const calculatedLipids = ingredient.reduce((sum, ing) => sum + parseFloat(ing.ingredient_lipids), 0)
+        if (!isAuthenticated) {
+            setErrors({ _global: "Vous devez être connecté." });
+            return false;
+        }
+        const totals = calculateTotalNutrition(ingredient);
 
         const recipe = {
             name: title,
             preparation_time_minutes: parsePreparationTime(preparationTime),
             servings: servings,
-            total_calories: calculatedCalories,
-            total_proteins: calculatedProteins,
-            total_carbs: calculatedCarbs,
-            total_lipids: calculatedLipids,
+            total_calories: totals.calories,
+            total_proteins: totals.proteins,
+            total_carbs: totals.carbs,
+            total_lipids: totals.lipids,
             recipe_type_id: Number(selectedRecipeTypeId),
         }
 
@@ -72,12 +84,14 @@ export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeI
         if (photo) formData.append("photo", photo)
 
         try {
-            const result = await updateRecipe(formData, id, token!);
+            await updateRecipe(formData, id);
+            invalidateRecipesCache();
             return true
-        } catch (error: any) {
-            if (error.errors && Array.isArray(error.errors)) {
+        } catch (error) {
+            const apiError = error as ApiError;
+            if (apiError.errors && Array.isArray(apiError.errors)) {
                 const errorMap: Record<string, string> = {};
-                error.errors.forEach((e: any) => {
+                apiError.errors.forEach((e) => {
                     errorMap[e.field] = e.message;
                 });
                 setErrors(errorMap);
@@ -100,7 +114,6 @@ export const useEditRecipe = (recipeData: RecipeType | null, ingredient: RecipeI
         servings,
         setSelectedRecipeTypeId,
         selectedRecipeTypeId,
-        setRecipeType,
         recipeType,
         activePicker,
         setActivePicker,

@@ -24,13 +24,13 @@ $shadow-teal: 0 4px 12px rgba(13, 148, 136, 0.2);
 
 .hero-section {
   display: flex;
-  gap: $spacing-6;
+  gap: $spacing-4;
   align-items: flex-start;
 }
 
 .image-box {
   position: relative;
-  width: 10rem;
+  width: 8rem;
   flex-shrink: 0;
   cursor: pointer;
 
@@ -53,6 +53,18 @@ $shadow-teal: 0 4px 12px rgba(13, 148, 136, 0.2);
     transition: transform 0.3s;
   }
 
+  &__placeholder {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: $radius-3xl;
+    background: $teal-50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $teal-600;
+  }
+
   &:active img {
     transform: scale(0.95);
   }
@@ -60,6 +72,7 @@ $shadow-teal: 0 4px 12px rgba(13, 148, 136, 0.2);
 
 .hero-stats {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: $spacing-5;
@@ -99,6 +112,7 @@ $shadow-teal: 0 4px 12px rgba(13, 148, 136, 0.2);
   align-items: center;
   text-align: center;
   gap: $spacing-1;
+  overflow: hidden;
 }
 
 .nutri-item {

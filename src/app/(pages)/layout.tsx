@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
 export default function PagesLayout ({children}: { children: React.ReactNode }) {

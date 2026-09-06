@@ -1,0 +1,503 @@
+@use "../variables" as *;
+
+.informations-page {
+  max-width: 448px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+}
+
+.informations-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: max($spacing-4, env(safe-area-inset-top)) $spacing-6 $spacing-4;
+}
+
+.informations-title {
+  font-size: 1.25rem;
+  font-weight: $font-semibold;
+  color: $slate-900;
+  margin: 0;
+}
+
+.informations-content {
+  padding: 0 $spacing-6 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.info-card {
+  background: $white;
+  border-radius: 1.25rem;
+  border: 1px solid $slate-300;
+  overflow: hidden;
+}
+
+.info-field {
+  padding: $spacing-3 $spacing-5;
+}
+
+.info-label {
+  display: block;
+  font-size: 0.7rem;
+  color: $slate-400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: $font-medium;
+  margin-bottom: 2px;
+}
+
+.info-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.95rem;
+  color: $slate-900;
+  font-weight: $font-medium;
+  font-family: inherit;
+  padding: $spacing-1 0;
+
+  &:focus {
+    color: $teal-600;
+  }
+}
+
+.info-divider {
+  height: 1px;
+  background: $slate-300;
+  margin: 0 $spacing-5;
+  opacity: 0.5;
+}
+
+.save-success {
+  text-align: center;
+  font-size: $text-sm;
+  color: $teal-600;
+  font-weight: $font-medium;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.contact-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $spacing-2;
+  padding: $spacing-4 $spacing-2;
+
+  &__title {
+    font-size: 1.4rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    margin: 0;
+  }
+
+  &__text {
+    font-size: 0.85rem;
+    color: $slate-400;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.contact-form-card {
+  padding: $spacing-4 $spacing-5;
+}
+
+.contact-success {
+  padding: $spacing-6 $spacing-5;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-3;
+
+  &__icon {
+    font-size: 2.5rem;
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    margin: 0;
+  }
+
+  &__text {
+    font-size: $text-sm;
+    color: $slate-400;
+    margin: 0;
+  }
+}
+
+
+.info-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.info-row {
+  display: flex;
+  gap: $spacing-3;
+
+  .info-group {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-group__label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: $font-semibold;
+  color: $slate-400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 $spacing-2 2px;
+}
+
+.info-box-input {
+  width: 100%;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: 0.875rem;
+  padding: 0.875rem 1rem;
+  font-size: 0.95rem;
+  color: $slate-900;
+  font-family: inherit;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s ease;
+
+  &:focus {
+    border-color: $teal-600;
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  &[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+}
+
+.gender-toggle {
+  display: flex;
+  gap: $spacing-2;
+}
+
+.gender-btn {
+  flex: 1;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: 0.875rem;
+  padding: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: $font-medium;
+  color: $slate-600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &--active {
+    background: $teal-50;
+    border-color: $teal-600;
+    color: $teal-700;
+    font-weight: $font-semibold;
+  }
+}
+
+.info-save {
+  width: 100%;
+  background: $teal-600;
+  color: $white;
+  border: none;
+  border-radius: 1rem;
+  padding: 1rem;
+  font-size: 0.95rem;
+  font-weight: $font-semibold;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: $shadow-teal-card;
+  margin-top: $spacing-2;
+  transition: opacity 0.15s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
+// ── Suivi du poids ──
+.weight-ranges {
+  display: flex;
+  gap: $spacing-2;
+  margin-bottom: $spacing-4;
+}
+
+.weight-range {
+  flex: 1;
+  padding: $spacing-2;
+  border: 1px solid $slate-300;
+  border-radius: 999px;
+  background: $white;
+  color: $slate-600;
+  font-size: 0.8rem;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &.active {
+    background: $teal-600;
+    border-color: $teal-600;
+    color: $white;
+  }
+}
+
+.weight-chart {
+  width: 100%;
+  height: auto;
+
+  &__axis {
+    font-size: 9px;
+    fill: $slate-400;
+  }
+
+  &__empty {
+    text-align: center;
+    font-size: 0.85rem;
+    color: $slate-400;
+    padding: $spacing-6 0;
+    margin: 0;
+  }
+}
+
+.weight-form-title {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-size: 0.95rem;
+  font-weight: $font-semibold;
+  color: $slate-900;
+  margin: 0 0 $spacing-3;
+}
+
+.weight-form {
+  display: flex;
+  gap: $spacing-2;
+
+  &__input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid $slate-300;
+    border-radius: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.9rem;
+    color: $slate-900;
+    outline: none;
+
+    &:focus {
+      border-color: $teal-600;
+    }
+  }
+
+  &__add {
+    flex: none;
+    width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 0.75rem;
+    background: $teal-600;
+    color: $white;
+    cursor: pointer;
+  }
+}
+
+.weight-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    padding: $spacing-3 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $slate-300;
+    }
+  }
+
+  &__weight {
+    font-size: 0.95rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    min-width: 72px;
+  }
+
+  &__date {
+    flex: 1;
+    font-size: 0.85rem;
+    color: $slate-600;
+  }
+
+  &__delete {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    color: $slate-400;
+    cursor: pointer;
+    padding: $spacing-1;
+
+    &:active {
+      color: #ef4444;
+    }
+  }
+}
+
+// ── Bilan du mois ──
+.stats-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-4;
+
+  &__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid $slate-300;
+    border-radius: 50%;
+    background: $white;
+    color: $slate-600;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+  }
+
+  &__label {
+    font-size: 0.95rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    text-transform: capitalize;
+  }
+}
+
+.stats-highlights {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-3;
+  margin-bottom: $spacing-3;
+}
+
+.stat-highlight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-4;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: 1.25rem;
+  text-align: center;
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    margin-bottom: $spacing-1;
+
+    &.teal {
+      background: $teal-50;
+      color: $teal-600;
+    }
+
+    &.orange {
+      background: #fff7ed;
+      color: #f97316;
+    }
+  }
+
+  &__value {
+    font-size: 1.5rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    color: $slate-600;
+  }
+}
+
+.stats-averages {
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-average {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-3 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $slate-300;
+  }
+
+  &__label {
+    font-size: 0.9rem;
+    color: $slate-600;
+  }
+
+  &__values {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-1;
+  }
+
+  &__value {
+    font-size: 0.95rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+
+  &__goal {
+    font-size: 0.8rem;
+    color: $slate-400;
+  }
+}

@@ -1,3 +1,5 @@
+import { WeekDay } from "@/types/tracking.types";
+
 export const parsePreparationTime = (timeStr: string): number => {
     const match = timeStr.match(/^(\d+)h(\d+)?$/);
     if (match) {
@@ -14,3 +16,31 @@ export const formatPreparationTime = (totalMinutes: number): string => {
     return `${h}h${m}`;
 }
 
+export const toISODate = (d: Date): string => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
+
+export const getWeekDays = (weekOffset = 0): WeekDay[] => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dayOfWeek = today.getDay();
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7) + weekOffset * 7);
+
+    const labels = ["L", "M", "M", "J", "V", "S", "D"];
+    return labels.map((label, i) => {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        return {
+            label,
+            date: d.getDate(),
+            isToday: d.toDateString() === today.toDateString(),
+            isFuture: d.getTime() > today.getTime(),
+            fullDate: d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+            iso: toISODate(d),
+        };
+    });
+};

@@ -1,0 +1,29 @@
+@use '../variables' as *;
+
+// -- Shared Form Styles --
+.form-content {
+  padding: 0 $spacing-6 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+}
+
+.intro-section {
+  h1 {
+    font-size: 1.5rem;
+    font-weight: $font-semibold;
+    margin: 0;
+  }
+
+  p {
+    color: $slate-400;
+    font-size: $text-sm;
+    margin: $spacing-1 0 0;
+  }
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-4;
+}

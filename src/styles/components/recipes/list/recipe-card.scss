@@ -1,0 +1,24 @@
+// src/styles/components/recipes/recipe-card.scss
+@use "../../../variables" as *;
+
+$text-light: $slate-400;
+$primary: $teal-600;
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: $text-light;
+
+  i, svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &.category {
+    color: $primary;
+    font-weight: $font-medium;
+    margin-top: $spacing-1;
+  }
+}

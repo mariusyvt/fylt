@@ -7,6 +7,7 @@ import TextInput from "@/components/ui/TextInput";
 import PasswordInput from "@/components/ui/PasswordInput";
 import SelectField from "@/components/ui/SelectField";
 import { MailCheck } from "lucide-react";
+import { FieldError } from "@/types/api.types";
 
 const GENDER_OPTIONS = [
     { value: "male", label: "Homme" },
@@ -14,10 +15,6 @@ const GENDER_OPTIONS = [
     { value: "other", label: "Autre" },
 ];
 
-interface FieldError {
-    field: string;
-    message: string;
-}
 
 export default function SignUpForm() {
     const [lastName, setLastName] = useState("");
@@ -41,6 +38,9 @@ export default function SignUpForm() {
         try {
             await signUp(lastName, firstName, email, gender, password);
             setRegistered(true);
+            // On vide les champs sensibles après succès
+            setPassword("");
+            setConfirmPassword("");
         } catch (err: unknown) {
             console.error("Erreur signup:", err);
             const e = err as { status?: number; message?: string; errors?: FieldError[] };

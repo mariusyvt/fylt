@@ -4,16 +4,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .loader-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid $teal-50;
+  width: 36px;
+  height: 36px;
+  border: 2.5px solid rgba($teal-600, 0.12);
   border-top-color: $teal-600;
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  animation: spin 0.65s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  box-shadow: 0 0 12px rgba($teal-600, 0.08);
 }
 
 @keyframes spin {
@@ -21,4 +22,3 @@
     transform: rotate(360deg);
   }
 }
-

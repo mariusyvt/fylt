@@ -1,60 +1,64 @@
 "use client";
 
-import TextInput from "@/components/ui/TextInput";
+import { useState } from "react";
+import { Nutrients } from "@/types/nutrition.types";
+import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
+import SelectedFood from "@/components/add/ingredient/SelectedFood";
+import ManualFoodForm from "@/components/add/ingredient/ManualFoodForm";
+import FoodSearchPanel from "@/components/add/ingredient/FoodSearchPanel";
 
 interface IngredientFormProps {
     ingredientName: string;
+    nutrients: Nutrients | null;
     quantity: string;
     setQuantity: (qty: string) => void;
-    scanning: boolean;
-    isLoading: boolean;
-    error: string | null;
-    onStartScanner: () => void;
-    onStopScanner: () => void;
+    onSelectFood: (nutrients: Nutrients) => void;
+    onClearFood: () => void;
 }
 
+/**
+ * Orchestrateur : bascule entre l'aliment sélectionné, la saisie manuelle et
+ * la recherche/scan. Le scanner (react-barcode-scanner) est encapsulé ici et
+ * chargé à la demande via FoodSearchPanel.
+ */
 export default function IngredientForm({
     ingredientName,
+    nutrients,
     quantity,
     setQuantity,
-    scanning,
-    isLoading,
-    error,
-    onStartScanner,
-    onStopScanner,
+    onSelectFood,
+    onClearFood,
 }: IngredientFormProps) {
+    const [mode, setMode] = useState<"search" | "manual">("search");
+    const scanner = useBarcodeScanner(onSelectFood);
+
+    if (nutrients) {
+        return (
+            <SelectedFood
+                ingredientName={ingredientName}
+                nutrients={nutrients}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                onClear={onClearFood}
+            />
+        );
+    }
+
+    if (mode === "manual") {
+        return <ManualFoodForm onSelectFood={onSelectFood} onBack={() => setMode("search")} />;
+    }
 
     return (
-        <div className="ingredient-form">
-            <div className="input-group">
-                <label className="field-label">Nom</label>
-                {ingredientName
-                    ? <span className="ingredient-badge">{ingredientName}</span>
-                    : <span className="ingredient-placeholder">Scanner un ingrédient</span>
-                }
-            </div>
-
-            <TextInput
-                label="Quantité"
-                value={quantity}
-                onChange={setQuantity}
-                placeholder="Ex: 200g"
-            />
-
-            {isLoading && <p>Chargement des infos...</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
-
-            {!scanning ? (
-                <button type="button" className="btn-add-item" onClick={onStartScanner}>
-                    Scanner un code-barres
-                </button>
-            ) : (
-                <button type="button" className="btn-add-item" onClick={onStopScanner}>
-                    Arrêter le scan
-                </button>
-            )}
-
-            <div id="reader" style={{ width: "100%", minHeight: scanning ? "250px" : "0" }}></div>
-        </div>
+        <FoodSearchPanel
+            onSelectFood={onSelectFood}
+            onManual={() => setMode("manual")}
+            scanning={scanner.scanning}
+            isLoading={scanner.isLoading}
+            error={scanner.error}
+            onStartScanner={scanner.startScanner}
+            onStopScanner={scanner.stopScanner}
+            onCapture={scanner.handleCapture}
+            onCameraError={scanner.handleCameraError}
+        />
     );
 }

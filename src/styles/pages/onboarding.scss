@@ -1,0 +1,419 @@
+@use "../variables" as *;
+
+.onboarding-page {
+  max-width: 448px;
+  margin: 0 auto;
+  padding: $spacing-6;
+  padding-bottom: 8rem;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &--intro {
+    justify-content: center;
+  }
+}
+
+// ── Intro screen ──
+.onboarding-intro {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__badge {
+    width: 72px;
+    height: 72px;
+    border-radius: 24px;
+    background: $teal-600;
+    color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: $shadow-teal-card;
+    margin-bottom: $spacing-6;
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: $slate-900;
+    margin: 0 0 $spacing-3;
+    line-height: 1.15;
+  }
+
+  &__text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: $slate-600;
+    margin: 0 0 $spacing-8;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    font-size: 15px;
+    color: $slate-800;
+    line-height: 1.4;
+  }
+
+  &__item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: $teal-50;
+    color: $teal-600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+}
+
+.onboarding-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  margin-bottom: $spacing-5;
+}
+
+.onboarding-step-count {
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  color: $slate-400;
+}
+
+.onboarding-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: $slate-900;
+  margin: 0;
+}
+
+// ── Progress bar ──
+.onboarding-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+  margin-bottom: $spacing-8;
+
+  &__fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, $teal-600, #14b8a6);
+    transition: width 0.35s ease;
+  }
+}
+
+.onboarding-question {
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: $slate-900;
+  margin: 0 0 $spacing-6;
+}
+
+.onboarding-content {
+  flex: 1;
+}
+
+// ── Options ──
+.onboarding-options {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+
+  &--grid {
+    flex-direction: row;
+    gap: $spacing-4;
+  }
+}
+
+// -- Big card option (gender) --
+.option-card {
+  flex: 1;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: $radius-2xl;
+  padding: $spacing-8 $spacing-4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-3;
+  cursor: pointer;
+  color: $slate-600;
+  transition: all $transition-base;
+  box-shadow: 0 1px 2px rgba(10, 20, 40, 0.03);
+
+  &__label {
+    font-size: 1rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.selected {
+    border-color: $teal-600;
+    background: $teal-50;
+    color: $teal-600;
+  }
+}
+
+// -- Row option (activity) --
+.option-row {
+  width: 100%;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: $radius-2xl;
+  padding: $spacing-4;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  cursor: pointer;
+  text-align: left;
+  transition: all $transition-base;
+  box-shadow: 0 1px 2px rgba(10, 20, 40, 0.03);
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: $teal-50;
+    color: $teal-600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all $transition-base;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__label {
+    font-size: 15px;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+
+  &__desc {
+    font-size: 0.8rem;
+    color: $slate-400;
+  }
+
+  &__check {
+    color: $teal-600;
+    flex-shrink: 0;
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+
+  &.selected {
+    border-color: $teal-600;
+    background: $teal-50;
+
+    .option-row__icon {
+      background: $teal-600;
+      color: $white;
+    }
+  }
+}
+
+// ── Number input steps ──
+.onboarding-number {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: $spacing-3;
+  padding: $spacing-8 0;
+
+  &__input {
+    width: 160px;
+    border: none;
+    border-bottom: 2px solid $slate-300;
+    background: transparent;
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    color: $slate-900;
+    padding: $spacing-2 0;
+    transition: border-color $transition-base;
+
+    &:focus {
+      outline: none;
+      border-bottom-color: $teal-600;
+    }
+
+    &::placeholder {
+      color: $slate-300;
+    }
+
+    // Hide number spinners
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  &__unit {
+    font-size: 1.25rem;
+    font-weight: $font-semibold;
+    color: $slate-400;
+  }
+}
+
+// ── Actions ──
+.onboarding-actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  margin-top: $spacing-6;
+
+  .btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+
+    &:hover {
+      background-color: $black;
+    }
+  }
+}
+
+.onboarding-restart {
+  background: none;
+  border: none;
+  color: $slate-400;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  cursor: pointer;
+  padding: $spacing-2;
+
+  &:hover {
+    color: $slate-600;
+  }
+}
+
+// ── Result ──
+.onboarding-result {
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: $radius-3xl;
+  padding: $spacing-8 $spacing-6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-2;
+  box-shadow: $shadow-teal-card;
+  margin-bottom: $spacing-4;
+
+  &--compact {
+    padding: $spacing-5 $spacing-6;
+    border-radius: $radius-2xl;
+    box-shadow: 0 1px 2px rgba(10, 20, 40, 0.03);
+    margin-top: $spacing-5;
+
+    .onboarding-result__value {
+      font-size: 2.5rem;
+    }
+  }
+
+  &__badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: $teal-50;
+    color: $teal-600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $spacing-2;
+  }
+
+  &__value {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: $slate-900;
+    line-height: 1;
+    margin: 0;
+  }
+
+  &__unit {
+    font-size: 1rem;
+    color: $slate-400;
+    margin: 0;
+  }
+
+  &__delta {
+    font-weight: $font-semibold;
+    color: $teal-600;
+  }
+}
+
+.onboarding-macros {
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: $radius-2xl;
+  padding: $spacing-2 $spacing-5;
+  box-shadow: 0 1px 2px rgba(10, 20, 40, 0.03);
+  margin-bottom: $spacing-6;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    padding: $spacing-4 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #f1f5f9;
+    }
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    flex: 1;
+    font-size: 15px;
+    font-weight: $font-medium;
+    color: $slate-600;
+  }
+
+  &__value {
+    font-size: 1rem;
+    font-weight: 800;
+    color: $slate-900;
+  }
+}

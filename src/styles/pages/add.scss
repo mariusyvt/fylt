@@ -1,0 +1,16 @@
+@use "../variables" as *;
+
+.add-recipe-page {
+  .mobile-container {
+    max-width: 448px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+  }
+}
+
+.error-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}

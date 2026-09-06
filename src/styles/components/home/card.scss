@@ -14,22 +14,24 @@ $orange-bg: #fff7ed;
 
 .card {
   padding: $spacing-3;
-  background: $white;
+  background: rgba($white, 0.9);
   border-radius: $radius-2xl;
-  border: 1px solid $card-border;
+  border: 1px solid rgba($slate-300, 0.5);
   display: flex;
   gap: $spacing-4;
   align-items: center;
-  transition: transform $transition-base;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   text-decoration: none;
   color: inherit;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 
   &:active {
     transform: scale(0.98);
+    box-shadow: 0 0 0 rgba(15, 23, 42, 0);
   }
 
   &--featured {
-    box-shadow: $shadow-slate;
+    box-shadow: 0 4px 20px -6px rgba(13, 148, 136, 0.12), 0 1px 3px rgba(15, 23, 42, 0.04);
     border-left: 4px solid $teal-600;
     background: $white;
   }
@@ -40,8 +42,20 @@ $orange-bg: #fff7ed;
     border-radius: $spacing-3;
     object-fit: cover;
     background: $card-border;
-  }
+    transition: transform 0.3s ease;
 
+    .card:active & {
+      transform: scale(0.97);
+    }
+
+    &--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: $teal-50;
+      color: $teal-600;
+    }
+  }
 
   &__info {
     flex: 1;
@@ -58,6 +72,7 @@ $orange-bg: #fff7ed;
     margin: 0;
     font-weight: $font-semibold;
     color: $slate-900;
+    letter-spacing: -0.01em;
   }
 
   &__calories {
@@ -67,6 +82,7 @@ $orange-bg: #fff7ed;
     padding: $spacing-1 $spacing-2;
     border-radius: 999px;
     font-weight: $font-medium;
+    font-variant-numeric: tabular-nums;
   }
 
   &__details {
@@ -82,6 +98,7 @@ $orange-bg: #fff7ed;
     gap: $spacing-2;
     font-size: $spacing-3;
     color: $slate-400;
+    font-variant-numeric: tabular-nums;
 
     i {
       width: 14px;
@@ -95,6 +112,11 @@ $orange-bg: #fff7ed;
 
   &__arrow {
     color: $slate-300;
+    transition: color 0.2s ease, transform 0.2s ease;
+
+    .card:active & {
+      transform: translateX(2px);
+    }
 
     &--active {
       color: $teal-600;

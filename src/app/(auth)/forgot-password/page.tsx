@@ -15,8 +15,9 @@ export default function ForgotPasswordPage() {
         try {
             await forgotPassword(email);
             setSuccess(true);
-        } catch {
-            setError("Une erreur est survenue. Vérifiez votre email.");
+        } catch (err: unknown) {
+            const e = err as { message?: string };
+            setError(e.message || "Une erreur est survenue. Vérifiez votre email.");
         }
     };
 

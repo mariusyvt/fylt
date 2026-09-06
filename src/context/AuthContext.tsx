@@ -1,54 +1,66 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+"use client";
 
-interface AuthContextType {
-    token: string | null;
+import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
+import { getSession, signOut } from '@/api/services/auth.service';
+
+export interface AuthContextType {
     isAuthenticated: boolean;
-    login: (token: string) => void;
-    logout: () => void;
+    isReady: boolean;
+    login: () => void;
+    logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+export const AuthContext = createContext<AuthContextType | null>(null)
 
-export const AuthProvider = ({children}: {children : ReactNode}) => {
-    const [token, setToken] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+/**
+ * Purge les caches du service worker (evite de servir des donnees API
+ * d'une session precedente sur un appareil partage).
+ */
+const clearServiceWorkerCaches = () => {
+    if (typeof caches === "undefined") return;
+    caches.keys().then((keys) => keys.forEach((key) => caches.delete(key))).catch(() => {});
+};
 
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+
+    // L'auth repose sur un cookie httpOnly (non lisible en JS) : on verifie
+    // la session au demarrage en interrogeant une route protegee.
     useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        if(storedToken){
-            setToken(storedToken);
-        }
-        setIsLoading(false);
+        let active = true;
+        getSession()
+            .then((ok) => {
+                if (active) setIsAuthenticated(ok);
+            })
+            .finally(() => {
+                if (active) setIsReady(true);
+            });
+        return () => {
+            active = false;
+        };
     }, []);
 
-    if (isLoading) {
+    const login = useCallback(() => {
+        setIsAuthenticated(true);
+    }, []);
+
+    const logout = useCallback(async () => {
+        try {
+            await signOut();
+        } catch {
+        }
+        setIsAuthenticated(false);
+        clearServiceWorkerCaches();
+    }, []);
+
+    if (!isReady) {
         return null;
     }
 
-    const isAuthenticated = !!token;
-
-    const login = (newToken: string) => {
-        setToken(newToken);
-        localStorage.setItem("token", newToken);
-    };
-
-    const logout = () => {
-        setToken(null);
-        localStorage.removeItem("token");
-    }
-
     return (
-        <AuthContext.Provider value={{token, isAuthenticated, login, logout}}>
+        <AuthContext.Provider value={{ isAuthenticated, isReady, login, logout }}>
             {children}
         </AuthContext.Provider>
     )
-}
-
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-
-    if(!context){
-        throw new Error("useAuth must be used within an AuthProvider")
-    }
-    return context
 }

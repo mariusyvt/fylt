@@ -1,4 +1,4 @@
-export interface RecipeType {
+export interface Recipe {
     id: number;
     name: string;
     photo_url: string;
@@ -10,6 +10,7 @@ export interface RecipeType {
     total_carbs: string;
     total_lipids: string;
     total_proteins: string;
+    total_weight: number;
     updated_at: string;
     preparation_steps: RecipeStep[];
     recipe_ingredients: RecipeIngredient[];

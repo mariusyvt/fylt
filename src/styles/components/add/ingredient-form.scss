@@ -1,0 +1,489 @@
+@use "../../variables" as *;
+
+.ingredient-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding-top: $spacing-2;
+}
+
+// -- Barre de recherche + scan --
+.food-search {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  background: rgba($white, 0.85);
+  border: 1px solid rgba($slate-300, 0.6);
+  border-radius: 1rem;
+  padding: $spacing-1 $spacing-3 $spacing-1 $spacing-4;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+
+  &:focus-within {
+    border-color: rgba($teal-600, 0.5);
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04), 0 0 0 3px rgba($teal-600, 0.08);
+    background: $white;
+  }
+
+  &__icon {
+    color: $slate-400;
+    flex: none;
+    transition: color 0.25s ease, transform 0.25s ease;
+
+    .food-search:focus-within & {
+      color: $teal-600;
+      transform: scale(1.08);
+    }
+  }
+
+  &__input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0.8rem 0;
+    font-size: 0.95rem;
+    color: $slate-900;
+    letter-spacing: -0.01em;
+
+    &::placeholder {
+      color: $slate-400;
+      transition: color 0.2s ease;
+    }
+
+    &:focus::placeholder {
+      color: rgba($slate-400, 0.5);
+    }
+  }
+
+  &__scan {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 0.75rem;
+    background: $teal-50;
+    color: $teal-600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      background: rgba($teal-600, 0.15);
+      box-shadow: 0 2px 8px rgba($teal-600, 0.12);
+    }
+
+    &:active {
+      transform: scale(0.92);
+      background: rgba($teal-600, 0.2);
+    }
+  }
+}
+
+// -- Scanner overlay moderne --
+.scanner-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: $teal-900;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    padding: calc($spacing-4 + env(safe-area-inset-top)) $spacing-4 $spacing-4;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: $white;
+    cursor: pointer;
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: $font-medium;
+    color: $white;
+  }
+
+  &__viewport {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    #reader {
+      position: absolute !important;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      background: $teal-900;
+    }
+  }
+
+  &__frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 260px;
+    height: 180px;
+    border: 3px solid $white;
+    border-radius: 1.25rem;
+    box-shadow: 0 0 0 9999px rgba(11, 59, 55, 0.6);
+    pointer-events: none;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border: 4px solid $white;
+    }
+
+    &::before {
+      top: -4px;
+      left: -4px;
+      border-right: none;
+      border-bottom: none;
+      border-top-left-radius: 1.25rem;
+    }
+
+    &::after {
+      bottom: -4px;
+      right: -4px;
+      border-left: none;
+      border-top: none;
+      border-bottom-right-radius: 1.25rem;
+    }
+  }
+
+  &__hint {
+    text-align: center;
+    padding: $spacing-4 $spacing-4 calc($spacing-6 + env(safe-area-inset-bottom));
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+  }
+}
+
+// -- Aliments récents --
+.food-recents {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: 0.8rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0 $spacing-2;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.food-recent {
+  display: flex;
+  align-items: center;
+  padding: $spacing-3 $spacing-2;
+  border-radius: 0.5rem;
+
+  &__main {
+    flex: 1;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  &__name {
+    font-size: 0.9rem;
+    color: $slate-900;
+  }
+
+  &__remove {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    color: $slate-400;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:active {
+      background: rgba(0, 0, 0, 0.05);
+      color: $slate-600;
+    }
+  }
+}
+
+// -- Résultats de recherche --
+.food-results {
+  display: flex;
+  flex-direction: column;
+}
+
+.food-result {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-3 $spacing-2;
+  border-radius: 0.75rem;
+  width: 100%;
+
+  &__select {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background $transition-base;
+    border-radius: 0.75rem;
+    padding: 0;
+
+    &:active {
+      background: $teal-50;
+    }
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 0.125rem;
+  }
+
+  &__name {
+    font-size: 0.9rem;
+    font-weight: $font-medium;
+    color: $slate-900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+  }
+
+  &__brand {
+    font-size: 0.78rem;
+    color: $slate-600;
+  }
+
+  &__badge {
+    font-size: 0.6rem;
+    font-weight: $font-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $teal-700;
+    background: $teal-50;
+    border: 1px solid $teal-600;
+    border-radius: 999px;
+    padding: 0.1rem 0.4rem;
+  }
+
+  &__right {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  &__kcal {
+    font-size: 0.95rem;
+    font-weight: $font-semibold;
+    color: $teal-700;
+    line-height: 1;
+  }
+
+  &__unit {
+    font-size: 0.65rem;
+    color: $slate-400;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  &__delete {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    color: $slate-400;
+    cursor: pointer;
+    padding: $spacing-1;
+
+    &:active {
+      color: #ef4444;
+    }
+  }
+}
+
+// -- Aliment sélectionné --
+.food-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-3;
+  background: $teal-50;
+  border: 1px solid $teal-600;
+  border-radius: 0.875rem;
+  padding: $spacing-3 $spacing-4;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 0.95rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__kcal {
+    font-size: 0.75rem;
+    color: $teal-700;
+  }
+
+  &__change {
+    flex: none;
+    border: none;
+    background: none;
+    color: $teal-700;
+    font-size: 0.8rem;
+    font-weight: $font-semibold;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+// -- Aperçu des macros pour la quantité --
+.food-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2 $spacing-4;
+  align-items: baseline;
+  padding: $spacing-3 $spacing-4;
+  background: $white;
+  border: 1px solid $slate-300;
+  border-radius: 0.875rem;
+  font-size: 0.8rem;
+  color: $slate-600;
+
+  &__cal {
+    font-size: 0.95rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+}
+
+// -- Saisie manuelle --
+.manual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-3;
+}
+
+.link-btn {
+  align-self: center;
+  border: none;
+  background: none;
+  color: $teal-600;
+  font-size: 0.85rem;
+  font-weight: $font-medium;
+  cursor: pointer;
+  padding: $spacing-1;
+}
+
+.food-hint {
+  font-size: 0.85rem;
+  color: $slate-400;
+  text-align: center;
+  margin: 0;
+}
+
+.food-error {
+  font-size: 0.85rem;
+  color: #ef4444;
+  text-align: center;
+  margin: 0;
+}
+
+// -- Plein écran d'ajout d'aliment --
+.ingredient-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: $gray-50;
+  display: flex;
+  flex-direction: column;
+
+  .sticky-header {
+    position: static;
+  }
+
+  .icon-btn-circle--confirm {
+    background: $teal-600;
+    border-color: $teal-600;
+    color: $white;
+
+    &:disabled {
+      background: $slate-300;
+      border-color: $slate-300;
+      cursor: default;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 448px;
+    margin: 0 auto;
+    padding: $spacing-2 $spacing-5 calc($spacing-6 + env(safe-area-inset-bottom));
+  }
+}

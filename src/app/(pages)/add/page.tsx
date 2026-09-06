@@ -1,13 +1,12 @@
 "use client"
 
-import { useEffect } from "react";
 import { Clock, Users } from "lucide-react";
 import TimePicker from "@/components/add/TimePicker";
 import PersonPicker from "@/components/add/PersonPicker";
 import HeaderAddRecipe from "@/components/add/HeaderAddRecipe";
 import IngredientsSection from "@/components/add/IngredientsSection";
 import StepsSection from "@/components/add/StepsSection";
-import IngredientForm from "@/components/add/IngredientForm";
+import IngredientFullScreen from "@/components/add/IngredientFullScreen";
 import StepForm from "@/components/add/StepForm";
 import PickerOverlay from "@/components/add/PickerOverlay";
 import ConfirmButton from "@/components/add/ConfirmButton";
@@ -15,16 +14,12 @@ import TextInput from "@/components/ui/TextInput";
 import SelectField from "@/components/ui/SelectField";
 import PickerButton from "@/components/ui/PickerButton";
 import FileButton from "@/components/ui/FileButton";
-import { getRecipesTypes } from "@/api/services/recipes.service";
-import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
 import { useNutrition } from "@/hooks/useNutrition";
 import { useAddRecipe } from "@/hooks/useAddRecipe";
 import { useStep } from "@/hooks/useStep";
 
 export default function AddPage () {
-    const {token} = useAuth();
     const router = useRouter();
 
     const {
@@ -59,29 +54,12 @@ export default function AddPage () {
         selectedRecipeTypeId,
         setSelectedRecipeTypeId,
         recipeType,
-        setRecipeType,
         activePicker,
         setActivePicker,
         handleSubmit,
         errors,
     } = useAddRecipe(ingredient, steps);
 
-    const {scanning, isLoading, error, startScanner, stopScanner} = useBarcodeScanner(
-        (scannedData) => {
-            setScannedNutrients(scannedData);
-            setIngredientName(scannedData.name);
-        }
-    );
-
-    useEffect(() => {
-        const fetchRecipes = async () => {
-            if (token) {
-                const result = await getRecipesTypes(token);
-                setRecipeType(result.data);
-            }
-        };
-        fetchRecipes();
-    }, [token]);
 
     const handlePickerConfirm = () => {
         if (activePicker === "ingredient" && scannedNutrients !== null) addIngredient(scannedNutrients, Number(quantity), ingredientName);
@@ -158,7 +136,7 @@ export default function AddPage () {
                 </main>
 
                 <PickerOverlay
-                    activePicker={activePicker}
+                    activePicker={activePicker === "ingredient" ? null : activePicker}
                     onClose={() => setActivePicker(null)}
                     onConfirm={handlePickerConfirm}
                 >
@@ -168,18 +146,6 @@ export default function AddPage () {
                     {activePicker === "persons" && (
                         <PersonPicker initial={servings} onChange={setServings} />
                     )}
-                    {activePicker === "ingredient" && (
-                        <IngredientForm
-                            ingredientName={ingredientName}
-                            quantity={quantity}
-                            setQuantity={setQuantity}
-                            scanning={scanning}
-                            isLoading={isLoading}
-                            error={error}
-                            onStartScanner={startScanner}
-                            onStopScanner={stopScanner}
-                        />
-                    )}
                     {activePicker === "step" && (
                         <StepForm
                             stepNumber={steps.length + 1}
@@ -188,6 +154,24 @@ export default function AddPage () {
                         />
                     )}
                 </PickerOverlay>
+
+                <IngredientFullScreen
+                    open={activePicker === "ingredient"}
+                    onClose={() => setActivePicker(null)}
+                    onConfirm={handlePickerConfirm}
+                    ingredientName={ingredientName}
+                    nutrients={scannedNutrients}
+                    quantity={quantity}
+                    setQuantity={setQuantity}
+                    onSelectFood={(n) => {
+                        setScannedNutrients(n);
+                        setIngredientName(n.name);
+                    }}
+                    onClearFood={() => {
+                        setScannedNutrients(null);
+                        setIngredientName("");
+                    }}
+                />
 
                 <ConfirmButton onClick={handleConfirm} />
             </div>

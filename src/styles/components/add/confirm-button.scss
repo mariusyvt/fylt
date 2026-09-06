@@ -1,0 +1,30 @@
+@use "../../variables" as *;
+
+.floating-action-container {
+  position: fixed;
+  bottom: 6rem;
+  left: 0;
+  right: 0;
+  padding: 0 $spacing-6;
+  pointer-events: none;
+}
+
+.btn-confirm {
+  max-width: 400px;
+  margin: 0 auto;
+  pointer-events: auto;
+  width: 100%;
+  background: $teal-600;
+  color: $white;
+  padding: $spacing-4;
+  border: none;
+  border-radius: $radius-2xl;
+  font-weight: $font-semibold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-2;
+  box-shadow: 0 8px 30px rgba($teal-600, 0.3);
+  cursor: pointer;
+}
+

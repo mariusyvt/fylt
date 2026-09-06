@@ -24,7 +24,7 @@ export default function StepsSection({
 
     return (
         <section className="steps-section">
-            <h2 className="section-title">Étapes</h2>
+            <h2 className="recipe-section-title">Étapes</h2>
             <div className="timeline">
                 {steps.map((step, index) => (
                     <div key={index} className={`step-item ${index === activeIndex ? "active" : ""}`}>

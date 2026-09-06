@@ -3,11 +3,11 @@
 // -- Labels --
 .field-label {
   display: block;
-  font-size: 0.75rem;
-  font-weight: v.$font-medium;
+  font-size: 0.7rem;
+  font-weight: v.$font-semibold;
   color: v.$slate-400;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   margin: 0 0 v.$spacing-2 v.$spacing-1;
 }
 
@@ -15,24 +15,31 @@
 .text-input,
 .select-input {
   width: 100%;
-  background: v.$white;
-  border: 1px solid #f1f5f9;
-  border-radius: v.$radius-2xl;
+  background: rgba(v.$white, 0.85);
+  border: 1px solid rgba(v.$slate-300, 0.6);
+  border-radius: 0.875rem;
   padding: v.$spacing-3-5 v.$spacing-4;
-  font-size: 1rem;
-  box-shadow: 0 1px 2px rgba(v.$black, 0.05);
-  transition: v.$transition-base;
+  font-size: 0.95rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
   box-sizing: border-box;
   color: v.$slate-900;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
 
   &::placeholder {
     color: v.$slate-400;
+    transition: color 0.2s ease;
   }
 }
 
 .text-input:focus {
   outline: none;
-  border-color: v.$teal-600;
+  border-color: rgba(v.$teal-600, 0.5);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04), 0 0 0 3px rgba(v.$teal-600, 0.08);
+  background: v.$white;
+
+  &::placeholder {
+    color: rgba(v.$slate-400, 0.5);
+  }
 }
 
 .text-input.textarea {
@@ -121,7 +128,7 @@
 .error-message {
   color: #f87171;
   font-size: v.$text-sm;
-  padding: v.$spacing-2 v.$spacing-4;
-  border-radius: v.$radius-2xl;
+  margin-top: v.$spacing-2;
+  padding: 0;
   text-align: center;
 }

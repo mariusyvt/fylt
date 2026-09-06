@@ -2,7 +2,7 @@
 
 import { signIn } from "@/api/services/auth.service";
 import { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import TextInput from "@/components/ui/TextInput";
@@ -22,8 +22,8 @@ export default function SignInForm () {
     const handleSubmit = async () => {
         setError("");
         try {
-            const result = await signIn(email, password);
-            login(result.data.token);
+            await signIn(email, password);
+            login();
             setEmail("");
             setPassword("");
         } catch (err: unknown) {

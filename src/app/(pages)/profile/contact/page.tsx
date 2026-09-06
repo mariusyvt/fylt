@@ -1,14 +1,21 @@
 "use client"
 
 import { useState } from "react";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft, Send, ChevronDown } from "lucide-react";
 import Link from "next/link";
-import TextInput from "@/components/ui/TextInput";
 import TextArea from "@/components/ui/TextArea";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { sendContactMessage } from "@/api/services/contact.service";
+
+const SUBJECT_OPTIONS = [
+    { value: "", label: "Choisir un sujet…" },
+    { value: "bug", label: "Bug / Problème technique" },
+    { value: "question", label: "Question" },
+    { value: "suggestion", label: "Suggestion / Amélioration" },
+];
 
 export default function ContactPage() {
-    const { token } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [subject, setSubject] = useState("");
     const [message, setMessage] = useState("");
     const [sending, setSending] = useState(false);
@@ -18,8 +25,8 @@ export default function ContactPage() {
     const handleSubmit = async () => {
         setError("");
 
-        if (!subject.trim()) {
-            setError("Le sujet est requis.");
+        if (!subject) {
+            setError("Veuillez choisir un sujet.");
             return;
         }
         if (!message.trim()) {
@@ -27,19 +34,15 @@ export default function ContactPage() {
             return;
         }
 
+        if (!isAuthenticated) {
+            setError("Vous devez être connecté.");
+            return;
+        }
+
         setSending(true);
+        const subjectLabel = SUBJECT_OPTIONS.find(o => o.value === subject)?.label ?? subject;
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/contact`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ subject, message }),
-            });
-
-            if (!response.ok) throw new Error();
-
+            await sendContactMessage({ subject: subjectLabel, message });
             setSuccess(true);
             setSubject("");
             setMessage("");
@@ -62,46 +65,63 @@ export default function ContactPage() {
             </header>
 
             <main className="informations-content">
+                <div className="contact-intro">
+                    <h2 className="contact-intro__title">Contactez notre équipe</h2>
+                    <p className="contact-intro__text">
+                        Une question, un bug ou une suggestion ? Nous sommes là pour vous aider et répondons sous 48h.
+                    </p>
+                </div>
+
                 {success ? (
-                    <div className="info-card" style={{ padding: "2rem 1.5rem", textAlign: "center" }}>
-                        <p className="save-success" style={{ margin: 0 }}>
-                            Votre message a bien été envoyé. Nous vous répondrons rapidement !
+                    <div className="info-card contact-success">
+                        <div className="contact-success__icon">✉️</div>
+                        <p className="contact-success__title">Message envoyé !</p>
+                        <p className="contact-success__text">
+                            Nous vous répondrons dans les plus brefs délais.
                         </p>
                         <button
                             className="btn-primary"
-                            style={{ marginTop: "1rem" }}
                             onClick={() => setSuccess(false)}
                         >
                             Envoyer un autre message
                         </button>
                     </div>
                 ) : (
-                    <div className="info-card" style={{ padding: "1rem 1.25rem" }}>
-                        <form className="contact-form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-                            <TextInput
-                                label="Sujet"
-                                value={subject}
-                                onChange={setSubject}
-                                placeholder="Ex: Suggestion, Bug, Question..."
-                            />
+                    <form className="contact-form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                        <div>
+                            <label className="field-label">Sujet</label>
+                            <div className="select-wrapper">
+                                <select
+                                    className="text-input select-native"
+                                    value={subject}
+                                    onChange={(e) => setSubject(e.target.value)}
+                                >
+                                    {SUBJECT_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value} disabled={!opt.value}>
+                                            {opt.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <span className="select-icon"><ChevronDown size={18} /></span>
+                            </div>
+                        </div>
 
-                            <TextArea
-                                label="Message"
-                                value={message}
-                                onChange={setMessage}
-                                placeholder="Décrivez votre demande..."
-                                rows={5}
-                            />
+                        <TextArea
+                            label="Message"
+                            value={message}
+                            onChange={setMessage}
+                        placeholder="Décrivez votre demande en détail..."
+                        rows={6}
+                    />
 
-                            {error && <p className="error-message">{error}</p>}
+                    {error && <p className="error-message">{error}</p>}
 
-                            <button className="btn-primary" type="submit" disabled={sending}>
-                                {sending ? "Envoi..." : (
-                                    <><Send size={16} /> Envoyer</>
-                                )}
-                            </button>
-                        </form>
-                    </div>
+                    <button className="btn-primary" type="submit" disabled={sending}>
+                        {sending ? "Envoi..." : (
+                            <><Send size={16} /> Envoyer</>
+                        )}
+                    </button>
+                    </form>
                 )}
             </main>
         </div>

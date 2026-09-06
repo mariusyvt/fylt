@@ -1,0 +1,242 @@
+@use "../variables" as *;
+
+//.mobile-container {
+//  max-width: 448px;
+//  margin: 0 auto;
+//  min-height: 100vh;
+//  position: relative;
+//  padding-bottom: 120px;
+//}
+
+
+.section-container {
+  margin-top: $spacing-4;
+}
+
+.section-header {
+  padding: 0 $spacing-6;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: $spacing-4;
+}
+
+.section-title {
+  font-size: $spacing-5;
+  font-weight: $font-semibold;
+  margin: 0;
+}
+
+.view-all {
+  color: $teal-600;
+  font-size: $text-sm;
+  text-decoration: none;
+  font-weight: $font-medium;
+}
+
+// ── Tableau de bord : suivi du jour ──
+.today-card {
+  display: block;
+  margin: 0 $spacing-6;
+  padding: $spacing-4 $spacing-5;
+  background: rgba($white, 0.92);
+  border: 1px solid rgba($slate-300, 0.5);
+  border-radius: $radius-2xl;
+  box-shadow: 0 4px 20px -6px rgba(13, 148, 136, 0.1), 0 1px 3px rgba(15, 23, 42, 0.04);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+
+  &:active {
+    transform: scale(0.99);
+    box-shadow: 0 2px 10px -4px rgba(13, 148, 136, 0.08);
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-2;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $slate-400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.75rem;
+    font-weight: $font-medium;
+    color: $teal-600;
+  }
+
+  &__cal {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2px $spacing-3;
+  }
+
+  &__calMain {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  &__calValue {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $slate-900;
+  }
+
+  &__calGoal {
+    font-size: $text-sm;
+    color: $slate-400;
+  }
+
+  &__remaining {
+    margin: 0;
+    font-size: $text-sm;
+    font-weight: 800;
+    color: $slate-900;
+    white-space: nowrap;
+
+    span {
+      font-size: 0.7rem;
+      font-weight: $font-medium;
+      color: $slate-400;
+    }
+  }
+
+  &__track {
+    height: 8px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    overflow: hidden;
+    margin: $spacing-3 0;
+  }
+
+  &__fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, $teal-600, $teal-700);
+  }
+
+  &__macros {
+    display: flex;
+    gap: $spacing-4;
+  }
+}
+
+.today-macro {
+  flex: 1;
+  min-width: 0;
+
+  &__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: $spacing-1;
+  }
+
+  &__label {
+    font-size: 0.7rem;
+    font-weight: $font-medium;
+    color: $slate-600;
+  }
+
+  &__value {
+    font-size: 0.75rem;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+
+  &__target {
+    font-size: 0.65rem;
+    font-weight: $font-medium;
+    color: $slate-400;
+  }
+
+  &__track {
+    height: 5px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    overflow: hidden;
+  }
+
+  &__fill {
+    height: 100%;
+    border-radius: 999px;
+  }
+}
+
+// ── CTA objectif (pas encore défini) ──
+.today-cta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  margin: 0 $spacing-6;
+  padding: $spacing-4 $spacing-5;
+  background: rgba($white, 0.9);
+  border: 1px dashed rgba($teal-600, 0.4);
+  border-radius: $radius-2xl;
+  text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &:active {
+    background: $teal-50;
+    border-color: $teal-600;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: $teal-50;
+    color: $teal-600;
+    flex-shrink: 0;
+    transition: background 0.25s ease, transform 0.2s ease;
+
+    .today-cta:active & {
+      background: rgba($teal-600, 0.15);
+      transform: scale(1.06);
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: $text-sm;
+    font-weight: $font-semibold;
+    color: $slate-900;
+  }
+
+  &__sub {
+    font-size: 0.75rem;
+    color: $slate-400;
+  }
+
+  &__arrow {
+    color: $slate-400;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, color 0.2s ease;
+
+    .today-cta:active & {
+      transform: translateX(2px);
+      color: $teal-600;
+    }
+  }
+}

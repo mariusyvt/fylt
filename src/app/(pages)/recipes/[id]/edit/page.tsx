@@ -11,8 +11,6 @@ import SelectField from "@/components/ui/SelectField";
 import PickerButton from "@/components/ui/PickerButton";
 import { Clock, Users } from "lucide-react";
 import { useEffect } from "react";
-import { getRecipesTypes } from "@/api/services/recipes.service";
-import { useAuth} from "@/context/AuthContext";
 import IngredientsSection from "@/components/add/IngredientsSection";
 import StepsSection from "@/components/add/StepsSection";
 import { useNutrition } from "@/hooks/useNutrition";
@@ -20,14 +18,12 @@ import { useStep } from "@/hooks/useStep";
 import PickerOverlay from "@/components/add/PickerOverlay";
 import TimePicker from "@/components/add/TimePicker";
 import PersonPicker from "@/components/add/PersonPicker";
-import IngredientForm from "@/components/add/IngredientForm";
+import IngredientFullScreen from "@/components/add/IngredientFullScreen";
 import StepForm from "@/components/add/StepForm";
-import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
-import ConfirmButton from "@/components/add/ConfirmButton";
+import { useState } from "react";
 
 export default function EditPage() {
     const router = useRouter();
-    const {token} = useAuth();
 
     const {recipes, loading, id} = useRecipe()
 
@@ -41,8 +37,11 @@ export default function EditPage() {
         quantity,
         setQuantity,
         addIngredient,
-        removeIngredient
+        removeIngredient,
+        editIngredient
     } = useNutrition();
+
+    const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
     const {
         steps,
@@ -65,7 +64,6 @@ export default function EditPage() {
         servings,
         setSelectedRecipeTypeId,
         selectedRecipeTypeId,
-        setRecipeType,
         recipeType,
         activePicker,
         setActivePicker,
@@ -73,16 +71,41 @@ export default function EditPage() {
         handleSubmit
     } = useEditRecipe(recipes, ingredient, steps, Number(id));
 
-    const {scanning, isLoading, error, startScanner, stopScanner} = useBarcodeScanner(
-        (scannedData) => {
-            setScannedNutrients(scannedData);
-            setIngredientName(scannedData.name);
-        }
-    );
-
     const handlePickerConfirm = () => {
-        if (activePicker === "ingredient" && scannedNutrients !== null) addIngredient(scannedNutrients, Number(quantity), ingredientName);
+        if (activePicker === "ingredient" && scannedNutrients !== null) {
+            if (editingIndex !== null) {
+                editIngredient(editingIndex, scannedNutrients, Number(quantity), ingredientName);
+            } else {
+                addIngredient(scannedNutrients, Number(quantity), ingredientName);
+            }
+        }
         if (activePicker === "step") addStep();
+        setEditingIndex(null);
+        setActivePicker(null);
+    };
+
+    const handleEditIngredient = (index: number) => {
+        const ing = ingredient[index];
+        if (!ing) return;
+        const qty = Number(ing.quantity) || 1;
+        setScannedNutrients({
+            name: ing.ingredient_name,
+            calories: (parseFloat(ing.ingredient_calories) / qty) * 100,
+            proteins: (parseFloat(ing.ingredient_proteins) / qty) * 100,
+            carbs: (parseFloat(ing.ingredient_carbs) / qty) * 100,
+            lipids: (parseFloat(ing.ingredient_lipids) / qty) * 100,
+        });
+        setIngredientName(ing.ingredient_name);
+        setQuantity(ing.quantity);
+        setEditingIndex(index);
+        setActivePicker("ingredient");
+    };
+
+    const closeIngredient = () => {
+        setEditingIndex(null);
+        setScannedNutrients(null);
+        setIngredientName("");
+        setQuantity("");
         setActivePicker(null);
     };
 
@@ -94,21 +117,11 @@ export default function EditPage() {
     }
 
     useEffect(() => {
-        const fetchRecipes = async () => {
-            if (token) {
-                const result = await getRecipesTypes(token);
-                setRecipeType(result.data);
-            }
-        };
-        fetchRecipes();
-    }, [token]);
-
-    useEffect(() => {
         if (recipes?.recipe_ingredients && recipes.recipe_ingredients.length > 0 && recipes?.preparation_steps && recipes?.preparation_steps.length > 0) {
             setIngredient(recipes.recipe_ingredients);
             setSteps(recipes.preparation_steps)
         }
-    }, [recipes]);
+    }, [recipes, setIngredient, setSteps]);
 
     if (loading) return <Loader />;
 
@@ -169,7 +182,14 @@ export default function EditPage() {
                 <IngredientsSection
                     ingredients={ingredient}
                     onRemove={removeIngredient}
-                    onAdd={() => setActivePicker("ingredient")}
+                    onAdd={() => {
+                        setEditingIndex(null);
+                        setScannedNutrients(null);
+                        setIngredientName("");
+                        setQuantity("");
+                        setActivePicker("ingredient");
+                    }}
+                    onEdit={handleEditIngredient}
                 />
                 {errors.ingredients && <p className="error-message">{errors.ingredients}</p>}
 
@@ -182,7 +202,7 @@ export default function EditPage() {
             </main>
 
             <PickerOverlay
-                activePicker={activePicker}
+                activePicker={activePicker === "ingredient" ? null : activePicker}
                 onClose={() => setActivePicker(null)}
                 onConfirm={handlePickerConfirm}
             >
@@ -192,18 +212,6 @@ export default function EditPage() {
                 {activePicker === "persons" && (
                     <PersonPicker initial={servings} onChange={setServings} />
                 )}
-                {activePicker === "ingredient" && (
-                    <IngredientForm
-                        ingredientName={ingredientName}
-                        quantity={quantity}
-                        setQuantity={setQuantity}
-                        scanning={scanning}
-                        isLoading={isLoading}
-                        error={error}
-                        onStartScanner={startScanner}
-                        onStopScanner={stopScanner}
-                    />
-                )}
                 {activePicker === "step" && (
                     <StepForm
                         stepNumber={steps.length + 1}
@@ -212,6 +220,25 @@ export default function EditPage() {
                     />
                 )}
             </PickerOverlay>
+
+            <IngredientFullScreen
+                open={activePicker === "ingredient"}
+                onClose={closeIngredient}
+                onConfirm={handlePickerConfirm}
+                isEdit={editingIndex !== null}
+                ingredientName={ingredientName}
+                nutrients={scannedNutrients}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                onSelectFood={(n) => {
+                    setScannedNutrients(n);
+                    setIngredientName(n.name);
+                }}
+                onClearFood={() => {
+                    setScannedNutrients(null);
+                    setIngredientName("");
+                }}
+            />
         </>
     )
 }
