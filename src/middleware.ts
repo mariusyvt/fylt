@@ -14,6 +14,7 @@ const AUTH_ROUTES = [
 
 /** Routes auth qui restent accessibles même connecté (via lien email). */
 const PUBLIC_AUTH_ROUTES = ["/verify-email", "/reset-password"];
+const PUBLIC_ROUTES = ["/offline", "/legal"];
 
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -21,9 +22,10 @@ export function middleware(request: NextRequest) {
 
     const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
     const isPublicAuthRoute = PUBLIC_AUTH_ROUTES.some((route) => pathname.startsWith(route));
+    const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
 
     // Non connecté sur une page protégée → redirection vers /signin
-    if (!hasSession && !isAuthRoute && pathname !== "/offline") {
+    if (!hasSession && !isAuthRoute && !isPublicRoute) {
         const url = request.nextUrl.clone();
         url.pathname = "/signin";
         return NextResponse.redirect(url);

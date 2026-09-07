@@ -10,19 +10,13 @@ export default function ConfidentialitePage() {
             <h1 className="legal__title">Politique de confidentialité</h1>
             <p className="legal__updated">Dernière mise à jour : {new Date().toLocaleDateString("fr-FR")}</p>
 
-            <div className="legal__placeholder">
-                ⚠️ Document conforme au RGPD (UE 2016/679). Adaptez les champs entre crochets [ ] et
-                faites-le relire par un professionnel. Vérifiez que les traitements décrits
-                correspondent réellement à votre application.
-            </div>
-
             <section>
                 <h2>1. Responsable du traitement</h2>
                 <p>
                     Le responsable du traitement est l'éditeur du site, particulier agissant à titre
                     non professionnel (voir les mentions légales). Pour toute question relative à vos
                     données ou pour exercer vos droits, un point de contact dédié est mis à votre
-                    disposition : <a href="mailto:[contact@votredomaine.com]">[contact@votredomaine.com]</a>.
+                    disposition : <a href="mailto:supportfylt@gmail.com">supportfylt@gmail.com</a>.
                 </p>
             </section>
 
@@ -77,7 +71,7 @@ export default function ConfidentialitePage() {
                 </ul>
                 <p>
                     Pour exercer ces droits, contactez-nous à{" "}
-                    <a href="mailto:[contact@votredomaine.com]">[contact@votredomaine.com]</a>. Vous
+                    <a href="mailto:supportfylt@gmail.com">supportfylt@gmail.com</a>. Vous
                     pouvez également introduire une réclamation auprès de la CNIL (
                     <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a>).
                 </p>

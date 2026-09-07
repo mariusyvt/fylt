@@ -10,14 +10,6 @@ export default function MentionsLegalesPage() {
             <h1 className="legal__title">Mentions légales</h1>
             <p className="legal__updated">Dernière mise à jour : {new Date().toLocaleDateString("fr-FR")}</p>
 
-            <div className="legal__placeholder">
-                ⚠️ Ce site est édité par un particulier à titre non professionnel. Conformément à
-                l'article 6 III 2 de la loi n°2004-575 (LCEN), l'éditeur peut conserver l'anonymat
-                vis-à-vis du public à condition d'avoir communiqué son identité à l'hébergeur. Seuls
-                un moyen de contact et les informations de l'hébergeur sont donc affichés
-                ci-dessous. Complétez les champs entre crochets [ ].
-            </div>
-
             <section>
                 <h2>1. Éditeur du site</h2>
                 <p>
@@ -31,18 +23,13 @@ export default function MentionsLegalesPage() {
                     section 2), qui peut les tenir à la disposition des autorités compétentes.
                 </p>
                 <ul>
-                    <li><strong>Contact :</strong> <a href="mailto:[contact@votredomaine.com]">[contact@votredomaine.com]</a></li>
+                    <li><strong>Contact :</strong> <a href="mailto:supportfylt@gmail.com">supportfylt@gmail.com</a></li>
                 </ul>
             </section>
 
             <section>
                 <h2>2. Hébergement</h2>
-                <p>Le site est hébergé par :</p>
-                <ul>
-                    <li><strong>Hébergeur :</strong> [Nom de l'hébergeur, ex. Vercel Inc.]</li>
-                    <li><strong>Adresse :</strong> [Adresse postale de l'hébergeur]</li>
-                    <li><strong>Contact :</strong> [Site / e-mail de l'hébergeur]</li>
-                </ul>
+                <p><strong>Hébergement :</strong> site auto-hébergé.</p>
             </section>
 
             <section>
@@ -73,7 +60,7 @@ export default function MentionsLegalesPage() {
                 <h2>5. Contact</h2>
                 <p>
                     Pour toute question, vous pouvez nous écrire à l'adresse :{" "}
-                    <a href="mailto:[contact@votredomaine.com]">[contact@votredomaine.com]</a>.
+                    <a href="mailto:supportfylt@gmail.com">supportfylt@gmail.com</a>.
                 </p>
             </section>
         </>

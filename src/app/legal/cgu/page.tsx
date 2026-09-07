@@ -10,11 +10,6 @@ export default function CguPage() {
             <h1 className="legal__title">Conditions Générales d'Utilisation</h1>
             <p className="legal__updated">Dernière mise à jour : {new Date().toLocaleDateString("fr-FR")}</p>
 
-            <div className="legal__placeholder">
-                ⚠️ Modèle de CGU à adapter et à faire relire par un professionnel du droit avant
-                mise en ligne. Les champs entre crochets [ ] sont à compléter.
-            </div>
-
             <section>
                 <h2>1. Objet</h2>
                 <p>
