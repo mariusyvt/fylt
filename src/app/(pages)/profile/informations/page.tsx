@@ -65,7 +65,6 @@ export default function InformationsPage() {
             weight: weightNum,
         };
 
-        // Recalcule les objectifs caloriques si les données morphologiques sont complètes
         if (
             profile.activity_level &&
             ageNum != null &&

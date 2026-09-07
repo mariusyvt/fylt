@@ -1,12 +1,5 @@
 @use "../variables" as *;
 
-//.mobile-container {
-//  max-width: 448px;
-//  margin: 0 auto;
-//  min-height: 100vh;
-//  position: relative;
-//  padding-bottom: 120px;
-//}
 
 
 .section-container {
@@ -34,7 +27,6 @@
   font-weight: $font-medium;
 }
 
-// ── Tableau de bord : suivi du jour ──
 .today-card {
   display: block;
   margin: 0 $spacing-6;
@@ -175,7 +167,6 @@
   }
 }
 
-// ── CTA objectif (pas encore défini) ──
 .today-cta {
   display: flex;
   align-items: center;

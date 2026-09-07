@@ -39,7 +39,6 @@ export const createFood = async (food: NewFood): Promise<Food> => {
     return data.data;
 };
 
-// 404 = deja supprime cote serveur : on considere l'operation reussie.
 export const deleteFood = async (id: number): Promise<void> => {
     try {
         await apiFetch(`/foods/${id}`, { method: "DELETE" });
@@ -49,7 +48,6 @@ export const deleteFood = async (id: number): Promise<void> => {
     }
 };
 
-/** Log fire-and-forget : enregistre la sélection d'un aliment après recherche. */
 export const logFoodSelection = (query: string, foodId: number): void => {
     const q = query.trim();
     if (!q || !foodId) return;
@@ -58,6 +56,5 @@ export const logFoodSelection = (query: string, foodId: number): void => {
         method: "POST",
         json: { query: q, food_id: foodId },
     }).catch(() => {
-        // Télémétrie non critique — on ignore silencieusement.
     });
 };

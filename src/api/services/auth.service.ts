@@ -27,18 +27,13 @@ export const verifyEmail = async (token: string) =>
 export const resendVerification = async (email: string) =>
     apiFetchJson("/resend-verification", { method: "POST", json: { email } });
 
-/** Termine la session cote serveur et efface le cookie httpOnly. */
 export const signOut = async (): Promise<void> => {
     await apiFetch("/signout", { method: "POST" });
 };
 
-/**
- * Verifie l'existence d'une session valide via le cookie httpOnly.
- * Le cookie n'etant pas lisible en JS, on interroge une route protegee.
- */
 export const getSession = async (): Promise<boolean> => {
     try {
-        const res = await fetch(apiUrl("/user"), { method: "GET", credentials: "include" });
+        const res = await apiFetch("/user", { method: "GET" });
         return res.ok;
     } catch {
         return false;

@@ -12,8 +12,6 @@ interface ScannerOverlayProps {
     onClose: () => void;
 }
 
-// Chargé dynamiquement (next/dynamic, ssr:false) : react-barcode-scanner et son
-// polyfill ne sont téléchargés qu'à l'ouverture du scanner.
 export default function ScannerOverlay({ onCapture, onCameraError, onClose }: ScannerOverlayProps) {
     return (
         <div className="scanner-overlay">

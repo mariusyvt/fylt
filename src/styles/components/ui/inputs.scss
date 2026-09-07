@@ -1,6 +1,5 @@
 @use '../../variables' as v;
 
-// -- Labels --
 .field-label {
   display: block;
   font-size: 0.7rem;
@@ -11,7 +10,6 @@
   margin: 0 0 v.$spacing-2 v.$spacing-1;
 }
 
-// -- Text Input & Select Input --
 .text-input,
 .select-input {
   width: 100%;
@@ -47,7 +45,6 @@
   font-family: inherit;
 }
 
-// -- Select --
 .select-input {
   display: flex;
   justify-content: space-between;
@@ -88,7 +85,6 @@
   pointer-events: none;
 }
 
-// -- Password wrapper --
 .password-wrapper {
   position: relative;
   display: flex;
@@ -124,7 +120,6 @@
   }
 }
 
-// -- Errors --
 .error-message {
   color: #f87171;
   font-size: v.$text-sm;

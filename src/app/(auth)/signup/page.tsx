@@ -38,7 +38,6 @@ export default function SignUpForm() {
         try {
             await signUp(lastName, firstName, email, gender, password);
             setRegistered(true);
-            // On vide les champs sensibles après succès
             setPassword("");
             setConfirmPassword("");
         } catch (err: unknown) {

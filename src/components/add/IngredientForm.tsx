@@ -16,11 +16,6 @@ interface IngredientFormProps {
     onClearFood: () => void;
 }
 
-/**
- * Orchestrateur : bascule entre l'aliment sélectionné, la saisie manuelle et
- * la recherche/scan. Le scanner (react-barcode-scanner) est encapsulé ici et
- * chargé à la demande via FoodSearchPanel.
- */
 export default function IngredientForm({
     ingredientName,
     nutrients,

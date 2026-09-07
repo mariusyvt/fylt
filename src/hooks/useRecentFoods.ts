@@ -14,7 +14,6 @@ export const useRecentFoods = () => {
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) setRecentFoods(JSON.parse(stored));
         } catch {
-            // ignore
         }
     }, []);
 

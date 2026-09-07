@@ -16,7 +16,7 @@ export default function ConfidentialitePage() {
                     Le responsable du traitement est l'éditeur du site, particulier agissant à titre
                     non professionnel (voir les mentions légales). Pour toute question relative à vos
                     données ou pour exercer vos droits, un point de contact dédié est mis à votre
-                    disposition : <a href="mailto:supportfylt@gmail.com">supportfylt@gmail.com</a>.
+                    disposition : <a href="mailto:contact@fylt.app">contact@fylt.app</a>.
                 </p>
             </section>
 
@@ -71,7 +71,7 @@ export default function ConfidentialitePage() {
                 </ul>
                 <p>
                     Pour exercer ces droits, contactez-nous à{" "}
-                    <a href="mailto:supportfylt@gmail.com">supportfylt@gmail.com</a>. Vous
+                    <a href="mailto:contact@fylt.app">contact@fylt.app</a>. Vous
                     pouvez également introduire une réclamation auprès de la CNIL (
                     <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a>).
                 </p>

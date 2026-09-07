@@ -47,7 +47,7 @@ export default function CookiesPage() {
                 <h2>4. Contact</h2>
                 <p>
                     Pour toute question relative aux cookies, contactez-nous à{" "}
-                    <a href="mailto:supportfylt@gmail.com">supportfylt@gmail.com</a>.
+                    <a href="mailto:contact@fylt.app">contact@fylt.app</a>.
                 </p>
             </section>
         </>

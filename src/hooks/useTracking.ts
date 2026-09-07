@@ -98,12 +98,10 @@ export const useTracking = (goal?: CalorieGoal | null) => {
         [isAuthenticated]
     );
 
-    // Charge le jour sélectionné
     useEffect(() => {
         if (selectedIso) loadDay(selectedIso);
     }, [selectedIso, loadDay]);
 
-    // Charge les totaux de la semaine (indicateurs du sélecteur de jours)
     useEffect(() => {
         if (!isAuthenticated || !weekStart) return;
         let active = true;

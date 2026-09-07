@@ -1,7 +1,6 @@
 @use "sass:color";
 @use "../variables" as *;
 
-// ── Page ──
 .tracking-page {
   position: relative;
 }
@@ -10,7 +9,6 @@
   padding: 0 $spacing-6;
 }
 
-// ── Calories Card ──
 .calories-card {
   background: $white;
   border-radius: 1rem;
@@ -83,7 +81,6 @@
   }
 }
 
-// ── Macros Card ──
 .macros-card {
   background: $white;
   border-radius: 1rem;
@@ -136,7 +133,6 @@
   }
 }
 
-// ── Meals ──
 .tracking-meals {
   display: flex;
   flex-direction: column;
@@ -295,7 +291,6 @@
   }
 }
 
-// ── Modal d'édition d'une entrée ──
 .edit-entry-overlay {
   position: fixed;
   inset: 0;
@@ -392,7 +387,6 @@
   }
 }
 
-// ── Aliments récents (chips ajout rapide) ──
 .recent-foods {
   margin-top: $spacing-2;
   display: flex;
@@ -462,7 +456,6 @@
   }
 }
 
-// ── Sélecteur de recettes (ajout rapide) ──
 .recipe-picker {
   margin-top: $spacing-2;
   display: flex;
@@ -725,7 +718,6 @@
   }
 }
 
-// -- Recipe fullscreen --
 .recipe-fullscreen {
   position: fixed;
   inset: 0;
@@ -779,9 +771,6 @@
   max-height: none;
 }
 
-// ══════════════════════════════════
-// DESIGN B — Stacked Cards
-// ══════════════════════════════════
 
 .stat-grid {
   display: grid;
@@ -830,7 +819,6 @@
   }
 }
 
-// Day Picker
 .week-nav {
   display: flex;
   align-items: center;
@@ -954,7 +942,6 @@
   }
 }
 
-// Food Log
 .food-log {
   display: flex;
   flex-direction: column;
@@ -1010,9 +997,6 @@
   }
 }
 
-// ══════════════════════════════════
-// DESIGN C — Progress Stack
-// ══════════════════════════════════
 
 .hero-summary-card {
   background: $white;
@@ -1023,7 +1007,6 @@
   box-shadow: 0 20px 40px -12px rgba(13, 148, 136, 0.08);
 }
 
-// Semi-circle gauge
 .semi-gauge {
   display: flex;
   flex-direction: column;
@@ -1083,7 +1066,6 @@
   }
 }
 
-// Macro pills in hero
 .macro-pills {
   display: flex;
   gap: $spacing-3;
@@ -1131,7 +1113,6 @@
   }
 }
 
-// Meal accordions
 .meal-accordion {
   background: $white;
   border-radius: 1.25rem;
@@ -1199,7 +1180,6 @@
   }
 }
 
-// Sticky bottom macro bar
 .sticky-macro-bar {
   position: fixed;
   bottom: 5.5rem;
@@ -1238,9 +1218,6 @@
   }
 }
 
-// ══════════════════════════════════
-// TEST PAGE — Advanced UX/UI
-// ══════════════════════════════════
 
 .tracking-test {
     max-width: 1120px;
@@ -1741,9 +1718,6 @@
   }
 }
 
-  // ══════════════════════════════════
-  // TEST PAGE — Simple version requested
-  // ══════════════════════════════════
 
 .tracking-simple {
       max-width: 520px;

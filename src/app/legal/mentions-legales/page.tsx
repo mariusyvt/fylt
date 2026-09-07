@@ -23,7 +23,7 @@ export default function MentionsLegalesPage() {
                     section 2), qui peut les tenir à la disposition des autorités compétentes.
                 </p>
                 <ul>
-                    <li><strong>Contact :</strong> <a href="mailto:supportfylt@gmail.com">supportfylt@gmail.com</a></li>
+                    <li><strong>Contact :</strong> <a href="mailto:contact@fylt.app">contact@fylt.app</a></li>
                 </ul>
             </section>
 
@@ -60,7 +60,7 @@ export default function MentionsLegalesPage() {
                 <h2>5. Contact</h2>
                 <p>
                     Pour toute question, vous pouvez nous écrire à l'adresse :{" "}
-                    <a href="mailto:supportfylt@gmail.com">supportfylt@gmail.com</a>.
+                    <a href="mailto:contact@fylt.app">contact@fylt.app</a>.
                 </p>
             </section>
         </>

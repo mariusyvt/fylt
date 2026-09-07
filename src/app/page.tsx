@@ -38,7 +38,6 @@ export default function Home () {
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
 
-    // Garde d'authentification (la home est hors du groupe (pages)).
     useEffect(() => {
         if (!isAuthenticated) router.push('/signin');
     }, [isAuthenticated, router]);

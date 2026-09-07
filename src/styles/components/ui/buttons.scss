@@ -1,6 +1,5 @@
 @use '../../variables' as v;
 
-// -- Btn Dark (file upload / action dark) --
 .btn-dark {
   background: v.$slate-900;
   color: v.$white;
@@ -39,7 +38,6 @@
   }
 }
 
-// -- Btn Primary --
 .btn-primary {
   width: 100%;
   background-color: v.$slate-900;
@@ -79,7 +77,6 @@
   }
 }
 
-// -- Btn Danger --
 .btn-danger {
   width: 100%;
   background-color: transparent;
@@ -107,7 +104,6 @@
   }
 }
 
-// -- Circle Btn (icon action, shared across headers) --
 .circle-btn {
   width: 40px;
   height: 40px;

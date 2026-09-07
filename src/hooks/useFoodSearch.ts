@@ -5,7 +5,6 @@ import { Food } from "@/types/foods.types";
 import { searchFoods, deleteFood } from "@/api/services/foods.service";
 import { useAuth } from "@/hooks/useAuth";
 
-/** Recherche d'aliments avec debounce (350 ms) et suppression optimiste. */
 export const useFoodSearch = (enabled: boolean) => {
     const { isAuthenticated } = useAuth();
     const [query, setQuery] = useState("");
@@ -43,7 +42,6 @@ export const useFoodSearch = (enabled: boolean) => {
         try {
             await deleteFood(id);
         } catch {
-            // ignore : l'item est déjà retiré localement
         }
     };
 

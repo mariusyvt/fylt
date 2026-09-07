@@ -9,7 +9,6 @@ export interface ApiError extends Error {
 }
 
 
-/** Enveloppe standard des reponses API : { data: ... }. */
 export interface ApiResponse<T> {
     data: T;
 }

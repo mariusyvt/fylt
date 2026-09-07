@@ -1,38 +1,29 @@
-// src/styles/main.scss
 
 @use 'variables';
 
-// UI — composants réutilisables
 @use 'components/ui/inputs';
 @use 'components/ui/buttons';
 @use 'components/ui/page-header';
 
-// Styles transverses (formulaires partagés)
 @use 'shared/shared-form';
 
-// Composants — divers
 @use 'components/loader';
 @use 'components/bottom-navbar';
 @use 'components/landing';
 
-// Composants — home
 @use 'components/home/card';
 @use 'components/home/header';
 
-// Composants — profile
 @use 'components/profile/header-profil';
 
-// Composants — recipes (list)
 @use 'components/recipes/list/header-recipe';
 @use 'components/recipes/list/recipe-card';
 
-// Composants — recipes (detail)
 @use 'components/recipes/detail/recipe-detail-header';
 @use 'components/recipes/detail/recipe-hero';
 @use 'components/recipes/detail/recipe-ingredients-list';
 @use 'components/recipes/detail/recipe-options-menu';
 
-// Composants — add
 @use 'components/add/header-add-recipe';
 @use 'components/add/ingredient-form';
 @use 'components/add/ingredients-section';
@@ -40,7 +31,6 @@
 @use 'components/add/picker-overlay';
 @use 'components/add/confirm-button';
 
-// Pages
 @use 'pages/home';
 @use 'pages/add';
 @use 'pages/recipe';
@@ -52,7 +42,6 @@
 @use 'pages/legal';
 
 
-// Global styles
 *,
 *::before,
 *::after {
@@ -60,9 +49,6 @@
   margin: 0;
   padding: 0;
 }
-//* {
-//  outline: 1px solid red !important;
-//}
 
 html {
   scroll-behavior: smooth;
@@ -77,7 +63,6 @@ body {
   color: variables.$slate-900;
 }
 
-// Skip-to-content (accessibilité clavier)
 .skip-link {
   position: absolute;
   left: -9999px;

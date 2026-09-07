@@ -7,7 +7,6 @@
   padding-top: $spacing-2;
 }
 
-// -- Barre de recherche + scan --
 .food-search {
   display: flex;
   align-items: center;
@@ -83,7 +82,6 @@
   }
 }
 
-// -- Scanner overlay moderne --
 .scanner-overlay {
   position: fixed;
   inset: 0;
@@ -182,7 +180,6 @@
   }
 }
 
-// -- Aliments récents --
 .food-recents {
   display: flex;
   flex-direction: column;
@@ -247,7 +244,6 @@
   }
 }
 
-// -- Résultats de recherche --
 .food-results {
   display: flex;
   flex-direction: column;
@@ -358,7 +354,6 @@
   }
 }
 
-// -- Aliment sélectionné --
 .food-selected {
   display: flex;
   align-items: center;
@@ -401,7 +396,6 @@
   }
 }
 
-// -- Aperçu des macros pour la quantité --
 .food-preview {
   display: flex;
   flex-wrap: wrap;
@@ -421,7 +415,6 @@
   }
 }
 
-// -- Saisie manuelle --
 .manual-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -453,7 +446,6 @@
   margin: 0;
 }
 
-// -- Plein écran d'ajout d'aliment --
 .ingredient-fullscreen {
   position: fixed;
   inset: 0;

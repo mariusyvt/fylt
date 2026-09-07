@@ -34,7 +34,6 @@ export interface Meal {
     items: FoodItem[];
 }
 
-// ── Réponses API ──
 export interface ApiFoodLogItem {
     id: number;
     name: string;

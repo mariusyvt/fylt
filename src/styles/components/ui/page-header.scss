@@ -1,6 +1,5 @@
 @use '../../variables' as v;
 
-// ── Conteneur de page unifié ──
 .page-shell {
   max-width: 448px;
   margin: 0 auto;
@@ -9,7 +8,6 @@
   padding-bottom: 8rem;
 }
 
-// ── En-tête de page unifié ──
 .page-header {
   padding: max(#{v.$spacing-4}, env(safe-area-inset-top)) v.$spacing-6 v.$spacing-2;
 
@@ -21,7 +19,6 @@
     margin-bottom: v.$spacing-4;
   }
 
-  // Garde le bouton d'action à droite même sans leading
   &__leading {
     display: flex;
     align-items: center;

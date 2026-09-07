@@ -246,14 +246,11 @@
 }
 
 
-// Autofill fix
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px v.$gray-50 inset !important;
 }
 
-// ── Responsive ──
 
-// Mobile (petits écrans)
 @media (max-width: 480px) {
   .main-container {
     padding: v.$spacing-8 v.$spacing-4;
@@ -282,7 +279,6 @@ input:-webkit-autofill {
   }
 }
 
-// Tablette
 @media (min-width: 481px) and (max-width: 1024px) {
   .main-container {
     max-width: 520px;

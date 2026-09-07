@@ -15,7 +15,6 @@
   }
 }
 
-// ── Intro screen ──
 .onboarding-intro {
   flex: 1;
   display: flex;
@@ -103,7 +102,6 @@
   margin: 0;
 }
 
-// ── Progress bar ──
 .onboarding-progress {
   height: 6px;
   border-radius: 999px;
@@ -131,7 +129,6 @@
   flex: 1;
 }
 
-// ── Options ──
 .onboarding-options {
   display: flex;
   flex-direction: column;
@@ -143,7 +140,6 @@
   }
 }
 
-// -- Big card option (gender) --
 .option-card {
   flex: 1;
   background: $white;
@@ -176,7 +172,6 @@
   }
 }
 
-// -- Row option (activity) --
 .option-row {
   width: 100%;
   background: $white;
@@ -242,7 +237,6 @@
   }
 }
 
-// ── Number input steps ──
 .onboarding-number {
   display: flex;
   align-items: baseline;
@@ -271,7 +265,6 @@
       color: $slate-300;
     }
 
-    // Hide number spinners
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -289,7 +282,6 @@
   }
 }
 
-// ── Actions ──
 .onboarding-actions {
   display: flex;
   flex-direction: column;
@@ -321,7 +313,6 @@
   }
 }
 
-// ── Result ──
 .onboarding-result {
   background: $white;
   border: 1px solid $slate-300;

@@ -10,9 +10,6 @@ interface RecipesData {
     recipeTypes: RecipeCategory[];
 }
 
-// Cache module-level partage entre toutes les pages : evite de refetcher les
-// recettes a chaque navigation (home, tracking, recipes) et deduplique les
-// requetes declenchees simultanement.
 let cache: RecipesData | null = null;
 let inflight: Promise<RecipesData> | null = null;
 
@@ -37,7 +34,6 @@ const fetchRecipesData = (): Promise<RecipesData> => {
     return inflight;
 };
 
-/** Invalide le cache des recettes (a appeler apres creation/edition/suppression). */
 export const invalidateRecipesCache = () => {
     cache = null;
     inflight = null;

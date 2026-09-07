@@ -11,7 +11,6 @@ export default function TimePicker({ value, onChange }: TimePickerProps) {
         minutes: ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'],
     };
 
-    // Parse la string "3h20" en objet { hours: "3", minutes: "20" }
     const parseTime = (timeStr: string): { hours: string; minutes: string } => {
         const match = timeStr.match(/^(\d+)h(\d+)?$/);
         if (match) {
