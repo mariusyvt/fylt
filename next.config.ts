@@ -1,14 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    /* config options here */
     reactStrictMode: true,
     images: {
         remotePatterns: [
             {
-                protocol: 'http',
-                hostname: 'localhost',
-                port: '5000',
+                protocol: "https",
+                hostname: "api.fylt.fr",
+            },
+            {
+                protocol: "http",
+                hostname: "localhost",
+                port: "5000",
             },
         ],
     },

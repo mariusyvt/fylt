@@ -1,0 +1,23 @@
+services:
+  frontend:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - traefik-network
+      - internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-network"
+      - "traefik.http.routers.fylt-front.rule=Host(`fylt.fr`) || Host(`www.fylt.fr`)"
+      - "traefik.http.routers.fylt-front.entrypoints=websecure"
+      - "traefik.http.routers.fylt-front.tls.certresolver=letsencrypt"
+      - "traefik.http.services.fylt-front.loadbalancer.server.port=3000"
+
+networks:
+  traefik-network:
+    external: true
+  internal:
+    driver: bridge
+
