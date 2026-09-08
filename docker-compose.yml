@@ -4,23 +4,51 @@ services:
       context: .
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    container_name: fylt-frontend
     restart: unless-stopped
     env_file:
       - .env
     networks:
       - traefik-network
-      - internal
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp
+    mem_limit: 512m
+    cpus: 0.5
+    pids_limit: 200
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-network"
-      - "traefik.http.routers.fylt-front.rule=Host(`fylt.fr`) || Host(`www.fylt.fr`)"
+
+      # Router apex (fylt.fr)
+      - "traefik.http.routers.fylt-front.rule=Host(`fylt.fr`)"
       - "traefik.http.routers.fylt-front.entrypoints=websecure"
       - "traefik.http.routers.fylt-front.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.fylt-front.middlewares=secure-headers@file,web-ratelimit@file"
+      - "traefik.http.routers.fylt-front.service=fylt-front"
+
+      # Router www → redirect vers apex
+      - "traefik.http.routers.fylt-front-www.rule=Host(`www.fylt.fr`)"
+      - "traefik.http.routers.fylt-front-www.entrypoints=websecure"
+      - "traefik.http.routers.fylt-front-www.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.fylt-front-www.middlewares=fylt-www-to-apex,secure-headers@file"
+      - "traefik.http.routers.fylt-front-www.service=fylt-front"
+      - "traefik.http.middlewares.fylt-www-to-apex.redirectregex.regex=^https://www\\.fylt\\.fr/(.*)"
+      - "traefik.http.middlewares.fylt-www-to-apex.redirectregex.replacement=https://fylt.fr/$${1}"
+      - "traefik.http.middlewares.fylt-www-to-apex.redirectregex.permanent=true"
+
       - "traefik.http.services.fylt-front.loadbalancer.server.port=3000"
 
 networks:
   traefik-network:
     external: true
-  internal:
-    driver: bridge
-

@@ -14,3 +14,6 @@ Dockerfile
 npm-debug.log*
 next-env.d.ts
 *.tsbuildinfo
+DEPLOY_GUIDE.local.md
+SECURITY_CHECKLIST.md
+skills-lock.json
