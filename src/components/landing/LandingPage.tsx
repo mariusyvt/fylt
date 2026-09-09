@@ -9,28 +9,28 @@ const FEATURES = [
     title: "Vos recettes",
     description:
       "Créez et organisez vos recettes avec les macros calculées automatiquement.",
-    image: "./images/landing/pates_bolognaises.webp",
+    image: "/images/landing/pates_bolognaises.webp",
   },
   {
     icon: BarChart3,
     title: "Suivi nutritionnel",
     description:
       "Suivez vos calories et macros au quotidien pour atteindre vos objectifs.",
-    image: "./images/landing/salade.webp",
+    image: "/images/landing/salade.webp",
   },
   {
     icon: Scan,
     title: "Scanner rapide",
     description:
       "Scannez un code-barres pour ajouter un aliment en quelques secondes.",
-    image: "./images/landing/salade_pates.webp",
+    image: "/images/landing/salade_pates.webp",
   },
   {
     icon: Utensils,
     title: "Planification",
     description:
       "Planifiez vos repas et gardez le contrôle sur votre alimentation.",
-    image: "./images/landing/riz.webp",
+    image: "/images/landing/riz.webp",
   },
 ];
 
@@ -77,7 +77,7 @@ export default function LandingPage() {
             <div className="landing__phone-mockup">
               <div className="landing__phone-frame">
                 <img
-                  src="./images/landing/salade_saumon.webp"
+                  src="/images/landing/salade_saumon.webp"
                   alt="Aperçu Fylt"
                 />
               </div>
@@ -86,7 +86,7 @@ export default function LandingPage() {
         </section>
 
         <section className="landing__food-banner">
-          <img src="./images/landing/pizza.webp" alt="Healthy food" />
+          <img src="/images/landing/pizza.webp" alt="Healthy food" />
         </section>
 
         <section className="landing__features">
