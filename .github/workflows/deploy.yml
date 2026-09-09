@@ -1,0 +1,53 @@
+name: Deploy Frontend on Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, fylt, prod]
+    env:
+      DEPLOY_DIR: /home/mariusyvt/apps/fylt/fylt
+      COMPOSE_PROJECT_NAME: fylt
+      CONTAINER_NAME: fylt-frontend
+
+    steps:
+      - name: Checkout code on prod dir at pushed tag
+        run: |
+          set -euo pipefail
+          cd "$DEPLOY_DIR"
+          echo "Fetching tags..."
+          git fetch --tags --prune origin
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "Deploying tag: $TAG"
+          git checkout -f "refs/tags/$TAG"
+          git log -1 --oneline
+
+      - name: Build and start containers
+        run: |
+          set -euo pipefail
+          cd "$DEPLOY_DIR"
+          docker compose up -d --build --remove-orphans
+
+      - name: Wait for container to be healthy
+        run: |
+          set -euo pipefail
+          echo "Waiting for $CONTAINER_NAME to become healthy..."
+          for i in $(seq 1 30); do
+            STATUS=$(docker inspect --format='{{.State.Health.Status}}' "$CONTAINER_NAME" 2>/dev/null || echo "missing")
+            echo "Attempt $i/30: $STATUS"
+            if [ "$STATUS" = "healthy" ]; then
+              echo "✅ Container is healthy"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "❌ Container did not become healthy in time"
+          docker logs --tail 100 "$CONTAINER_NAME" || true
+          exit 1
+
+      - name: Prune unused images
+        if: success()
+        run: docker image prune -f
