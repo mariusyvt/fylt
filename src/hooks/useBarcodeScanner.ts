@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import type { DetectedBarcode } from "react-barcode-scanner";
 import { Nutrients } from "@/types/nutrition.types";
-import { searchByBarcode } from "@/api/services/openfoodfacts.service";
 import { getFoodByBarcode, foodToNutrients } from "@/api/services/foods.service";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -21,6 +21,7 @@ export const useBarcodeScanner = (
     onScanSuccess?: (nutrients: Nutrients) => void
 ) => {
     const { isAuthenticated } = useAuth();
+    const router = useRouter();
     const [scanning, setScanning] = useState(false);
     const [codeBar, setCodeBar] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -28,11 +29,15 @@ export const useBarcodeScanner = (
     const handledRef = useRef(false);
 
     const startScanner = useCallback(() => {
+        if (!isAuthenticated) {
+            router.push("/signin");
+            return;
+        }
         setError(null);
         setCodeBar("");
         handledRef.current = false;
         setScanning(true);
-    }, []);
+    }, [isAuthenticated, router]);
 
     const stopScanner = useCallback(() => {
         setScanning(false);
@@ -50,8 +55,8 @@ export const useBarcodeScanner = (
             setScanning(false);
 
             try {
-                const food = isAuthenticated ? await getFoodByBarcode(decodedText) : null;
-                const nutrients = food ? foodToNutrients(food) : await searchByBarcode(decodedText);
+                const food = await getFoodByBarcode(decodedText);
+                const nutrients = food ? foodToNutrients(food) : null;
                 setIsLoading(false);
 
                 if (nutrients && onScanSuccess) {
@@ -64,7 +69,7 @@ export const useBarcodeScanner = (
                 setError("Produit non trouvé");
             }
         },
-        [isAuthenticated, onScanSuccess]
+        [onScanSuccess]
     );
 
     const handleCameraError = useCallback(() => {
