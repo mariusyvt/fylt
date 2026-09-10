@@ -55,7 +55,7 @@ export default function ContactPage() {
 
     return (
         <div className="informations-page">
-            <div className="bg-gradient-decor"></div>
+
 
             <header className="informations-header">
                 <Link className="circle-btn" href="/profile">

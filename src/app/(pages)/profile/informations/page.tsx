@@ -109,7 +109,7 @@ export default function InformationsPage() {
 
     return (
         <div className="informations-page">
-            <div className="bg-gradient-header"></div>
+
 
             <header className="informations-header">
                 <Link className="circle-btn" href="/profile">

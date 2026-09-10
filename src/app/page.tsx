@@ -76,7 +76,7 @@ export default function Home () {
     if (loadError) {
         return (
             <div className="page-shell">
-                <div className="bg-gradient-decor"></div>
+
                 <div className="empty-state">
                     <UtensilsCrossed size={48} />
                     <h2>Oups…</h2>
@@ -91,7 +91,7 @@ export default function Home () {
 
     return (
         <div className="page-shell">
-            <div className="bg-gradient-decor"></div>
+
             <HeaderHome profile={profile} />
 
             <TodaySummary goal={goal} consumed={consumed} />

@@ -1,52 +1,37 @@
-"use client";
-
-import { useEffect } from "react";
-import { AuthProvider } from "@/context/AuthContext";
-import { useAuth } from "@/hooks/useAuth";
+import type { Metadata, Viewport } from "next";
 import "@/styles/main.scss";
-import BottomNavbar from "@/components/BottomNavbar";
-import DeviceGate from "@/components/landing/DeviceGate";
+import AppShell from "./AppShell";
 
-function LayoutContent({ children }: { children: React.ReactNode }) {
-    const { isAuthenticated } = useAuth();
+export const metadata: Metadata = {
+    title: "Fylt",
+    description: "Suivi nutritionnel et recettes personnalisées",
+    manifest: "/manifest.json",
+    appleWebApp: {
+        capable: true,
+        title: "Fylt",
+        statusBarStyle: "black-translucent",
+    },
+    icons: {
+        apple: "/icons/fylt-logo-192x192.webp",
+    },
+};
 
-    return (
-        <>
-            {children}
-            {isAuthenticated && <BottomNavbar />}
-        </>
-    );
-}
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+    themeColor: "#f0fdfa",
+};
 
 export default function RootLayout({
                                        children,
                                    }: {
-    children: React.ReactNode
+    children: React.ReactNode;
 }) {
-    useEffect(() => {
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/sw.js").catch(() => {});
-        }
-    }, []);
-
     return (
         <html lang="fr">
-        <head>
-            <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-            <link rel="manifest" href="/manifest.json" />
-            <meta name="theme-color" content="#0d9488" />
-            <meta name="apple-mobile-web-app-capable" content="yes" />
-            <meta name="mobile-web-app-capable" content="yes" />
-            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-            <meta name="apple-mobile-web-app-title" content="Fylt" />
-            <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-        </head>
         <body>
-        <AuthProvider>
-            <DeviceGate>
-                <LayoutContent>{children}</LayoutContent>
-            </DeviceGate>
-        </AuthProvider>
+        <AppShell>{children}</AppShell>
         </body>
         </html>
     );

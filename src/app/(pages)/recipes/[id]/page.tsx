@@ -21,7 +21,7 @@ export default function RecipeId () {
 
     return (
         <>
-            <div className="bg-gradient-decor"></div>
+
             <div className="mobile-wrapper">
                 <RecipeDetailHeader
                     onBack={() => router.push("/recipes")}

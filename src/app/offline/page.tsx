@@ -7,7 +7,7 @@ export const metadata = {
 export default function OfflinePage() {
     return (
         <div className="page-shell">
-            <div className="bg-gradient-decor"></div>
+
             <div className="empty-state">
                 <WifiOff size={48} />
                 <h2>Vous êtes hors ligne</h2>

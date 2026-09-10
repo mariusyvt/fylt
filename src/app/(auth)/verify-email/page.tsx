@@ -51,7 +51,7 @@ export default function VerifyEmailPage() {
     if (status === "loading") {
         return (
             <div className="login-page">
-                <div className="background-overlay" />
+
                 <div className="main-container">
                     <h1 className="page-title">Vérification en cours...</h1>
                     <div className="form-card">
@@ -67,7 +67,7 @@ export default function VerifyEmailPage() {
     if (status === "success") {
         return (
             <div className="login-page">
-                <div className="background-overlay" />
+
                 <div className="main-container">
                     <h1 className="page-title">Email vérifié !</h1>
                     <div className="form-card">
@@ -83,7 +83,7 @@ export default function VerifyEmailPage() {
 
     return (
         <div className="login-page">
-            <div className="background-overlay" />
+
             <div className="main-container">
                 <h1 className="page-title">
                     {status === "error" ? "Lien expiré" : "Vérifiez votre email"}

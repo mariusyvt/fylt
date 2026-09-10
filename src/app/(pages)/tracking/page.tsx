@@ -73,7 +73,7 @@ export default function Tracking() {
 
     return (
         <>
-            <div className="bg-gradient-decor"></div>
+
             <div className="page-shell tracking-page">
                 <PageHeader
                     title="Suivi du jour"

@@ -52,15 +52,7 @@
 
 html {
   scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100dvh;
-  background-color: variables.$gray-50;
-  color: variables.$slate-900;
+  background: #f0fdfa;
 }
 
 body::before {
@@ -69,10 +61,22 @@ body::before {
   top: 0;
   left: 0;
   right: 0;
-  height: env(safe-area-inset-top);
+  height: env(safe-area-inset-top, 0px);
   background: #f0fdfa;
-  z-index: 1000;
+  z-index: 9999;
   pointer-events: none;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+  background:
+    linear-gradient(to bottom, #f0fdfa 0px, transparent 384px) no-repeat,
+    variables.$gray-50;
+  background-attachment: fixed, scroll;
+  color: variables.$slate-900;
 }
 
 button,
@@ -127,18 +131,6 @@ input[type="radio"] {
     width: auto;
     height: auto;
   }
-}
-
-.bg-gradient-decor {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 448px;
-  height: 384px;
-  background: linear-gradient(to bottom, #f0fdfa 80%, transparent);
-  z-index: -1;
 }
 
 .no-scrollbar {

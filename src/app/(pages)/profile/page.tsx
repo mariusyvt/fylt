@@ -52,7 +52,7 @@ export default function ProfilPage () {
     if (error) {
         return (
             <div className="page-shell">
-                <div className="bg-gradient-decor"></div>
+
                 <div className="empty-state">
                     <UtensilsCrossed size={48} />
                     <h2>Oups…</h2>
@@ -64,7 +64,7 @@ export default function ProfilPage () {
 
     return (
         <>
-            <div className="bg-gradient-header"></div>
+
             {profile && (
                 <ProfileHeader
                     profile={profile}

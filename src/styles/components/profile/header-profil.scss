@@ -6,13 +6,6 @@ $border-color: $slate-300;
 $text-muted: $slate-400;
 
 
-.bg-gradient-header {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 384px;
-  background: linear-gradient(to bottom, #f0fdfa 80%, transparent);
-  z-index: -1;
-}
-
 .profile-header {
   padding: 3rem $spacing-6 2rem;
   display: flex;

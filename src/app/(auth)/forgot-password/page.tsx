@@ -23,7 +23,7 @@ export default function ForgotPasswordPage() {
 
     return (
         <div className="login-page">
-            <div className="background-overlay" />
+
             <div className="main-container">
                 <h1 className="page-title">Mot de passe oublié</h1>
 

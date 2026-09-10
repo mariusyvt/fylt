@@ -38,7 +38,7 @@ export default function SignInForm () {
 
     return (
         <div className="login-page">
-            <div className="background-overlay" />
+
             <div className="main-container">
                 <h1 className="page-title">Se connecter</h1>
 

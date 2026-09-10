@@ -105,7 +105,7 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
     if (!started && !result) {
         return (
             <>
-                <div className="bg-gradient-decor"></div>
+
                 <div className="onboarding-page onboarding-page--intro">
                     <div className="onboarding-intro">
                         <div className="onboarding-intro__badge">
@@ -159,7 +159,7 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
         if (postPhase === "result") {
             return (
                 <>
-                    <div className="bg-gradient-decor"></div>
+
                     <div className="onboarding-page">
                         <header className="onboarding-header">
                             <h1 className="onboarding-title">Ton maintien</h1>
@@ -200,7 +200,7 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
         const delta = finalResult!.calories - result.calories;
         return (
             <>
-                <div className="bg-gradient-decor"></div>
+
                 <div className="onboarding-page">
                     <header className="onboarding-header">
                         <button className="circle-btn" onClick={() => setPostPhase("result")}>
@@ -274,7 +274,7 @@ function OnboardingWizard({ goal, saveGoal }: WizardProps) {
 
     return (
         <>
-            <div className="bg-gradient-decor"></div>
+
             <div className="onboarding-page">
                 <header className="onboarding-header">
                     {step === 0 ? (

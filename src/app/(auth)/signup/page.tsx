@@ -64,7 +64,7 @@ export default function SignUpForm() {
     if (registered) {
         return (
             <div className="login-page">
-                <div className="background-overlay" />
+
                 <div className="main-container">
                     <h1 className="page-title">Vérifiez votre email</h1>
                     <div className="form-card">
@@ -82,7 +82,7 @@ export default function SignUpForm() {
 
     return (
         <div className="login-page">
-            <div className="background-overlay" />
+
             <div className="main-container">
                 <h1 className="page-title">S&apos;inscrire</h1>
                 <div className="form-card">

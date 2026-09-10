@@ -35,7 +35,7 @@ export default function RecipesPage () {
     return (
         <>
             <div className="page-shell">
-                <div className="bg-gradient-decor"></div>
+
                 {profile && (
                     <HeaderRecipes
                         profile={profile}

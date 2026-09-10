@@ -57,7 +57,7 @@ export default function StatsPage() {
 
     return (
         <div className="informations-page">
-            <div className="bg-gradient-decor"></div>
+
 
             <header className="informations-header">
                 <Link className="circle-btn" href="/tracking">

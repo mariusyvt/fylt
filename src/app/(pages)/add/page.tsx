@@ -75,7 +75,7 @@ export default function AddPage () {
     return (
         <div className="add-recipe-page">
             <div className="mobile-container">
-                <div className="bg-gradient-decor"></div>
+
 
                 <HeaderAddRecipe onClose={() => router.push("/")} />
 

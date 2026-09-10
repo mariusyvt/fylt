@@ -40,7 +40,7 @@ export default function ResetPasswordPage() {
     if (!token) {
         return (
             <div className="login-page">
-                <div className="background-overlay" />
+
                 <div className="main-container">
                     <h1 className="page-title">Lien invalide</h1>
                     <div className="form-card">
@@ -56,7 +56,7 @@ export default function ResetPasswordPage() {
 
     return (
         <div className="login-page">
-            <div className="background-overlay" />
+
             <div className="main-container">
                 <h1 className="page-title">Nouveau mot de passe</h1>
 
