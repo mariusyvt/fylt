@@ -7,7 +7,7 @@ $text-muted: $slate-400;
 
 
 .profile-header {
-  padding: 3rem $spacing-6 2rem;
+  padding: calc(3rem + env(safe-area-inset-top)) $spacing-6 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;

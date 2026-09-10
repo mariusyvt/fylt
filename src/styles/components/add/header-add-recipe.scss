@@ -3,7 +3,7 @@
 $border-color: #f1f5f9;
 
 .sticky-header {
-  padding: $spacing-8 $spacing-6 $spacing-4;
+  padding: calc(#{$spacing-8} + env(safe-area-inset-top)) $spacing-6 $spacing-4;
   display: flex;
   justify-content: space-between;
   align-items: center;

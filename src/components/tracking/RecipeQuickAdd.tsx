@@ -40,7 +40,6 @@ const perPortionCalories = (recipe: Recipe) => {
 export default function RecipeQuickAdd({ slot, recipes, recipeTypes, onAdd, open, onClose }: RecipeQuickAddProps) {
     const [query, setQuery] = useState("");
     const [addingId, setAddingId] = useState<number | null>(null);
-    const [addedId, setAddedId] = useState<number | null>(null);
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
     const [weight, setWeight] = useState("");
     const weightInputRef = useRef<HTMLInputElement>(null);
@@ -77,6 +76,11 @@ export default function RecipeQuickAdd({ slot, recipes, recipeTypes, onAdd, open
         return slotRecipes.filter((r) => r.name.toLowerCase().includes(q));
     }, [query, slotRecipes]);
 
+    const listRecipes = useMemo(
+        () => filtered.filter((r) => r.id !== selectedRecipe?.id),
+        [filtered, selectedRecipe]
+    );
+
     const handleSelectRecipe = (recipe: Recipe) => {
         const totalWeight = getTotalWeight(recipe);
         const portions = recipe.servings > 0 ? recipe.servings : 1;
@@ -106,13 +110,9 @@ export default function RecipeQuickAdd({ slot, recipes, recipeTypes, onAdd, open
                 carbs: Math.round(Number(selectedRecipe.total_carbs) * ratio),
                 lipids: Math.round(Number(selectedRecipe.total_lipids) * ratio),
             });
-            setAddedId(selectedRecipe.id);
             setSelectedRecipe(null);
             setWeight("");
-            setTimeout(() => {
-                setAddedId(null);
-                onClose();
-            }, 600);
+            onClose();
         } finally {
             setAddingId(null);
         }
@@ -186,11 +186,12 @@ export default function RecipeQuickAdd({ slot, recipes, recipeTypes, onAdd, open
                     <p className="recipe-picker__none">Aucune recette « {SLOT_CATEGORY[slot]} »</p>
                 ) : (
                     <ul className="recipe-picker__list recipe-picker__list--fullscreen no-scrollbar">
-                        {filtered.length === 0 ? (
-                            <li className="recipe-picker__none">Aucun résultat</li>
+                        {listRecipes.length === 0 ? (
+                            <li className="recipe-picker__none">
+                                {selectedRecipe ? "" : "Aucun résultat"}
+                            </li>
                         ) : (
-                            filtered.map((recipe) => {
-                                const added = addedId === recipe.id;
+                            listRecipes.map((recipe) => {
                                 const adding = addingId === recipe.id;
                                 return (
                                     <li key={recipe.id}>
@@ -205,8 +206,8 @@ export default function RecipeQuickAdd({ slot, recipes, recipeTypes, onAdd, open
                                                     ≈ {perPortionCalories(recipe)} kcal / portion · {Math.round(getTotalWeight(recipe))} g total
                                                 </span>
                                             </span>
-                                            <span className={`recipe-picker__add ${added ? "added" : ""}`}>
-                                                {added ? <Check size={16} /> : <Plus size={16} />}
+                                            <span className="recipe-picker__add">
+                                                <Plus size={16} />
                                             </span>
                                             {adding && <span className="recipe-picker__adding" />}
                                         </button>

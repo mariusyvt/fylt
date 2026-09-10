@@ -12,6 +12,11 @@ export const metadata: Metadata = {
         statusBarStyle: "black-translucent",
     },
     icons: {
+        icon: [
+            { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+            { url: "/icons/fylt-logo-192x192.png", type: "image/png", sizes: "192x192" },
+        ],
+        shortcut: "/favicon-32.png",
         apple: "/icons/fylt-logo-192x192.webp",
     },
 };

@@ -6,7 +6,7 @@ $text-light: #6b7280;
 .main-header {
   display: flex;
   justify-content: space-between;
-  padding: $spacing-8 $spacing-6 $spacing-4;
+  padding: calc(#{$spacing-8} + env(safe-area-inset-top)) $spacing-6 $spacing-4;
 }
 
 .icon-btn-ghost {
