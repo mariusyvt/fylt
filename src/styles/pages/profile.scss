@@ -18,7 +18,7 @@ $danger-hover: #dc2626;
 }
 
 .profile-main {
-  padding: 0 $spacing-6;
+  padding: 0 $spacing-6 calc(140px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: $spacing-3;

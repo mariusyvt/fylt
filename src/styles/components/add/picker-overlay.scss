@@ -6,7 +6,7 @@ $border-color: #f1f5f9;
   position: fixed;
   inset: 0;
   background: rgba($black, 0.5);
-  z-index: 100;
+  z-index: 1000;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -18,7 +18,7 @@ $border-color: #f1f5f9;
   width: 100%;
   max-width: 448px;
   padding: $spacing-6;
-  padding-bottom: calc($spacing-6 + 80px);
+  padding-bottom: calc($spacing-6 + env(safe-area-inset-bottom));
   overflow-y: auto;
 }
 

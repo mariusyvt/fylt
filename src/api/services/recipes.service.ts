@@ -19,3 +19,13 @@ export const deleteRecipe = async (id: number) =>
 
 export const updateRecipe = async (recipeData: FormData, id: number) =>
     apiFetchJson(`/recipes/${id}`, { method: "PATCH", body: recipeData });
+
+export const editPreparationStep = async (
+    recipeId: number,
+    preparationId: number,
+    payload: { description?: string; step_order?: number }
+) =>
+    apiFetchJson<ApiResponse<{ id: number; description: string; step_order: number }>>(
+        `/preparation/recipe/${recipeId}/preparation/${preparationId}`,
+        { method: "PATCH", json: { preparation: payload } }
+    );

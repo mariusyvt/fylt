@@ -6,7 +6,6 @@ const STATIC_ASSETS = [
   "/manifest.json",
 ];
 
-// Install — cache les assets essentiels (app-shell + page offline)
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
@@ -14,7 +13,6 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
-// Activate — nettoie les anciens caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -24,17 +22,14 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// On ne met en cache QUE les assets statiques same-origin.
-// Les reponses API (authentifiees, cross-origin) ne doivent jamais etre cachees.
 const isCacheableRequest = (request) => {
   if (request.method !== "GET") return false;
   const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return false; // exclut l'API et images distantes
+  if (url.origin !== self.location.origin) return false;
   if (url.pathname.startsWith("/api")) return false;
   return true;
 };
 
-// Network-first pour les assets same-origin, fallback cache puis page offline.
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (!isCacheableRequest(request)) return;

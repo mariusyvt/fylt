@@ -63,6 +63,36 @@ body {
   color: variables.$slate-900;
 }
 
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  font: inherit;
+  color: inherit;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  -webkit-appearance: auto;
+  appearance: auto;
+  accent-color: variables.$teal-600;
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;

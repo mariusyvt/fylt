@@ -21,6 +21,8 @@ import PersonPicker from "@/components/add/PersonPicker";
 import IngredientFullScreen from "@/components/add/IngredientFullScreen";
 import StepForm from "@/components/add/StepForm";
 import { useState } from "react";
+import { editPreparationStep } from "@/api/services/recipes.service";
+import { ApiError } from "@/types/api.types";
 
 export default function EditPage() {
     const router = useRouter();
@@ -42,6 +44,9 @@ export default function EditPage() {
     } = useNutrition();
 
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
+    const [editingStepIndex, setEditingStepIndex] = useState<number | null>(null);
+    const [stepError, setStepError] = useState<string | null>(null);
+    const [stepSaving, setStepSaving] = useState(false);
 
     const {
         steps,
@@ -79,9 +84,65 @@ export default function EditPage() {
                 addIngredient(scannedNutrients, Number(quantity), ingredientName);
             }
         }
-        if (activePicker === "step") addStep();
+        if (activePicker === "step") {
+            if (editingStepIndex !== null) {
+                void handleUpdateStep();
+                return;
+            }
+            addStep();
+        }
         setEditingIndex(null);
         setActivePicker(null);
+    };
+
+    const handleEditStep = (index: number) => {
+        const target = steps[index];
+        if (!target) return;
+        setEditingStepIndex(index);
+        setStepDescription(target.description);
+        setStepError(null);
+        setActivePicker("step");
+    };
+
+    const closeStepEdit = () => {
+        setEditingStepIndex(null);
+        setStepDescription("");
+        setStepError(null);
+        setActivePicker(null);
+    };
+
+    const handleUpdateStep = async () => {
+        if (editingStepIndex === null || stepSaving) return;
+        const target = steps[editingStepIndex];
+        if (!target?.id) {
+            setStepError("Étape introuvable, impossible de la mettre à jour.");
+            return;
+        }
+        const description = stepDescription.trim();
+        if (!description) {
+            setStepError("La description ne peut pas être vide.");
+            return;
+        }
+        if (description === target.description) {
+            closeStepEdit();
+            return;
+        }
+        setStepSaving(true);
+        setStepError(null);
+        try {
+            await editPreparationStep(Number(id), target.id, { description });
+            setSteps(
+                steps.map((s, i) =>
+                    i === editingStepIndex ? { ...s, description } : s
+                )
+            );
+            closeStepEdit();
+        } catch (err) {
+            const apiError = err as ApiError;
+            setStepError(apiError.message || "Impossible de mettre à jour l'étape.");
+        } finally {
+            setStepSaving(false);
+        }
     };
 
     const handleEditIngredient = (index: number) => {
@@ -197,13 +258,15 @@ export default function EditPage() {
                     steps={steps}
                     onRemove={removeStep}
                     onAdd={() => setActivePicker("step")}
+                    onEdit={handleEditStep}
                 />
                 {errors.steps && <p className="error-message">{errors.steps}</p>}
+                {stepError && <p className="error-message">{stepError}</p>}
             </main>
 
             <PickerOverlay
                 activePicker={activePicker === "ingredient" ? null : activePicker}
-                onClose={() => setActivePicker(null)}
+                onClose={activePicker === "step" && editingStepIndex !== null ? closeStepEdit : () => setActivePicker(null)}
                 onConfirm={handlePickerConfirm}
             >
                 {activePicker === "time" && (
@@ -214,7 +277,7 @@ export default function EditPage() {
                 )}
                 {activePicker === "step" && (
                     <StepForm
-                        stepNumber={steps.length + 1}
+                        stepNumber={editingStepIndex !== null ? editingStepIndex + 1 : steps.length + 1}
                         stepDescription={stepDescription}
                         setStepDescription={setStepDescription}
                     />

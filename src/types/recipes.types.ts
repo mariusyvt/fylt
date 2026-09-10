@@ -32,6 +32,7 @@ export interface RecipeIngredient {
 }
 
 export interface RecipeStep {
+    id?: number;
     step_order: number;
     description: string;
 }

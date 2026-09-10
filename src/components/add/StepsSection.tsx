@@ -8,6 +8,7 @@ interface StepsSectionProps {
     steps: RecipeStep[];
     onRemove: (index: number) => void;
     onAdd: () => void;
+    onEdit?: (index: number) => void;
     readOnly?: boolean;
 }
 
@@ -15,6 +16,7 @@ export default function StepsSection({
     steps,
     onRemove,
     onAdd,
+    onEdit,
     readOnly = false,
 }: StepsSectionProps) {
 
@@ -30,7 +32,12 @@ export default function StepsSection({
                     <div key={index} className={`step-item ${index === activeIndex ? "active" : ""}`}>
                         <div className="step-marker"></div>
                         <span className="step-number">Étape {index + 1}</span>
-                        <div className="step-card">
+                        <div
+                            className={`step-card ${onEdit ? "step-card--clickable" : ""}`}
+                            onClick={onEdit ? () => onEdit(index) : undefined}
+                            role={onEdit ? "button" : undefined}
+                            tabIndex={onEdit ? 0 : undefined}
+                        >
                             <p className={checkedSteps.includes(index) ? "step-done" : ""}>
                                 {step.description}
                             </p>
@@ -40,9 +47,16 @@ export default function StepsSection({
                                     className="step-checkbox"
                                     checked={checkedSteps.includes(index)}
                                     onChange={() => toggleStep(index)}
+                                    onClick={(e) => e.stopPropagation()}
                                 />
                                 :
-                                <button className="remove-step-btn" onClick={() => onRemove(index)}>
+                                <button
+                                    className="remove-step-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onRemove(index);
+                                    }}
+                                >
                                     <X size={14} />
                                 </button>
                             }
