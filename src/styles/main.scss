@@ -63,6 +63,18 @@ body {
   color: variables.$slate-900;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top);
+  background: #f0fdfa;
+  z-index: 1000;
+  pointer-events: none;
+}
+
 button,
 input[type="button"],
 input[type="submit"],
