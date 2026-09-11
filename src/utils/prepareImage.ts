@@ -35,14 +35,6 @@ const convertHeicToJpeg = async (file: File): Promise<File> => {
     });
 };
 
-/**
- * Prépare une image pour l'upload : conversion HEIC→JPEG si besoin,
- * puis compression/redimensionnement.
- * Sortie visée : WebP, max 1600px, ~0.5 Mo, orientation EXIF respectée.
- *
- * En cas d'échec, renvoie le fichier original : le serveur sait
- * convertir le HEIC et gérer les images pleine résolution.
- */
 export const prepareImage = async (file: File): Promise<File> => {
     try {
         const source = (await isHeic(file)) ? await convertHeicToJpeg(file) : file;
