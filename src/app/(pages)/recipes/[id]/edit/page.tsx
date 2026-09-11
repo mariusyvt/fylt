@@ -7,6 +7,7 @@ import { useRecipe } from "@/hooks/useRecipe";
 import TextInput from "@/components/ui/TextInput";
 import { useEditRecipe } from "@/hooks/useEditRecipe";
 import FileButton from "@/components/ui/FileButton";
+import Toast from "@/components/ui/Toast";
 import SelectField from "@/components/ui/SelectField";
 import PickerButton from "@/components/ui/PickerButton";
 import { Clock, Users } from "lucide-react";
@@ -47,6 +48,7 @@ export default function EditPage() {
     const [editingStepIndex, setEditingStepIndex] = useState<number | null>(null);
     const [stepError, setStepError] = useState<string | null>(null);
     const [stepSaving, setStepSaving] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const {
         steps,
@@ -173,7 +175,8 @@ export default function EditPage() {
     const handleConfirm = async () => {
         const success = await handleSubmit()
         if (success){
-            router.push(`/recipes/${id}`);
+            setSuccessMessage("Recette mise à jour !");
+            setTimeout(() => router.push(`/recipes/${id}`), 1200);
         }
     }
 
@@ -302,6 +305,7 @@ export default function EditPage() {
                     setIngredientName("");
                 }}
             />
+            {successMessage && <Toast message={successMessage} />}
         </>
     )
 }

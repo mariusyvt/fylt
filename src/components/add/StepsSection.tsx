@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Plus } from "lucide-react";
+import { X, Plus, ListChecks } from "lucide-react";
 import { RecipeStep } from "@/types/recipes.types";
 import { useCheckedSteps } from "@/hooks/useCheckedSteps";
 
@@ -27,6 +27,13 @@ export default function StepsSection({
     return (
         <section className="steps-section">
             <h2 className="recipe-section-title">Étapes</h2>
+            {readOnly && steps.length === 0 ? (
+                <div className="empty-state">
+                    <ListChecks size={48} />
+                    <h2>Aucune étape</h2>
+                    <p>Cette recette n&apos;a pas encore d&apos;étapes de préparation.</p>
+                </div>
+            ) : (
             <div className="timeline">
                 {steps.map((step, index) => (
                     <div key={index} className={`step-item ${index === activeIndex ? "active" : ""}`}>
@@ -64,6 +71,7 @@ export default function StepsSection({
                     </div>
                 ))}
             </div>
+            )}
             {readOnly ? null : <button
                 className="btn-add-item"
                 style={{marginTop: "1rem"}}
