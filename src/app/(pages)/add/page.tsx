@@ -82,7 +82,6 @@ export default function AddPage () {
                 <main className="form-content">
                     <section className="intro-section">
                         <h1>Ma recette</h1>
-                        <p>Partagez votre création culinaire</p>
                     </section>
 
                     <TextInput
