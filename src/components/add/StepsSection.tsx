@@ -29,7 +29,6 @@ export default function StepsSection({
             <h2 className="recipe-section-title">Étapes</h2>
             {readOnly && steps.length === 0 ? (
                 <div className="empty-state">
-                    <ListChecks size={48} />
                     <h2>Aucune étape</h2>
                     <p>Cette recette n&apos;a pas encore d&apos;étapes de préparation.</p>
                 </div>
