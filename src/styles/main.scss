@@ -4,6 +4,7 @@
 @use 'components/ui/inputs';
 @use 'components/ui/buttons';
 @use 'components/ui/page-header';
+@use 'components/ui/toast';
 
 @use 'shared/shared-form';
 
@@ -140,4 +141,15 @@ input[type="radio"] {
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.spin {
+  animation: spin 0.65s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.info-message {
+  color: variables.$teal-600;
+  font-size: variables.$text-sm;
+  margin-top: variables.$spacing-2;
+  text-align: center;
 }

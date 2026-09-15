@@ -1,7 +1,8 @@
-import { Camera } from "lucide-react";
+import { Camera, Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
 import { Profile } from "@/types/profile.types";
 import { updateProfilePhoto } from "@/api/services/profile.service";
+import { prepareImage, isAcceptedImage } from "@/utils/prepareImage";
 import { useAuth } from "@/hooks/useAuth";
 
 interface HeaderProps {
@@ -14,6 +15,7 @@ export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { isAuthenticated } = useAuth();
     const [uploadError, setUploadError] = useState<string | null>(null);
+    const [optimizing, setOptimizing] = useState(false);
 
     const handlePhotoClick = () => {
         fileInputRef.current?.click();
@@ -25,23 +27,30 @@ export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
 
         setUploadError(null);
 
-        if (!file.type.startsWith("image/")) {
+        if (!isAcceptedImage(file)) {
             setUploadError("Le fichier doit être une image.");
+            e.target.value = "";
             return;
         }
         if (file.size > 5 * 1024 * 1024) {
             setUploadError("L'image ne doit pas dépasser 5 Mo.");
+            e.target.value = "";
             return;
         }
 
+        setOptimizing(true);
         try {
-            const result = await updateProfilePhoto(file);
+            const prepared = await prepareImage(file);
+            const result = await updateProfilePhoto(prepared);
             if (result.data?.photo_url) {
                 onPhotoUpdated?.(result.data.photo_url);
             }
         } catch (err) {
             console.error("Erreur upload photo:", err);
             setUploadError("Échec de l'envoi de la photo. Réessayez.");
+        } finally {
+            setOptimizing(false);
+            e.target.value = "";
         }
     };
 
@@ -63,14 +72,22 @@ export default function ProfileHeader ({profile, onPhotoUpdated}: HeaderProps) {
                     type="file"
                     accept="image/*"
                     hidden
+                    disabled={optimizing}
                     onChange={handleFileChange}
                 />
-                <button className="edit-avatar-btn" onClick={handlePhotoClick} aria-label="Modifier la photo de profil">
-                    <Camera />
+                <button
+                    className="edit-avatar-btn"
+                    onClick={handlePhotoClick}
+                    disabled={optimizing}
+                    aria-busy={optimizing}
+                    aria-label="Modifier la photo de profil"
+                >
+                    {optimizing ? <Loader2 className="spin" /> : <Camera />}
                 </button>
             </div>
             <h1 className="user-name">{`${profile.firstName} ${profile.lastName}`}</h1>
             <p className="user-role">Chef Amateur</p>
+            {optimizing && <p className="info-message">Optimisation…</p>}
             {uploadError && <p className="error-message">{uploadError}</p>}
         </header>
     )

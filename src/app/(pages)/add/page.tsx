@@ -14,13 +14,16 @@ import TextInput from "@/components/ui/TextInput";
 import SelectField from "@/components/ui/SelectField";
 import PickerButton from "@/components/ui/PickerButton";
 import FileButton from "@/components/ui/FileButton";
+import Toast from "@/components/ui/Toast";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useNutrition } from "@/hooks/useNutrition";
 import { useAddRecipe } from "@/hooks/useAddRecipe";
 import { useStep } from "@/hooks/useStep";
 
 export default function AddPage () {
     const router = useRouter();
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const {
         ingredient,
@@ -69,7 +72,10 @@ export default function AddPage () {
 
     const handleConfirm = async () => {
         const success = await handleSubmit();
-        if (success) router.push("/");
+        if (success) {
+            setSuccessMessage("Recette ajoutée avec succès !");
+            setTimeout(() => router.push("/"), 1200);
+        }
     };
 
     return (
@@ -174,6 +180,7 @@ export default function AddPage () {
 
                 <ConfirmButton onClick={handleConfirm} />
             </div>
+            {successMessage && <Toast message={successMessage} />}
         </div>
     );
 }
