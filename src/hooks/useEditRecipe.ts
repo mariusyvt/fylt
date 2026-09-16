@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { RecipeCategory, RecipeIngredient, RecipeStep, Recipe } from "@/types/recipes.types";
 import { ApiError } from "@/types/api.types";
 import { parsePreparationTime, formatPreparationTime } from "@/utils/format.utils";
@@ -8,13 +8,12 @@ import { updateRecipe, getRecipeTypes } from "@/api/services/recipes.service";
 import { invalidateRecipesCache } from "@/hooks/useRecipes";
 import { calculateTotalNutrition } from "@/utils/nutrition.utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useImageUpload } from "@/hooks/useImageUpload";
 
 type PickerType = "time" | "persons" | "ingredient" | "step" | null;
 
 export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngredient[], steps: RecipeStep[], id: number) => {
     const [title, setTitle] = useState("");
-    const [photo, setPhoto] = useState<File | null>(null);
-    const [photoUrl, setPhotoUrl] = useState<string | null>(null);
     const [preparationTime, setPreparationTime] = useState("");
     const [servings, setServings] = useState<number>();
     const [selectedRecipeTypeId, setSelectedRecipeTypeId] = useState<string>("");
@@ -24,6 +23,19 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
     const [step, setStep] = useState<RecipeStep[]>([]);
     const {isAuthenticated} = useAuth();
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [submitting, setSubmitting] = useState(false);
+    const submittingRef = useRef(false);
+
+    const {
+        photo,
+        photoUrl,
+        previewUrl,
+        uploading,
+        uploadError,
+        selectImage,
+        clearImage,
+        setInitialPhotoUrl,
+    } = useImageUpload();
 
     useEffect(() => {
         const fetchRecipeTypes = async () => {
@@ -37,21 +49,33 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
     useEffect(() => {
         if (recipeData) {
             setTitle(recipeData.name);
-            setPhotoUrl(recipeData.photo_url)
+            setInitialPhotoUrl(recipeData.photo_url)
             setPreparationTime(formatPreparationTime(recipeData.preparation_time_minutes))
             setServings(recipeData.servings)
             setSelectedRecipeTypeId(recipeData.recipe_type_id.toString())
             setIngredients(recipeData.recipe_ingredients)
             setStep(recipeData.preparation_steps)
         }
-    }, [recipeData]);
+    }, [recipeData, setInitialPhotoUrl]);
 
     const handleSubmit = async () => {
+        if (submittingRef.current) return false;
         setErrors({});
         if (!isAuthenticated) {
             setErrors({ _global: "Vous devez être connecté." });
             return false;
         }
+        if (uploading) {
+            setErrors({ photo: "Veuillez patienter, l'image est en cours d'envoi." });
+            return false;
+        }
+        if (uploadError) {
+            setErrors({ photo: uploadError });
+            return false;
+        }
+
+        submittingRef.current = true;
+        setSubmitting(true);
         const totals = calculateTotalNutrition(ingredient);
 
         const recipe = {
@@ -65,7 +89,7 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
             recipe_type_id: Number(selectedRecipeTypeId),
         }
 
-        const formattedIngredients = JSON.stringify(ingredient.map(ing => ({
+        const formattedIngredients = ingredient.map(ing => ({
             api_ingredient_id: 1,
             ingredient_name: ing.ingredient_name,
             quantity: Number(ing.quantity),
@@ -74,17 +98,15 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
             ingredient_proteins: Number(ing.ingredient_proteins),
             ingredient_carbs: Number(ing.ingredient_carbs),
             ingredient_lipids: Number(ing.ingredient_lipids),
-        })))
-
-        const formData = new FormData();
-
-        formData.append("recipe", JSON.stringify(recipe))
-        formData.append("preparation_steps", JSON.stringify(steps))
-        formData.append("ingredients", formattedIngredients)
-        if (photo) formData.append("photo", photo)
+        }))
 
         try {
-            await updateRecipe(formData, id);
+            await updateRecipe({
+                recipe,
+                preparation_steps: steps,
+                ingredients: formattedIngredients,
+                photo_url: photoUrl,
+            }, id);
             invalidateRecipesCache();
             return true
         } catch (error) {
@@ -96,8 +118,12 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
                 });
                 setErrors(errorMap);
 
+                submittingRef.current = false;
+                setSubmitting(false);
                 return false
             }
+            submittingRef.current = false;
+            setSubmitting(false);
             return false;
         }
     }
@@ -106,8 +132,12 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
         title,
         setTitle,
         photo,
-        setPhoto,
         photoUrl,
+        previewUrl,
+        uploading,
+        uploadError,
+        selectImage,
+        clearImage,
         preparationTime,
         setPreparationTime,
         setServings,
@@ -122,6 +152,7 @@ export const useEditRecipe = (recipeData: Recipe | null, ingredient: RecipeIngre
         step,
         setStep,
         errors,
+        submitting,
         handleSubmit
     }
 }

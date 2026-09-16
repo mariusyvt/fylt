@@ -36,3 +36,32 @@ export interface RecipeStep {
     step_order: number;
     description: string;
 }
+
+export interface RecipeInput {
+    name: string;
+    preparation_time_minutes: number;
+    servings?: number;
+    total_calories: number;
+    total_proteins: number;
+    total_carbs: number;
+    total_lipids: number;
+    recipe_type_id: number;
+}
+
+export interface RecipeIngredientInput {
+    api_ingredient_id: number;
+    ingredient_name: string;
+    quantity: number;
+    unit: string;
+    ingredient_calories: number;
+    ingredient_proteins: number;
+    ingredient_carbs: number;
+    ingredient_lipids: number;
+}
+
+export interface RecipePayload {
+    recipe: RecipeInput;
+    preparation_steps: RecipeStep[];
+    ingredients: RecipeIngredientInput[];
+    photo_url: string | null;
+}

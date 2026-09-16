@@ -47,7 +47,12 @@ export default function AddPage () {
 
     const {
         photo,
-        setPhoto,
+        photoUrl,
+        previewUrl,
+        uploading,
+        uploadError,
+        selectImage,
+        clearImage,
         preparationTime,
         setPreparationTime,
         servings,
@@ -60,6 +65,7 @@ export default function AddPage () {
         activePicker,
         setActivePicker,
         handleSubmit,
+        submitting,
         errors,
     } = useAddRecipe(ingredient, steps);
 
@@ -98,7 +104,14 @@ export default function AddPage () {
                         error={errors.name}
                     />
 
-                    <FileButton value={photo} onChange={setPhoto} />
+                    <FileButton
+                        fileName={photo?.name}
+                        previewUrl={previewUrl ?? photoUrl}
+                        uploading={uploading}
+                        uploadError={uploadError ?? errors.photo}
+                        onSelect={selectImage}
+                        onClear={clearImage}
+                    />
 
                     <SelectField
                         label="Type de plat"
@@ -178,7 +191,11 @@ export default function AddPage () {
                     }}
                 />
 
-                <ConfirmButton onClick={handleConfirm} />
+                <ConfirmButton
+                    onClick={handleConfirm}
+                    disabled={uploading || submitting}
+                    label={submitting ? "Création en cours…" : "Confirmer la recette"}
+                />
             </div>
             {successMessage && <Toast message={successMessage} />}
         </div>

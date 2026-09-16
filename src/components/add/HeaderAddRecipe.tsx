@@ -6,12 +6,14 @@ interface HeaderAddRecipeProps {
     onClose: () => void;
     isEditMode?: boolean;
     onAdd?: () => void;
+    disabled?: boolean;
 }
 
 export default function HeaderAddRecipe({
     onClose,
     onAdd,
     isEditMode = false,
+    disabled = false,
 }: HeaderAddRecipeProps) {
     return (
         <header className="sticky-header">
@@ -21,7 +23,7 @@ export default function HeaderAddRecipe({
             {isEditMode ?
                 <>
                     <span className="header-subtitle">Modifier la recette</span>
-                    <button className="icon-btn-circle" onClick={onAdd}>
+                    <button className="icon-btn-circle" onClick={onAdd} disabled={disabled}>
                         <Check size={20} />
                     </button>
 
