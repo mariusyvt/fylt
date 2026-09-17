@@ -730,7 +730,7 @@
     display: flex;
     align-items: center;
     gap: $spacing-3;
-    padding: calc($spacing-4 + env(safe-area-inset-top)) $spacing-4 $spacing-3;
+    padding: calc($spacing-6 + env(safe-area-inset-top)) $spacing-4 $spacing-3;
     background: $white;
     border-bottom: 1px solid #f1f5f9;
   }

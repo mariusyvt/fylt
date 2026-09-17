@@ -9,7 +9,7 @@
 }
 
 .page-header {
-  padding: max(#{v.$spacing-4}, env(safe-area-inset-top)) v.$spacing-6 v.$spacing-2;
+  padding: calc(#{v.$spacing-6} + env(safe-area-inset-top)) v.$spacing-6 v.$spacing-2;
 
   &__bar {
     display: flex;
