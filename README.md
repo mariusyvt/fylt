@@ -1,101 +1,60 @@
-# 🥗 Fylt
+# Fylt
 
-Application mobile-first de suivi nutritionnel et de gestion de recettes. Fylt permet de suivre ses apports caloriques au quotidien, créer et partager ses recettes, et atteindre ses objectifs nutritionnels.
+Fylt est une application web mobile-first de suivi nutritionnel et de gestion de recettes. L'idée : suivre ses apports au quotidien sans friction, garder ses recettes au même endroit, et avancer vers ses objectifs sans se noyer dans les chiffres.
 
-## ✨ Fonctionnalités
+C'est un projet personnel, pensé et développé de bout en bout — de la conception produit jusqu'au design et à l'implémentation.
 
-### 📊 Suivi nutritionnel
-- Suivi quotidien des calories, protéines, glucides et lipides
-- Organisation des repas par créneau (petit-déjeuner, déjeuner, goûter, dîner)
-- Vue hebdomadaire et statistiques mensuelles
-- Historique des aliments récemment consommés
+## L'idée
 
-### 🍳 Gestion de recettes
-- Création de recettes avec photo, ingrédients et étapes
-- Calcul automatique des valeurs nutritionnelles
-- Catégorisation par type de plat (entrée, plat, dessert…)
-- Modification et suppression de recettes
+La plupart des applis de nutrition sont soit trop complexes, soit truffées de publicités. Je voulais quelque chose de simple et agréable à utiliser tous les jours : on ouvre l'app, on ajoute son repas, on voit où on en est. C'est tout.
 
-### 🔍 Recherche d'aliments
-- Recherche dans une base de données d'aliments (Ciqual)
-- Scan de code-barres via OpenFoodFacts
-- Ajout d'aliments personnalisés
+Fylt est une PWA (Progressive Web App), donc installable directement depuis le navigateur sur iOS comme sur Android, sans passer par un store.
 
-### 🎯 Objectifs personnalisés
-- Onboarding guidé pour définir ses objectifs (5 étapes)
-- Calcul du métabolisme de base (formule Mifflin-St Jeor)
-- Répartition automatique des macronutriments (30P / 40G / 30L)
-- Objectifs ajustables : maintien, sèche modérée/intense, prise de masse modérée/intense
+## Ce que fait l'application
 
-### 👤 Profil utilisateur
-- Authentification complète (inscription, connexion, mot de passe oublié, vérification email)
-- Photo de profil
-- Suivi du poids
+**Suivi nutritionnel**
+Suivi quotidien des calories et des macros (protéines, glucides, lipides), repas organisés par créneau (petit-déjeuner, déjeuner, goûter, dîner), vue hebdomadaire et statistiques mensuelles, et un historique des aliments récemment consommés pour aller plus vite.
 
-## 🛠️ Stack technique
+**Recettes**
+Création de recettes avec photo, ingrédients et étapes, calcul automatique des valeurs nutritionnelles, et catégorisation par type de plat.
+
+**Recherche d'aliments**
+Recherche dans la base de données Ciqual, scan de code-barres via OpenFoodFacts, et possibilité d'ajouter ses propres aliments.
+
+**Objectifs personnalisés**
+Un onboarding guidé calcule le métabolisme de base (formule Mifflin-St Jeor) et répartit automatiquement les macros selon l'objectif choisi : maintien, sèche ou prise de masse.
+
+**Compte utilisateur**
+Authentification complète (inscription, connexion, mot de passe oublié, vérification email), photo de profil et suivi du poids.
+
+## Stack technique
 
 | Technologie | Usage |
 |---|---|
-| **Next.js 16** | Framework React (App Router) |
-| **React 19** | UI |
-| **TypeScript** | Typage statique |
-| **Sass** | Styles |
-| **Vitest** | Tests unitaires |
-| **React Testing Library** | Tests de hooks |
-| **OpenFoodFacts SDK** | Données nutritionnelles par code-barres |
-| **Lucide React** | Icônes |
+| Next.js 16 (App Router) | Framework React |
+| React 19 | UI |
+| TypeScript | Typage statique |
+| Sass | Styles |
+| PWA | Installation mobile, mode standalone |
+| OpenFoodFacts SDK | Données nutritionnelles par code-barres |
+| Vitest + Testing Library | Tests |
 
-## 📁 Structure du projet
+## Aperçu de l'architecture
+
+Le code est organisé par domaine plutôt que par type de fichier, pour garder chaque fonctionnalité cohérente et facile à faire évoluer :
 
 ```
 src/
-├── api/              # Configuration API et services (recipes, foods, profile, tracking…)
-├── app/              # Pages Next.js (App Router)
-│   ├── (auth)/       # Pages d'authentification (signin, signup, forgot-password…)
-│   └── (pages)/      # Pages principales (tracking, recipes, add, profile)
-├── components/       # Composants React (ui, add, recipes, tracking, profile…)
-├── context/          # Contexte d'authentification
-├── hooks/            # Hooks personnalisés (useAddRecipe, useTracking, useNutrition…)
-├── styles/           # Fichiers SCSS
-├── types/            # Types TypeScript
-└── utils/            # Fonctions utilitaires (nutrition, TDEE, formatage)
+├── api/          # Services et configuration API (recipes, foods, profile, tracking…)
+├── app/          # Pages Next.js (App Router) — authentification et pages principales
+├── components/   # Composants React par domaine (ui, add, recipes, tracking, profile…)
+├── context/      # Contexte d'authentification
+├── hooks/        # Hooks métier (useTracking, useNutrition, useAddRecipe…)
+├── styles/       # Feuilles SCSS
+├── types/        # Types TypeScript
+└── utils/        # Logique nutrition (TDEE, macros, formatage)
 ```
 
-## 🚀 Démarrage
+---
 
-### Prérequis
-- Node.js 18+
-- npm
-
-### Installation
-
-```bash
-git clone https://github.com/mariusyvt/fylt.git
-cd fylt
-npm install
-```
-
-### Lancer le serveur de développement
-
-```bash
-npm run dev
-```
-
-L'application est accessible sur [http://localhost:3000](http://localhost:3000).
-
-### Lancer les tests
-
-```bash
-npm test
-```
-
-## 📜 Scripts disponibles
-
-| Commande | Description |
-|---|---|
-| `npm run dev` | Serveur de développement |
-| `npm run build` | Build de production |
-| `npm start` | Serveur de production |
-| `npm test` | Lancer les tests |
-| `npm run test:watch` | Tests en mode watch |
-| `npm run lint` | Linter ESLint |
+Développé par [Marius YVART](https://github.com/mariusyvt).

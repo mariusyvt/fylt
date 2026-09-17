@@ -3,13 +3,44 @@ import "@/styles/main.scss";
 import AppShell from "./AppShell";
 
 export const metadata: Metadata = {
-    title: "Fylt",
-    description: "Suivi nutritionnel et recettes personnalisées",
+    metadataBase: new URL("https://fylt.fr"),
+    title: {
+        default: "Fylt — Suivi nutritionnel et recettes",
+        template: "%s · Fylt",
+    },
+    description:
+        "Suivez vos calories et macros au quotidien, créez vos recettes et atteignez vos objectifs nutritionnels. Simple, rapide, installable sur votre téléphone.",
+    applicationName: "Fylt",
+    keywords: ["nutrition", "calories", "macros", "recettes", "suivi alimentaire", "fitness", "PWA"],
     manifest: "/manifest.json",
     appleWebApp: {
         capable: true,
         title: "Fylt",
         statusBarStyle: "black-translucent",
+    },
+    openGraph: {
+        type: "website",
+        siteName: "Fylt",
+        title: "Fylt — Suivi nutritionnel et recettes",
+        description:
+            "Suivez vos calories et macros au quotidien, créez vos recettes et atteignez vos objectifs nutritionnels.",
+        url: "https://fylt.fr",
+        locale: "fr_FR",
+        images: [
+            {
+                url: "/og-image.png",
+                width: 1200,
+                height: 630,
+                alt: "Fylt — Suivi nutritionnel et recettes",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Fylt — Suivi nutritionnel et recettes",
+        description:
+            "Suivez vos calories et macros au quotidien, créez vos recettes et atteignez vos objectifs nutritionnels.",
+        images: ["/og-image.png"],
     },
     icons: {
         icon: [
