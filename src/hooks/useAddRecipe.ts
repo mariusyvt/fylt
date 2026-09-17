@@ -1,9 +1,10 @@
 import { RecipeCategory, RecipeIngredient, RecipeStep } from "@/types/recipes.types";
 import { ApiError } from "@/types/api.types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createRecipe, getRecipeTypes } from "@/api/services/recipes.service";
 import { invalidateRecipesCache } from "@/hooks/useRecipes";
 import { useAuth } from "@/hooks/useAuth";
+import { useImageUpload } from "@/hooks/useImageUpload";
 import { parsePreparationTime } from "@/utils/format.utils";
 import { calculateTotalNutrition } from "@/utils/nutrition.utils";
 
@@ -14,11 +15,22 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
     const [servings, setServings] = useState<number>();
     const [title, setTitle] = useState("");
     const [selectedRecipeTypeId, setSelectedRecipeTypeId] = useState<string>("");
-    const [photo, setPhoto] = useState<File | null>(null);
     const [recipeType, setRecipeType] = useState<RecipeCategory[]>([]);
     const [activePicker, setActivePicker] = useState<PickerType>(null);
     const {isAuthenticated} = useAuth();
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [submitting, setSubmitting] = useState(false);
+    const submittingRef = useRef(false);
+
+    const {
+        photo,
+        photoUrl,
+        previewUrl,
+        uploading,
+        uploadError,
+        selectImage,
+        clearImage,
+    } = useImageUpload();
 
     useEffect(() => {
         const fetchRecipeTypes = async () => {
@@ -30,11 +42,23 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
     }, [isAuthenticated]);
 
     const handleSubmit = async () => {
+        if (submittingRef.current) return false;
         setErrors({});
         if (!isAuthenticated) {
             setErrors({ _global: "Vous devez être connecté." });
             return false;
         }
+        if (uploading) {
+            setErrors({ photo: "Veuillez patienter, l'image est en cours d'envoi." });
+            return false;
+        }
+        if (uploadError) {
+            setErrors({ photo: uploadError });
+            return false;
+        }
+
+        submittingRef.current = true;
+        setSubmitting(true);
         const totals = calculateTotalNutrition(ingredient);
 
         const recipe = {
@@ -48,7 +72,7 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
             recipe_type_id: Number(selectedRecipeTypeId),
         }
 
-        const formattedIngredients = JSON.stringify(ingredient.map(ing => ({
+        const formattedIngredients = ingredient.map(ing => ({
             api_ingredient_id: 1,
             ingredient_name: ing.ingredient_name,
             quantity: Number(ing.quantity),
@@ -57,17 +81,15 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
             ingredient_proteins: Number(ing.ingredient_proteins),
             ingredient_carbs: Number(ing.ingredient_carbs),
             ingredient_lipids: Number(ing.ingredient_lipids),
-        })))
-
-        const recipeData = new FormData();
-
-        recipeData.append("recipe", JSON.stringify(recipe))
-        recipeData.append("preparation_steps", JSON.stringify(steps))
-        recipeData.append("ingredients", formattedIngredients)
-        if (photo) recipeData.append("photo", photo)
+        }))
 
         try {
-            await createRecipe(recipeData);
+            await createRecipe({
+                recipe,
+                preparation_steps: steps,
+                ingredients: formattedIngredients,
+                photo_url: photoUrl,
+            });
             invalidateRecipesCache();
             return true
         } catch (error) {
@@ -79,13 +101,20 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
                 });
                 setErrors(errorMap);
             }
+            submittingRef.current = false;
+            setSubmitting(false);
             return false;
         }
     }
 
     return {
         photo,
-        setPhoto,
+        photoUrl,
+        previewUrl,
+        uploading,
+        uploadError,
+        selectImage,
+        clearImage,
         preparationTime,
         setPreparationTime,
         servings,
@@ -98,6 +127,7 @@ export const useAddRecipe = (ingredient: RecipeIngredient[], steps: RecipeStep[]
         activePicker,
         setActivePicker,
         handleSubmit,
+        submitting,
         errors
     }
 }

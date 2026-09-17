@@ -63,8 +63,12 @@ export default function EditPage() {
         title,
         setTitle,
         photo,
-        setPhoto,
         photoUrl,
+        previewUrl,
+        uploading,
+        uploadError,
+        selectImage,
+        clearImage,
         preparationTime,
         setPreparationTime,
         setServings,
@@ -75,6 +79,7 @@ export default function EditPage() {
         activePicker,
         setActivePicker,
         errors,
+        submitting,
         handleSubmit
     } = useEditRecipe(recipes, ingredient, steps, Number(id));
 
@@ -196,6 +201,7 @@ export default function EditPage() {
                 onClose={() => router.push(`/recipes/${id}`)}
                 onAdd={handleConfirm}
                 isEditMode={true}
+                disabled={uploading || submitting}
             />
 
             <main className="form-content">
@@ -213,9 +219,13 @@ export default function EditPage() {
                 />
 
                 <FileButton
-                    value={photo}
-                    onChange={setPhoto}
-                    placeholder={photoUrl ? photoUrl.split("/").pop() : "Ajouter une photo"}
+                    fileName={photo?.name ?? (photoUrl ? photoUrl.split("/").pop() : null)}
+                    previewUrl={previewUrl ?? photoUrl}
+                    uploading={uploading}
+                    uploadError={uploadError ?? errors.photo}
+                    onSelect={selectImage}
+                    onClear={clearImage}
+                    placeholder="Ajouter une photo"
                 />
 
                 <SelectField
